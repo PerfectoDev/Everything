@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <title>Wolmart eCommmerce Marketplace HTML Template</title>
+
+    <meta name="keywords" content="Marketplace ecommerce responsive HTML5 Template" />
+    <meta name="description" content="Wolmart is powerful marketplace &amp; ecommerce responsive Html5 Template.">
+    <meta name="author" content="D-THEMES">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/icons/favicon.png">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-brands-400.woff2" as="font" type="font/woff2"
+            crossorigin="anonymous">
+    <link rel="preload" href="assets/fonts/wolmart.woff?png09e" as="font" type="font/woff" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/fontawesome-free/css/all.min.css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/magnific-popup/magnific-popup.min.css">
+
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style-rtl.min.css">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <h1 class="d-none">Wolmart - Responsive Marketplace HTML Template</h1>
+  
+
+        <!-- Start of Main -->
+        <main class="main cart">
+           
+<style>
+
+</style>
+            <!-- Start of PageContent -->
+            <div class="page-content">
+                <div class="container">
+                    <div class="row gutter-lg mb-10">
+                        <div class="col-lg-8 pr-lg-4 mb-6">
+                            <table class="shop-table cart-table">
+                                <thead>
+                                    <tr>
+                                        <th class="product-name"><span>المنتجات</span></th>
+                                        <th></th>
+                                        <th class="product-price"><span>السعر</span></th>
+                                        <th class="product-quantity"><span>الكمية</span></th>
+                                        <th class="product-subtotal"><span>الأجمالي</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data_table">
+                                   
+                                 
+                                </tbody>
+                            </table>
+
+                            <div class="cart-action mb-6">
+                                <a href="demo-rtl-shop.html" class="btn btn-dark btn-rounded btn-icon-left btn-shopping mr-auto"><i class="w-icon-long-arrow-left"></i>الرجوع للتسوق</a>
+                                <button type="submit" class="btn btn-rounded btn-default btn-clear" name="clear_cart" id="ClearCart" value="Clear Cart">افراغ العربة</button> 
+                                <button type="submit" class="btn btn-rounded btn-update disabled" name="update_cart" value="Update Cart">تحديث العربة</button>
+                            </div>
+
+                            <form class="coupon">
+                                <h5 class="title coupon-title font-weight-bold text-uppercase">لديك كوبون خصم</h5>
+                                <input type="text" class="form-control mb-4" placeholder="ادخل الكوبون الخاص بك" required />
+                                <button class="btn btn-dark btn-outline btn-rounded" >استخدم الكوبون</button>
+                            </form>
+                        </div>
+                        <div class="col-lg-4 sticky-sidebar-wrapper">
+                            <div class="sticky-sidebar">
+                                <div class="cart-summary mb-4">
+                                    <h3 class="cart-title text-uppercase">المبلغ الكلى للشحنة</h3>
+                                    <div class="cart-subtotal d-flex align-items-center justify-content-between">
+                                        <label class="ls-25">الاجمالي</label>
+                                <span id="GrandTotal"></span>
+                                    </div>
+
+                                    <hr class="divider">
+
+                                    
+
+                                    <div class="shipping-calculator" style="display: flex; justify-content: space-between;">
+                                        سعر الشحن
+                                        <p style="font-weight: bold; color:black" class="shipping-destination lh-1"></p>
+
+                                    
+                                    </div>
+
+                                    <hr class="divider mb-6">
+                                    <div class="order-total d-flex justify-content-between align-items-center">
+                                        <label>المبلغ الاجمالى شامل الشحن</label>
+                                        <span id="OraderTotal" class="ls-50"></span>
+                                    </div>
+                                    <a href="checkout.html"
+                                        class="btn btn-block btn-dark btn-icon-right btn-rounded  btn-checkout">
+                                        اذهب للدفع<i class="w-icon-long-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of PageContent -->
+        </main>
+        <!-- End of Main -->
+
+       
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Start of Sticky Footer -->
+    <div class="sticky-footer sticky-content fix-bottom">
+        <a href="demo1.html" class="sticky-link active">
+            <i class="w-icon-home"></i>
+            <p>Home</p>
+        </a>
+        <a href="shop-banner-sidebar.html" class="sticky-link">
+            <i class="w-icon-category"></i>
+            <p>Shop</p>
+        </a>
+        <a href="my-account.html" class="sticky-link">
+            <i class="w-icon-account"></i>
+            <p>Account</p>
+        </a>
+        <div class="cart-dropdown dir-up">
+            <a href="cart.html" class="sticky-link">
+                <i class="w-icon-cart"></i>
+                <p>Cart</p>
+            </a>
+            <div class="dropdown-box">
+                <div class="products">
+                    <div class="product product-cart">
+                        <div class="product-detail">
+                            <h3 class="product-name">
+                                <a href="product-default.html">Beige knitted elas<br>tic
+                                    runner shoes</a>
+                            </h3>
+                            <div class="price-box">
+                                <span class="product-quantity">1</span>
+                                <span class="product-price">25.68</span>
+                            </div>
+                        </div>
+                        <figure class="product-media">
+                            <a href="#">
+                                <img src="assets/images/cart/product-1.jpg" alt="product" height="84"
+                                    width="94" />
+                            </a>
+                        </figure>
+                        <button class="btn btn-link btn-close" aria-label="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="product product-cart">
+                        <div class="product-detail">
+                            <h3 class="product-name">
+                                <a href="product.html">Blue utility pina<br>fore
+                                    denim dress</a>
+                            </h3>
+                            <div class="price-box">
+                                <span class="product-quantity">1</span>
+                                <span class="product-price">32.99</span>
+                            </div>
+                        </div>
+                        <figure class="product-media">
+                            <a href="#">
+                                <img src="assets/images/cart/product-2.jpg" alt="product" width="84"
+                                    height="94" />
+                            </a>
+                        </figure>
+                        <button class="btn btn-link btn-close" aria-label="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cart-total">
+                    <label>Subtotal:</label>
+                    <span class="price">58.67</span>
+                </div>
+
+                <div class="cart-action">
+                    <a href="cart.html" class="btn btn-dark btn-outline btn-rounded">View Cart</a>
+                    <a href="checkout.html" class="btn btn-primary  btn-rounded">Checkout</a>
+                </div>
+            </div>
+            <!-- End of Dropdown Box -->
+        </div>
+        
+        <div class="header-search hs-toggle dir-up">
+            <a href="#" class="search-toggle sticky-link">
+                <i class="w-icon-search"></i>
+                <p>Search</p>
+            </a>
+            <form action="#" class="input-wrapper">
+                <input type="text" class="form-control" name="search" autocomplete="off"
+                    placeholder="Search" required />
+                <button class="btn btn-search" type="submit">
+                    <i class="w-icon-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- End of Sticky Footer -->
+    
+    <!-- Start of Scroll Top -->
+    <a id="scroll-top" class="scroll-top" href="#top" title="Top" role="button"> <i class="w-icon-angle-up"></i> <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70"> <circle id="progress-indicator" fill="transparent" stroke="#000000" stroke-miterlimit="10" cx="35" cy="35" r="34" style="stroke-dasharray: 16.4198, 400;"></circle> </svg> </a>
+    <!-- End of Scroll Top -->
+
+   
+    <!-- Plugin JS File -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/sticky/sticky.js"></script>
+    <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/main.min.js"></script>
+    <script src="assets/js/fetchingAPIS/cart.js"></script>
+    <script src="assets/js/fetchingAPIS/removeAllFromBasket.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <title>Otp</title>
+
+    <meta name="keywords" content="Marketplace ecommerce responsive HTML5 Template" />
+    <meta name="description" content="Wolmart is powerful marketplace &amp; ecommerce responsive Html5 Template.">
+    <meta name="author" content="D-THEMES">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/icons/favicon.png">
+
+    
+
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-brands-400.woff2" as="font" type="font/woff2"
+            crossorigin="anonymous">
+    <link rel="preload" href="assets/fonts/wolmart.woff?png09e" as="font" type="font/woff" crossorigin="anonymous">
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/swiper/swiper-bundle.min.css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/magnific-popup/magnific-popup.min.css">
+
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+</head>
+
+<body>
+<style>
+.otp-input {
+  width: 100%;
+  display: flex;
+  gap: 10px; 
+  justify-content: center;
+  flex-direction: row-reverse;
+}
+
+.otp-input input {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 24px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.otp-input input:focus {
+    border-color:green;
+}
+
+</style>
+
+        <!-- Start of Main -->
+        <main class="main login-page">
+            <!-- Start of Page Header -->
+            <div class="page-header">
+                <div class="container">
+                    <h1 class="page-title mb-0">تأكيد البريد الألكتروني</h1>
+                </div>
+            </div>
+            <!-- End of Page Header -->
+
+            
+            <div class="page-content">
+                <div class="container">
+                    <div class="login-popup">
+                        <div class="tab tab-nav-boxed tab-nav-center tab-nav-underline">
+                            <ul class="nav nav-tabs text-uppercase" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active">تأكيد البريد الإلكتروني</a>
+                                    <p>سيصلك رسالة تأكيد علي البريد الإلكتروني</p>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="sign-in">
+
+                                    <form  onsubmit="return false;">
+                                        <div class="otp-input">
+                                            <input autofocus type="text" id="otp1" maxlength="1" />
+                                            <input type="text" id="otp2" maxlength="1" />
+                                            <input type="text" id="otp3" maxlength="1" />
+                                            <input type="text" id="otp4" maxlength="1" />
+                                          </div>
+                                        <button id="OtpCheck" type="submit" class="btn btn-primary">تأكيد</button>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+        </main>
+        <!-- End of Main -->
+
+       <script>
+        const inputs = document.querySelectorAll('.otp-input input');
+
+        inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+            if (e.target.value.length === 1 && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+            }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && index > 0 && !e.target.value) {
+            inputs[index - 1].focus();
+            }
+        });
+        });
+       
+        
+       </script>
+
+    <!-- Plugin JS File -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/main.min.js"></script>
+    <script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
+    <script src="assets/js/fetchingAPIS/OtpSend.js"></script>
+</body>
+</html>

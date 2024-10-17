@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" dir="">
+    <script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
+
+<script>
+    CheckLoginPages()
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <title>حسابى</title>
+
+    <meta name="keywords" content="Marketplace ecommerce responsive HTML5 Template" />
+    <meta name="description" content="Wolmart is powerful marketplace &amp; ecommerce responsive Html5 Template.">
+    <meta name="author" content="D-THEMES">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/icons/favicon.png">
+
+    <!-- WebFont.js -->
+    <script>
+        WebFontConfig = {
+            google: { families: ['Poppins:400,500,600,700'] }
+        };
+        ( function ( d ) {
+            var wf = d.createElement( 'script' ), s = d.scripts[0];
+            wf.src = 'assets/js/webfont.js';
+            wf.async = true;
+            s.parentNode.insertBefore( wf, s );
+        } )( document );
+    </script>
+
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-brands-400.woff2" as="font" type="font/woff2"
+            crossorigin="anonymous">
+    <link rel="preload" href="assets/fonts/wolmart.woff?png09e" as="font" type="font/woff" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/swiper/swiper-bundle.min.css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/magnific-popup/magnific-popup.min.css">
+
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<style>
+     h1, h2, h3, h4, h5, h6 , select{
+        font-family: 'Noto Kufi Arabic', sans-serif;
+    }
+    *{
+        font-family: 'Noto Kufi Arabic', sans-serif;
+    }
+</style>
+<body class="my-account">
+    <div class="page-wrapper">
+        <!-- Start of Header -->
+    
+
+
+        <!-- Start of Main -->
+        <main class="main">
+            <!-- Start of Page Header -->
+            <div class="page-header">
+                <div class="container">
+                    <h1 class="page-title mb-0">حسابى</h1>
+                </div>
+            </div>
+            <!-- End of Page Header -->
+
+            <!-- Start of Breadcrumb -->
+          
+            <!-- End of Breadcrumb -->
+
+            <!-- Start of PageContent -->
+            <div class="page-content pt-2">
+                <div class="container">
+                        <div class=" mb-12">
+                            <div class="active in" id="account-dashboard">
+                                
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                        <a href="MyOrder.html" class="link-to-tab">
+                                            <div class="icon-box text-center">
+                                                <span class="icon-box-icon icon-orders">
+                                                    <i class="w-icon-orders"></i>
+                                                </span>
+                                                <div class="icon-box-content">
+                                                    <p class="text-uppercase mb-0">الطلبات</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                        <a href="AddToWallet.html" class="link-to-tab">
+                                            <div class="icon-box text-center">
+                                                <span class="icon-box-icon icon-download">
+                                                    <i class="w-icon-download"></i>
+                                                </span>
+                                                <div class="icon-box-content">
+                                                    <p class="text-uppercase mb-0">المحفظة</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                        <a href="MyAddress.html" class="link-to-tab">
+                                            <div class="icon-box text-center">
+                                                <span class="icon-box-icon icon-address">
+                                                    <i class="w-icon-map-marker"></i>
+                                                </span>
+                                                <div class="icon-box-content">
+                                                    <p class="text-uppercase mb-0">العنوان</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                        <a href="AccountData.html" class="link-to-tab">
+                                            <div class="icon-box text-center">
+                                                <span class="icon-box-icon icon-account">
+                                                    <i class="w-icon-user"></i>
+                                                </span>
+                                                <div class="icon-box-content">
+                                                    <p class="text-uppercase mb-0">بيانات الحساب</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                        <a href="wishlist.html" class="link-to-tab">
+                                            <div class="icon-box text-center">
+                                                <span class="icon-box-icon icon-wishlist">
+                                                    <i class="w-icon-heart"></i>
+                                                </span>
+                                                <div class="icon-box-content">
+                                                    <p class="text-uppercase mb-0">المنتجات المفضلة</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
+                                        <a style="cursor: pointer;" id="logoutButton">
+                                            <div class="icon-box text-center">
+                                                <span class="icon-box-icon icon-logout">
+                                                    <i class="w-icon-logout"></i>
+                                                </span>
+                                                <div  class="icon-box-content">
+                                                    <p class="text-uppercase mb-0">خروج من الحساب</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+    <!-- Plugin JS File -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/main.min.js"></script>
+    <script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
+    <script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
+    <script src="assets/js/fetchingAPIS/Logout.js"></script>
+
+</body>
+
+</html>

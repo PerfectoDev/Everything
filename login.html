@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <title>Wolmart eCommmerce Marketplace HTML Template</title>
+
+    <meta name="keywords" content="Marketplace ecommerce responsive HTML5 Template" />
+    <meta name="description" content="Wolmart is powerful marketplace &amp; ecommerce responsive Html5 Template.">
+    <meta name="author" content="D-THEMES">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/icons/favicon.png">
+
+    
+
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-brands-400.woff2" as="font" type="font/woff2"
+            crossorigin="anonymous">
+    <link rel="preload" href="assets/fonts/wolmart.woff?png09e" as="font" type="font/woff" crossorigin="anonymous">
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/swiper/swiper-bundle.min.css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/magnific-popup/magnific-popup.min.css">
+
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<body>
+
+
+        <!-- Start of Main -->
+        <main class="main login-page">
+            <!-- Start of Page Header -->
+            <div class="page-header">
+                <div class="container">
+                    <h1 class="page-title mb-0">تسجيل الدخول</h1>
+                </div>
+            </div>
+            <!-- End of Page Header -->
+
+            
+            <div class="page-content">
+                <div class="container">
+                    <div class="login-popup">
+                        <div class="tab tab-nav-boxed tab-nav-center tab-nav-underline">
+                            <ul class="nav nav-tabs text-uppercase" role="tablist">
+                                <li class="nav-item">
+                                    <a onclick="window.location.href='Register-New-Account.html'" class="nav-link active">تسجيل حساب</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="sign-in">
+
+                                    <form id="loginForm" onsubmit="return false;">
+                                        <div class="form-group">
+                                            <label for="emailOrPhone">رقم الهاتف / البريد الالكتروني</label>
+                                            <input type="text" class="form-control" name="emailOrPhone" id="emailOrPhone" required>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="password">كلمة المرور *</label>
+                                            <input type="password" class="form-control" name="password" id="password" required>
+                                        </div>
+                                        <div class="form-checkbox d-flex align-items-center justify-content-between">
+                                            <input type="checkbox" class="custom-checkbox" id="remember1" name="remember1">
+                                            <label for="remember1">تذكر كلمة المرور</label>
+                                            <a href="forgot-password.html">نسيت كلمة المرور</a>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+        </main>
+        <!-- End of Main -->
+
+       <script>
+
+function checkLoginStatus() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') {
+        window.location.href = 'ar-defult-rtl-old-slider.html';
+    }
+}
+checkLoginStatus();
+       </script>
+
+    <!-- Plugin JS File -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/main.min.js"></script>
+    <script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
+</body>
+</html>

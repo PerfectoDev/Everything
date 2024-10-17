@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <title>Wolmart eCommmerce Marketplace HTML Template</title>
+
+    <meta name="keywords" content="Marketplace ecommerce responsive HTML5 Template" />
+    <meta name="description" content="Wolmart is powerful marketplace &amp; ecommerce responsive Html5 Template.">
+    <meta name="author" content="D-THEMES">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/icons/favicon.png">
+
+
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-regular-400.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/vendor/fontawesome-free/webfonts/fa-brands-400.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="assets/fonts/wolmart.woff?png09e" as="font" type="font/woff" crossorigin="anonymous">
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/swiper/swiper-bundle.min.css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/magnific-popup/magnific-popup.min.css">
+
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+</head>
+
+
+
+
+<!-- Start of Main -->
+<main class="main">
+    <!-- Start of Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title mb-0">تسجيل حساب جديد</h1>
+        </div>
+    </div>
+    <!-- End of Page Header -->
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+
+            </div>
+            <div class="col-lg-6">
+                <div class="tab-pane" id="account-details">
+
+                    <form class="form account-details-form" id="registrationForm" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="firstname">الاسم</label>
+                                    <input type="text" id="firstname" name="firstname" placeholder="" class="form-control form-control-md" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Email">البريد الالكتروني</label>
+                                    <input type="email" id="Email" name="email" placeholder="" class="form-control form-control-md" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="username">اسم المستخدم</label>
+                                    <input type="text" id="username" name="username" placeholder="" class="form-control form-control-md" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="mobileNumber">رقم الجوال</label>
+                                    <input type="text" id="mobileNumber" name="mobileNumber" placeholder="" class="form-control form-control-md" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-dark" for="new-password">كلمة المرور</label>
+                            <input type="password" class="form-control form-control-md" id="new-password" name="new_password" required>
+                        </div>
+                        <div class="form-group mb-10">
+                            <label class="text-dark" for="conf-password">تأكيد كلمة المرور</label>
+                            <input type="password" class="form-control form-control-md" id="conf-password" name="conf_password" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-rounded btn-sm mb-4">تسجيل حساب جديد</button>
+                        <button onclick="window.location.href='login.html'" type="submit" class="btn btn-dark btn-rounded btn-sm mb-4">تسجيل الدخول</button>
+                    </form>
+                    
+                </div>
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+
+        </div>
+    </div>
+</main>
+<!-- End of Main -->
+
+<script>
+
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (isLoggedIn === 'true') {
+            window.location.href = 'ar-defult-rtl-old-slider.html';
+        }
+    }
+    checkLoginStatus();
+           </script>
+<!-- Plugin JS File -->
+<script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
+<script src="assets/vendor/jquery/jquery.min.js"></script>
+<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+<script src="assets/js/main.min.js"></script>
+</body>
+
+</html>
