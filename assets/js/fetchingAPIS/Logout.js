@@ -33,7 +33,7 @@ async function logout() {
             return;
         }
 
-        const resultText = await response.text(); // استخدام text بدلاً من json
+        const resultText = await response.text();  
         console.log('Logout Response:', resultText);
         
         const Toast = Swal.mixin({

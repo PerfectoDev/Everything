@@ -295,6 +295,64 @@ function updateSlider(sliderData) {
     });
 }
 
+/*adds--------------*/
+
+fetch("https://everyapi.webxy.net/api/Adds/get-all-adds")
+        .then(response => response.json())
+        .then(data => {
+            const adsContainer = document.getElementById('ads-container');
+            const domainImage = 'https://everyui.webxy.net/';
+
+            const filteredAds = data.filter(ad => ad.publish && (ad.pagePlace === 0 || ad.pagePlace === 2));
+
+            for (let i = 0; i < filteredAds.length; i += 2) {
+                const ad1 = filteredAds[i];
+                const ad2 = filteredAds[i + 1];
+
+                const bannerHTML = `
+                    <div class="swiper-slide ads-slide">
+                        <div class="row ads-row">
+                            <div class="col-md-6 mb-4 ads-col">
+                                <div class="banner banner-fixed overlay-light br-xs ads-banner">
+                                    <figure>
+                                        <img src="${domainImage}${ad1.imageUrl}" alt="Category Banner" width="610" height="160" style="background-color: #ecedec;" />
+                                    </figure>
+                                    <div class="banner-content y-50 mt-0 ads-content">
+                                        <h3 class="banner-title text-uppercase ads-title">${ad1.titleAr ? ad1.titleAr : ad1.title}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            ${ad2 ? `
+                            <div class="col-md-6 mb-4 ads-col">
+                                <div class="banner banner-fixed overlay-light br-xs ads-banner">
+                                    <figure>
+                                        <img src="${domainImage}${ad2.imageUrl}" alt="Category Banner" width="610" height="160" style="background-color: #636363;" />
+                                    </figure>
+                                    <div class="banner-content y-50 mt-0 ads-content">
+                                        <h3 class="banner-title text-uppercase ads-title">${ad2.titleAr ? ad2.titleAr : ad2.title}</h3>
+                                    </div>
+                                </div>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                adsContainer.innerHTML += bannerHTML;
+            }
+
+            new Swiper('.mySwiper', {
+                slidesPerView: 1,
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                loop: true
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching ads:", error);
+        });
 /*عرض مميز  -----------*/
 document.addEventListener("DOMContentLoaded", function () {
     const apiSpacilDayUrl = "https://everyapi.webxy.net/Product/GetSpacilDay";

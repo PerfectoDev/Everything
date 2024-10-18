@@ -1,30 +1,31 @@
-console.log(localStorage.getItem('AdDtoCart'));
-
-
 function AddToCart() {
-let product_id = document.getElementById('product_id').value
-let Quantity = document.getElementById('Quantity').value
-let featuresId = '1'
+    let product_id = document.getElementById('product_id').value;
+    let Quantity = document.getElementById('Quantity').value;
+    let featuresId = '1'; // يمكنك تعديل هذا إذا كنت تستخدم معرفات مختلفة
     let userId = localStorage.getItem('User_id');
+
+    // الحصول على اللون والحجم المحددين
+    let selectedColor = Array.from(document.querySelectorAll('#ColorSwitch .color.active')).map(color => color.style.backgroundColor);
+    let selectedSize = Array.from(document.querySelectorAll('#size .size.active')).map(size => size.textContent);
+
     let ProductData = {
-        'userId' : userId,
-        'product_id' : product_id,
-        'quantity' : Quantity,
-        'featuresId' : featuresId
-    }
+        'userId': userId,
+        'product_id': product_id,
+        'quantity': Quantity,
+        'featuresId': featuresId,
+        'color': selectedColor.length > 0 ? selectedColor[0] : null, // إذا لم يتم اختيار أي لون
+        'size': selectedSize.length > 0 ? selectedSize[0] : null   // إذا لم يتم اختيار أي حجم
+    };
 
-    localStorage.setItem('AdDtoCart' , JSON.stringify(ProductData));
+    localStorage.setItem('AdDtoCart', JSON.stringify(ProductData));
 
-    AddToBasket()
-};
-
-
-
+    AddToBasket();
+}
 
 async function AddToBasket() { 
     const ApiLink = 'https://everyapi.webxy.net/Orders/Add-to-Basket';
     const productDataString = localStorage.getItem('AdDtoCart');
-    
+
     if (!productDataString) {
         console.error('No product data found in localStorage.');
         return;
@@ -47,6 +48,8 @@ async function AddToBasket() {
     const productId = ProductData.product_id;
     const quantity = ProductData.quantity;
     const featuresId = ProductData.featuresId;
+    const color = ProductData.color;
+    const size = ProductData.size;
 
     const token = localStorage.getItem('token');    
 
@@ -62,7 +65,9 @@ async function AddToBasket() {
                 userId: userId,
                 productId: productId,
                 quantity: quantity,
-                featuresId: featuresId
+                featuresId: featuresId,
+                color: color,
+                size: size
             })
         });
 
@@ -75,9 +80,9 @@ async function AddToBasket() {
                 icon: "error"
             });
             setTimeout(() => {
-                location.href='login.html'
+                location.href='login.html';
             }, 1500);
-        }else { 
+        } else { 
             Swal.fire({
                 title: "success",
                 text: 'تم الاضافة بنجاح',
@@ -90,5 +95,3 @@ async function AddToBasket() {
         console.error('There was a problem with the fetch operation:', error);
     }
 }
-
-

@@ -47,10 +47,10 @@ function deleteAddress(addressId) {
                 throw new Error(errText || 'خطأ غير معروف');
             });
         }
-        return response.text(); // استخدام text بدلاً من json
+        return response.text();  
     })
     .then(text => {
-        // تحقق مما إذا كانت النص يحتوي على "done"
+
         if (text.includes("done")) { 
             const Toast = Swal.mixin({
                 toast: true,
@@ -68,7 +68,7 @@ function deleteAddress(addressId) {
                 title: "تم حذف العنوان بنجاح"
             });
 
-            // إزالة العنصر من الجدول
+
             document.querySelector(`button[data-id="${addressId}"]`).closest('tr').remove();
 
         } else {

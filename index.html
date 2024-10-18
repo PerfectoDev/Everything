@@ -17,6 +17,37 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="">
 
+    <Style>
+        .swiper-container.mySwiper {
+    width: 1240px;
+    height: 200px;
+    margin: 0 auto;
+    }
+
+
+        .swiper-slide.ads-slide {
+        width: 100%;
+    }
+
+
+.ads-banner {
+    width: 610px;
+    height: 200px;
+}
+
+
+.ads-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.ads-title {
+    color: #fff;
+}
+    </Style>
+
     <!-- WebFont.js -->
     <script>
         WebFontConfig = {
@@ -320,31 +351,12 @@
                 </div>
                 <!-- End of Iocn Box Wrapper -->
 
-                <div class="row category-banner-wrapper appear-animate pt-6 pb-8">
-                    <div class="col-md-6 mb-4">
-                        <div class="banner banner-fixed overlay-light br-xs">
-                            <figure>
-                                <img src="assets/images/demos/demo-rtl/banners/banner-1.jpg" alt="Category Banner"
-                                    width="610" height="160" style="background-color: #ecedec;" />
-                            </figure>
-                            <div class="banner-content y-50 mt-0">
-                                
-                                <h3 class="banner-title text-uppercase">خصم فى القسم الرياضى<br></h3>
-                               
-                            </div>
+                <div class="row category-banner-wrapper text-white appear-animate pt-6 pb-8">
+                    <div class="swiper-container mySwiper">
+                        <div class="swiper-wrapper" id="ads-container">
                         </div>
-                    </div>
-                    <div class="col-md-6 mb-4">
-                        <div class="banner banner-fixed overlay-light br-xs">
-                            <figure>
-                                <img src="assets/images/demos/demo-rtl/banners/banner-2.jpg" alt="Category Banner"
-                                    width="610" height="160" style="background-color: #636363;" />
-                            </figure>
-                            <div class="banner-content y-50 mt-0">
-                                <h3 class="banner-title text-white text-uppercase">الاكسسوارت
-                              
-                            </div>
-                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
                     </div>
                 </div>
                 <!-- End of Category Banner Wrapper -->
