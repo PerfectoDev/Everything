@@ -2,20 +2,20 @@
 let phoneNumber, title, description, logo, faceBook, twitter, instgram, youtube, pint, message, contactUs;
 
     fetch("https://everyapi.webxy.net/PageSetting/GetSetting")
-        .then(response => response.json()) 
+        .then(response => response.json())
         .then((data) => {
         const domainImage = "https://everyui.webxy.net/";
         phoneNumber=data.phoneNumber;
-        title=data.titleAr;       
+        title=data.titleAr;
         description=data.descriptionAr;
         logo=data.logo;
-        faceBook=data.faceBook;  
+        faceBook=data.faceBook;
         twitter=data.twitter;
         instgram=data.instagram;
         youtube=data.youtube;
         pint=data.pint;
         message=data.messageAR;
-        contactUs=data.contactUs;
+        contactUs=data.contactUs
 
         console.log("Data fetched successfully:", data);
         }).catch((err) =>{console.log("Error")});
@@ -146,19 +146,17 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <span></span>
                                         </div>
 
-                                        <div class="product-form">
-                                            <div class="product-qty-form">
-                                                <div class="input-group">
-                                                    <input class="quantity form-control" id='Quantity' type="number" min="1" max="10000000">
-                                                    <button class="quantity-plus w-icon-plus"></button>
-                                                    <button class="quantity-minus w-icon-minus"></button>
-                                                </div>
-                                            </div>
-                                            <button id='btn' class="btn btn-cart btn-primary">
-                                                <i class="w-icon-cart"></i>
-                                                <span>اضافة للسلة</span>
-                                            </button>
+                                                <div class="product-form">
+                                    <div class="product-qty-form">
+                                        <div class="input-qty-group">
+                                            <input class="quantity form-control" id='Quantity' type="number" min="1" >
                                         </div>
+                                    </div>
+                                    <button id='btn' class="btn btn-cart btn-primary">
+                                        <i class="w-icon-cart"></i>
+                                        <span>اضافة للسلة</span>
+                                    </button>
+                                </div>
 
                                         <div class="social-links-wrapper">
                                             <div class="social-links">
@@ -241,74 +239,98 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
                 
-
     let selectedSizes = [];
-let selectedColors = [];
-let productPrice = document.getElementById('product-variation-pricee');
-let btn = document.getElementById('btn');
+    let selectedColors = [];
+    let productPrice = document.getElementById('product-variation-pricee');
+    let btn = document.getElementById('btn');
+    
+    btn.disabled = true; 
+    
+    const updateButtonState = () => {
+        if (selectedSizes.length > 0 && selectedColors.length > 0) {
+            btn.disabled = false; 
+            btn.onclick = () => {
+                AddToCart();
+                checkForMatchingFeature();
+            };
+        } else {
+            btn.disabled = true; 
+            btn.onclick = null;  
+        }
+    };
+    
+    const checkForMatchingFeature = () => {
+        let foundMatchingFeature = false;
+    
+        product.productFeatureDto.forEach(productFeature => {
+            if (selectedSizes.includes(productFeature.sizeName) && selectedColors.includes(productFeature.color)) {
+                let productId = productFeature.id;
+                let productCount = productFeature.count
+                localStorage.setItem('ProductId', productId);
+                localStorage.setItem('ProductCount' , productCount)
+                foundMatchingFeature = true;
 
-btn.disabled = true; 
-
-const updateButtonState = () => {
-    if (selectedSizes.length > 0 && selectedColors.length > 0) {
-        btn.disabled = false; 
-        btn.onclick = () => {
-            AddToCart()
-        };
-    } else {
-        btn.disabled = true; 
-        btn.onclick = null;  
+            }
+        });
+            if (!foundMatchingFeature) {
+            localStorage.setItem('ProductId', 'False');
+        }
+    };
+    
+    const sizeDiv = document.getElementById('size');
+    
+    if (sizeDiv) {
+        product.productFeatureDto.forEach(productFeature => {
+            const Size = document.createElement('a');
+            Size.href = '#';
+            Size.classList.add('size');
+            Size.textContent = productFeature.sizeName;
+    
+            Size.onclick = () => { 
+                if (selectedSizes.includes(productFeature.sizeName)) {
+                    selectedSizes = selectedSizes.filter(size => size !== productFeature.sizeName);
+                    Size.classList.remove('active');
+                } else {
+                    selectedSizes.splice(0, selectedSizes.length);
+                    selectedSizes.push(productFeature.sizeName);
+                    Size.classList.add('active');
+                    console.log(selectedSizes);
+                }
+                updateButtonState();
+                checkForMatchingFeature();
+            };
+    
+            sizeDiv.appendChild(Size);
+        });
     }
-};
-
-const sizeDiv = document.getElementById('size');
-
-if (sizeDiv) {
-    product.productFeatureDto.forEach(productFeature => {
-        const Size = document.createElement('a');
-        Size.href = '#';
-        Size.classList.add('size');
-        Size.textContent = productFeature.sizeName;
-
-        Size.onclick = () => { 
-            if (selectedSizes.includes(productFeature.sizeName)) {
-                selectedSizes = selectedSizes.filter(size => size !== productFeature.sizeName);
-                Size.classList.remove('active');
-            } else {
-                selectedSizes.push(productFeature.sizeName);
-                Size.classList.add('active');
-            }
-            updateButtonState();
-        };
-
-        sizeDiv.appendChild(Size);
-    });
-}
-
-const ColorDiv = document.getElementById('ColorSwitch');
-
-if (ColorDiv) {
-    product.productFeatureDto.forEach(productFeature => {
-        const Color = document.createElement('a');
-        Color.style.backgroundColor = productFeature.color;
-        Color.classList.add('color');
-        Color.href = '#';
-
-        Color.onclick = () => {
-            if (selectedColors.includes(productFeature.color)) {
-                selectedColors = selectedColors.filter(color => color !== productFeature.color);
-                Color.classList.remove('active');
-            } else {
-                selectedColors.push(productFeature.color);
-                Color.classList.add('active');
-            }
-            updateButtonState();
-        };
-
-        ColorDiv.appendChild(Color);
-    });
-}
-
+    
+    const ColorDiv = document.getElementById('ColorSwitch');
+    
+    if (ColorDiv) {
+        product.productFeatureDto.forEach(productFeature => {
+            const Color = document.createElement('a');
+            Color.style.backgroundColor = productFeature.color;
+            Color.classList.add('color');
+            Color.href = '#';
+    
+            Color.onclick = () => {
+                if (selectedColors.includes(productFeature.color)) {
+                    selectedColors = selectedColors.filter(color => color !== productFeature.color);
+                    Color.classList.remove('active');
+                } else {
+                    selectedColors.splice(0, selectedColors.length);
+                    selectedColors.push(productFeature.color);
+                    Color.classList.add('active');
+                    console.log(selectedColors);
+                }
+                updateButtonState();
+                checkForMatchingFeature();
+            };
+    
+            ColorDiv.appendChild(Color);
+        });
+    }
+    
     
                 const ImgSwitch = document.querySelector('.ImgSwitch');
 
@@ -376,11 +398,6 @@ if (ColorDiv) {
             }
 
 
-/*
-<div class="product-thumb swiper-slide swiper-slide-visible swiper-slide-active swiper-slide-thumb-active" role="group" aria-label="1 / 6" style="width: 106.25px; margin-left: 10px;">
-<img src="assets/images/products/default/1-800x900.jpg" alt="Product Thumb" width="800" height="900">
-</div>
-*/
         })
         .catch(error => {
             console.error('حدث خطأ:', error);
@@ -394,44 +411,6 @@ if (ColorDiv) {
 
 
 
-
-    /*     async function fetchProductImages(product) {
-        try {
-            const productThumbsContainer = document.getElementById('product-thumbs');
-            productThumbsContainer.innerHTML = '';
-
-            if (product.productFeatureDto) {
-                console.log('Product Features:', product.productFeatureDto); 
-                product.productFeatureDto.forEach(feature => {
-                    const thumbDiv = document.createElement('div');
-                    thumbDiv.classList.add('product-thumb', 'swiper-slide');
-
-                    const img = document.createElement('img');
-                    img.src = `https://everyui.webxy.net/${feature.featureImage}`;
-                    img.alt = product.name;
-                    img.style.width = '100px'; 
-                    img.style.height = '100px';
-
- 
-                    thumbDiv.addEventListener('click', () => {
-                        console.log("Size Name:", feature.sizeName);
-                        console.log("Color:", feature.color);
-                        console.log("Count:", feature.count);
-                        console.log("Size:", feature.size);
-                        console.log("ID:", feature.id);
-                        console.log("Feature Image:", feature.featureImage);
-                    });
-
-                    thumbDiv.appendChild(img);
-                    productThumbsContainer.appendChild(thumbDiv);
-                });
-            } else {
-                console.log('لا توجد ميزات للمنتج.'); 
-            }
-        } catch (error) {
-            console.error('Error fetching product images:', error);
-        }
-    } */
 
 
 

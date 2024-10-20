@@ -17,7 +17,6 @@ let phoneNumber, title, description, logo, faceBook, twitter, instgram, youtube,
         message=data.messageAR;
         contactUs=data.contactUs;
 
-        console.log("Data fetched successfully:", data);
 
 
 
@@ -155,10 +154,10 @@ fetch("https://everyapi.webxy.net/Category/GettMenu")
     .then((response) => response.json())
     .then((data) => {
         const mainMenu = document.getElementById("main-menu");
-
         data.forEach((category) => {
             const li = document.createElement("li");
-            li.innerHTML = `<a href="demo-rtl-shop.html"><i class="${category.iconUrl}" id="main-level"></i> ${category.nameAr}</a>`;
+
+            li.innerHTML = `<a href="demo-rtl-shop.html?CategoryId=${category.id}"><i class="${category.iconUrl}" id="main-level"></i> ${category.nameAr}</a>`;
 
             if (category.secondLevels && category.secondLevels.length > 0) {
                 const subMenu = document.createElement("ul");

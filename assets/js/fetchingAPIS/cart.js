@@ -19,7 +19,6 @@ fetch(url, {
     return response.json();
 })
 .then(data => {
-
     document.getElementById('data_table').innerHTML = '';
 
     let count = 0 ; 
@@ -30,14 +29,25 @@ fetch(url, {
 
     data.forEach(item => {
         const productData = {
-            name: item.productName_Ar,  
+            name: item.productName_Ar,
             quantity: item.quantity,
             price: item.unitPrice,
             TotalPrice: item.totalPrice,
             Img: 'https://everyui.webxy.net/' + item.productImage,
-            productId: item.productId
+            productId: item.productId,
+            featureId: item.featureId,
+            productFeatureDto: item.productFeatureDto,
+            color: '',
+            size: '',
         };
-        
+    
+        const matchingFeatures = productData.productFeatureDto.filter(feature => feature.id === productData.featureId);
+    
+        if (matchingFeatures.length > 0) {
+            productData.color = matchingFeatures[0].color || '';
+            productData.size = matchingFeatures[0].sizeName || ''; 
+        }
+    
         const productDiv = document.createElement('tr');
         productDiv.innerHTML = `
             <td class="product-thumbnail">
@@ -47,16 +57,22 @@ fetch(url, {
                             <img src="${productData.Img}" alt="product" width="300" height="338">
                         </figure>
                     </a>
-                <button onclick='DeleteProductFromCart(${productData.productId})' class="btn btn-close"><i class="fas fa-times"></i></button>
+                    <button onclick='DeleteProductFromCart(${productData.productId})' class="btn btn-close"><i class="fas fa-times"></i></button>
                 </div>
             </td>
             <td class="product-name">
                 <a href="product-default.html">${productData.name}</a>
             </td>
-            <td class="product-price"><span class="amount">${productData.price}</span></td>
+            <td class="product-color">
+                <a href="product-default.html" style='display:flex;justify-content:center;align-items:center'>
+                <div style='width:30px;height:30px;border-radius:50%; background-color:${productData.color}'></div>
+                </a>
+            </td>
+            <td class="product-size">${productData.size} </td>
+            <td class="product-price"><span class="amout">${productData.price}</span></td>
             <td class="product-quantity">
                 <div class="input-group">
-                    <input class="quantityForm${productData.productId} form-control"  type="number" value='${productData.quantity}' min='1' max="100000">
+                    <input class="quantityForm${productData.productId} form-control" type="number" value='${productData.quantity}' min='1' max="100000">
                     <button onclick="document.querySelector('.quantityForm${productData.productId}').value = parseInt(document.querySelector('.quantityForm${productData.productId}').value) + 1" class="quantity-plus w-icon-plus"></button>
                     <button onclick="if(document.querySelector('.quantityForm${productData.productId}').value != 0){document.querySelector('.quantityForm${productData.productId}').value = parseInt(document.querySelector('.quantityForm${productData.productId}').value) - 1}" class="quantity-minus w-icon-minus"></button>
                 </div>
@@ -65,10 +81,11 @@ fetch(url, {
                 <span class="amount">${productData.TotalPrice}</span>
             </td>
         `;
-      
+    
         document.getElementById('data_table').appendChild(productDiv);
         grandTotal += parseFloat(productData.TotalPrice) || 0;
     });
+    
    
     
 document.getElementById('GrandTotal').innerHTML = grandTotal

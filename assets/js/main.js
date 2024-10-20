@@ -3095,7 +3095,7 @@ window.Wolmart = {};
         $star.closest('.rating-form').find('select').val($star.text());
         e.preventDefault();
     }
-
+    productId = localStorage.getItem('ProductId')
     function onAddToCartSingle(e) {
 
         var $this = $(this),
@@ -3111,7 +3111,15 @@ window.Wolmart = {};
             $alert.fadeOut(function () {
                 $alert.fadeIn();
             })
-        } else {
+        }else if(productId === 'False'){
+            productName = $this.closest('.product-single').find('.product-title').text();
+            var alertHtml = '<div class="alert alert-danger alert-cart-product mb-2">\
+                            <a href="cart.html" class="btn btn-success btn-rounded">View Cart</a>\
+                            <p class="mb-0 ls-normal">“'+ productName + '”اللون والحجم المطلوبين غير متوفرين لهذا المنتج.</p>\
+                            <a href="#" class="btn btn-link btn-close" aria-label="button">\<i class="close-icon"></i>\</a>\
+                            </div>'
+            $this.closest('.product-single').before(alertHtml);
+        }else {
             productName = $this.closest('.product-single').find('.product-title').text();
             var alertHtml = '<div class="alert alert-success alert-cart-product mb-2">\
                             <a href="cart.html" class="btn btn-success btn-rounded">View Cart</a>\

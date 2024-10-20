@@ -1,28 +1,36 @@
 function AddToCart() {
     let product_id = document.getElementById('product_id').value;
     let Quantity = document.getElementById('Quantity').value;
-    let featuresId = '1'; // يمكنك تعديل هذا إذا كنت تستخدم معرفات مختلفة
+    console.log(Quantity)
     let userId = localStorage.getItem('User_id');
+    let productid = localStorage.getItem('ProductId')
+    let productCount = localStorage.getItem('ProductCount')
+       
+        if(productid === 'False' ) { 
+        console.log('المنتج غير موجود')
 
-    // الحصول على اللون والحجم المحددين
-    let selectedColor = Array.from(document.querySelectorAll('#ColorSwitch .color.active')).map(color => color.style.backgroundColor);
-    let selectedSize = Array.from(document.querySelectorAll('#size .size.active')).map(size => size.textContent);
-
+        return
+        
+    }
+    let featuresId = productid; 
+    
     let ProductData = {
         'userId': userId,
         'product_id': product_id,
         'quantity': Quantity,
         'featuresId': featuresId,
-        'color': selectedColor.length > 0 ? selectedColor[0] : null, // إذا لم يتم اختيار أي لون
-        'size': selectedSize.length > 0 ? selectedSize[0] : null   // إذا لم يتم اختيار أي حجم
+        
     };
-
     localStorage.setItem('AdDtoCart', JSON.stringify(ProductData));
+    if(productCount < Quantity) { 
+        console.log('العدد الموجود في المنتج غير كافي')
+        return
 
+    }
     AddToBasket();
 }
 
-async function AddToBasket() { 
+async function AddToBasket() {
     const ApiLink = 'https://everyapi.webxy.net/Orders/Add-to-Basket';
     const productDataString = localStorage.getItem('AdDtoCart');
 
@@ -48,8 +56,7 @@ async function AddToBasket() {
     const productId = ProductData.product_id;
     const quantity = ProductData.quantity;
     const featuresId = ProductData.featuresId;
-    const color = ProductData.color;
-    const size = ProductData.size;
+
 
     const token = localStorage.getItem('token');    
 
@@ -66,8 +73,6 @@ async function AddToBasket() {
                 productId: productId,
                 quantity: quantity,
                 featuresId: featuresId,
-                color: color,
-                size: size
             })
         });
 
@@ -83,11 +88,7 @@ async function AddToBasket() {
                 location.href='login.html';
             }, 1500);
         } else { 
-            Swal.fire({
-                title: "success",
-                text: 'تم الاضافة بنجاح',
-                icon: "success"
-            });
+           
         }
 
         const data = JSON.parse(responseText);

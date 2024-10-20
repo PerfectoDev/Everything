@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
+
     fetch(`https://everyapi.webxy.net/Wallet/get-wallet-by-userId/${userId}`, {
         method: 'GET',
         headers: {
@@ -34,13 +35,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('submitButton').addEventListener('click', function(event) {
-        event.preventDefault();
+        event.preventDefault();  
 
         const amount = parseFloat(document.getElementById('AddToWallet').value);
 
-
-        if (isNaN(amount) || amount < 0) {
-            alert('يرجى التحقق من البيانات المدخلة.');
+        if (isNaN(amount) || amount <= 0) {
+            alert('يرجى إدخال مبلغ صحيح وموجب.');
             return;
         }
 
@@ -58,42 +58,31 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify(requestData)
         })
         .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(`Error adding to wallet: ${text}`);
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('response data:', data);
-            if (data.success) {
-                alert('تمت إضافة المبلغ إلى المحفظة بنجاح.');
+            console.log('Response status:', response.status);
+            return response.text().then(text => {
+                console.log('Response text:', text);  
+                if (!response.ok) {
+                    throw new Error(`Server responded with ${response.status}: ${text}`);
+                }
 
-                return fetch(`https://everyapi.webxy.net/Wallet/get-wallet-by-userId/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-            } else {
-                alert('فشل في إضافة المبلغ: ' + data.message);
-            }
+                return text;  
+            });
         })
-        .then(response => {
-            if (response && response.ok) {
-                return response.json();
-            }
-        })
-        .then(data => {
-            if (data && data.balance !== undefined) {
-                document.getElementById('wallet-amount').innerText = `${data.balance}$`;
-            } else {
-                console.error('Invalid response data:', data);
-            }
+        .then(text => {
+            console.log('Response data:', text);
+            alert('تمت إضافة المبلغ إلى المحفظة بنجاح.');
+            setTimeout(() => location.reload(), 1000); 
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error details:', error);
+            
+            let errorMessage = 'حدث خطأ أثناء إضافة المبلغ: ';
+            if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+                errorMessage += 'فشل الاتصال بالخادم. تأكد من اتصالك بالإنترنت وحاول مرة أخرى.';
+            } else {
+                errorMessage += error.message;
+            }
+            alert(errorMessage);
         });
     });
 });
