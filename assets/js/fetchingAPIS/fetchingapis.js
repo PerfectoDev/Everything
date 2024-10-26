@@ -364,147 +364,140 @@ document.addEventListener("DOMContentLoaded", function () {
             productContainer.innerHTML = "";
             if (data.length > 0) {
                 let swiperWrapper = `
-                            <div class="single-product h-100 br-sm">
-                            <h4 class="title-sm title-underline font-weight-bolder ls-normal">
-                            عرض اليوم المميز
-                            </h4>
-                            <div class="swiper">
-                                <div class="swiper-container swiper-theme nav-top swiper-nav-lg" data-swiper-options="{
-                                    'spaceBetween': 20,
-                                    'slidesPerView': 1
-                                    }">
-                                    <div class="swiper-wrapper row cols-1 gutter-no">
+                    <div class="single-product h-100 br-sm">
+                    <h4 class="title-sm title-underline font-weight-bolder ls-normal">
+                    عرض اليوم المميز
+                    </h4>
+                    <div class="swiper">
+                        <div class="swiper-container swiper-theme nav-top swiper-nav-lg" data-swiper-options="{
+                            'spaceBetween': 20,
+                            'slidesPerView': 1
+                            }">
+                            <div class="swiper-wrapper row cols-1 gutter-no">
                 `;
 
                 data.forEach((product) => {
-
-                    const productId=product.productId;
-
-                    const productImage =
-                        product.productAttributs.length > 0 && product.productAttributs[0].productAttributImages.length > 0 ? domainImage + product.productAttributs[0].productAttributImages[0].imagePath : "placeholder.jpg";                        product.productAttributs.length > 0 &&product.productAttributs[0].productAttributImages.length > 0? domainImage + product.productAttributs[0].productAttributImages[0].imagePath: "https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg";
-
+                    const productId = product.productId;
+                    const productImage = product.productAttributs.length > 0 && product.productAttributs[0].productAttributImages.length > 0
+                        ? domainImage + product.productAttributs[0].productAttributImages[0].imagePath
+                        : "placeholder.jpg";
 
                     const productSlide = `
-                                                     <div data-id='${product.productId}' class="swiper-slide productD">
-                                                     <input value='${product.productId}' id='product_id' style='display:none'>
-                                            <div class="product product-single row">
-                                                <div class="col-md-6">
-                                                    <div
-                                                        class="product-gallery product-gallery-sticky product-gallery-vertical">
-                                                        <div
-                                                            class="swiper-container product-single-swiper swiper-theme nav-inner">
-                                                            <div class="swiper-wrapper row cols-1 gutter-no">
-                                                              ${product.productFeatureDto.map(feature => `
-                                                             <div class="swiper-slide">
-                                                                    <figure class="product-image">
-                                                                        <img src="${domainImage + feature.featureImage}" alt="${product.productName}"
-                                                                            data-zoom-image="${domainImage + feature.featureImage}"
-                                                                            alt="Product Image" width="800"
-                                                                            height="900">
-                                                                    </figure>
-                                                                    </div>
-                                                        `).join('')}
-                                                              
-                                                               
-                                                            </div>
-                                                            <button class="swiper-button-next"></button>
-                                                            <button class="swiper-button-prev"></button>
-                                                            <div class="product-label-group">
-                                                        <label class="product-label label-discount">${product.discount} خصم</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-thumbs-wrap swiper-container"
-                                                            data-swiper-options="{
-                                                            'breakpoints': {
-                                                                '992': {
-                                                                    'direction': 'vertical',
-                                                                    'slidesPerView': 'auto'
-                                                                }
-                                                            }
-                                                        }">
-                                                        <div class="product-thumbs swiper-wrapper row cols-lg-1 cols-4 gutter-sm">
-                                                        ${product.productFeatureDto.map(feature => `
-                                                            <div class="product-thumb swiper-slide">
-                                                                <img src="${domainImage + feature.featureImage}" alt="Product thumb" width="60" height="68" onclick="changeMainImage('${domainImage + feature.featureImage}')" />
-                                                            </div>
-                                                        `).join('')}
-                                                    </div>
-                                                        </div>
-                                                    </div>
+                        <div data-id='${product.productId}' class="swiper-slide productD">
+                        <input value='${product.productId}' id='product_id' style='display:none'>
+                            <div class="product product-single row">
+                                <div class="col-md-6">
+                                    <div class="product-gallery product-gallery-sticky product-gallery-vertical">
+                                        <div class="swiper-container product-single-swiper swiper-theme nav-inner">
+                                            <div class="swiper-wrapper row cols-1 gutter-no">
+                                                ${product.productFeatureDto.map(feature => `
+                                                <div class="swiper-slide">
+                                                    <figure class="product-image">
+                                                        <img src="${domainImage + feature.featureImage}" alt="${product.productName}"
+                                                            data-zoom-image="${domainImage + feature.featureImage}"
+                                                            alt="Product Image" width="800"
+                                                            height="900">
+                                                    </figure>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="product-details scrollable">
-                                                        <h2 class="product-title mb-1"><a href="ar-product-details.html?id=${productId}">${product.productName_Ar}</a></h2>
-
-                                                        <hr class="product-divider">
-
-                                                       <div class="product-price"><ins class="new-price ls-50">
-                                                            ${product.price}       
-                                                        </ins></div>
-                                                        <div class="ratings-container">
-                                                            <div class="ratings-full">
-                                                                 <span class="ratings" style="width: ${product.review *10}%;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
-                                                            </div>
-                                                            <a href="#" class="rating-reviews">(1 تعليق)</a>
-                                                        </div>
-
-                                                        <div
-                                                            class="product-form product-variation-form product-size-swatch mb-3">
-                                                            <label class="mb-1">المقاسات</label>
-                                                            <div
-                                                              class="flex-wrap d-flex align-items-center product-variations SizeBox" id='SizeBox'>
-
-                                                            </div>
-                                                            <a href="#" class="product-variation-clean">Clean All</a>
-                                                        </div>
-
-                                                        <div class="product-variation-price">
-                                                            <span></span>
-                                                        </div>
-
-                                                        <div class="product-form pt-4">
-                                                            <div class="product-qty-form mb-2 mr-2">
-                                                                <div class="input-group">
-                                                                    <input id='Quantity' class="quantity form-control" type="number"
-                                                                        min="1" max="10000000">
-                                                                    <button class="quantity-plus w-icon-plus"></button>
-                                                                    <button
-                                                                        class="quantity-minus w-icon-minus"></button>
-                                                                </div>
-                                                            </div>
-                                                            <button onclick='AddToCart()' class="btn btn-primary btn-cart">
-                                                                <i class="w-icon-cart"></i>
-                                                                <span>اضف للسلة</span>
-                                                            </button>
-                                                        </div>
-
-                                                        <div class="social-links-wrapper">
-                                                            <div class="social-links">
-                                                                <div class="social-icons social-no-color border-thin">
-                                                                    <a href="${faceBook}"
-                                                                        class="social-icon social-facebook w-icon-facebook"></a>
-                                                                    <a href="${twitter}"
-                                                                        class="social-icon social-twitter w-icon-twitter"></a>
-                                                                    <a href="${pint}"
-                                                                        class="social-icon social-pinterest fab fa-pinterest-p"></a>
-                                                                    <a href="#"
-                                                                        class="social-icon social-whatsapp fab fa-whatsapp"></a>
-                                                                    <a href="#"
-                                                                        class="social-icon social-youtube fab fa-linkedin-in"></a>
-                                                                </div>
-                                                            </div>
-                                                            <span class="divider d-xs-show"></span>
-                                                            <div class="product-link-wrapper d-flex">
-                                                                <a href="#"
-                                                                    class="btn-product-icon btn-wishlist w-icon-heart"></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                `).join('')}
+                                            </div>
+                                            <button class="swiper-button-next"></button>
+                                            <button class="swiper-button-prev"></button>
+                                            <div class="product-label-group">
+                                                <label class="product-label label-discount">${product.discount} خصم</label>
                                             </div>
                                         </div>
-                       `;
+                                        <div class="product-thumbs-wrap swiper-container"
+                                            data-swiper-options="{
+                                            'breakpoints': {
+                                                '992': {
+                                                    'direction': 'vertical',
+                                                    'slidesPerView': 'auto'
+                                                }
+                                            }
+                                        }">
+                                            <div class="product-thumbs swiper-wrapper row cols-lg-1 cols-4 gutter-sm">
+                                                ${product.productFeatureDto.map(feature => `
+                                                <div class="product-thumb swiper-slide">
+                                                    <img src="${domainImage + feature.featureImage}" alt="Product thumb" width="60" height="68" onclick="changeMainImage('${domainImage + feature.featureImage}')" />
+                                                </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="product-details scrollable">
+                                        <h2 class="product-title mb-1"><a href="ar-product-details.html?id=${productId}">${product.productName_Ar}</a></h2>
+                                        <hr class="product-divider">
+                                        <div class="product-price"><ins class="new-price ls-50">
+                                            ${product.price}       
+                                        </ins></div>
+                                        <div class="ratings-container">
+                                            <div class="ratings-full">
+                                                <span class="ratings" style="width: ${product.review * 10}%;"></span>
+                                                <span class="tooltiptext tooltip-top"></span>
+                                            </div>
+                                            <a href="#" class="rating-reviews">(1 تعليق)</a>
+                                        </div>
+
+                                        <div class="product-form product-variation-form product-size-swatch mb-3">
+                                            <label class="mb-1">المقاسات</label>
+                                            <div class="flex-wrap d-flex align-items-center product-variations SizeBox" id='size'>
+                                                ${product.productFeatureDto.map(feature => `
+                                                <a href="#" class="size">${feature.sizeName}</a>
+                                                `).join('')}
+                                            </div>
+                                            <a href="#" class="product-variation-clean">Clean All</a>
+                                        </div>
+                                        <hr class="product-divider">
+
+                                        <div class="product-form product-variation-form product-color-swatch">
+                                            <label>الألوان:</label>
+                                            <div class="d-flex align-items-center product-variations" id='ColorSwitch'>
+                                                ${product.productFeatureDto.map(feature => `
+                                                <a href="#" class="color" style="background-color: ${feature.color};" onclick="changeMainImage('${domainImage + feature.featureImage}')"></a>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                        <div class="product-variation-price">
+                                            <span></span>
+                                        </div>
+
+                                        <div class="product-form pt-4">
+                                            <div class="product-qty-form mb-2 mr-2">
+                                                <div class="input-group">
+                                                    <input id='Quantity' class="quantity form-control" type="number" min="1" max="10000000">
+                                                    <button class="quantity-plus w-icon-plus"></button>
+                                                    <button class="quantity-minus w-icon-minus"></button>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary btn-cart" id="btn-${productId}" onclick="AddToCart()">
+                                                <i class="w-icon-cart"></i>
+                                                <span>اضف للسلة</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="social-links-wrapper">
+                                            <div class="social-links">
+                                                <div class="social-icons social-no-color border-thin">
+                                                    <a href="${faceBook}" class="social-icon social-facebook w-icon-facebook"></a>
+                                                    <a href="${twitter}" class="social-icon social-twitter w-icon-twitter"></a>
+                                                    <a href="${pint}" class="social-icon social-pinterest fab fa-pinterest-p"></a>
+                                                    <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
+                                                    <a href="#" class="social-icon social-youtube fab fa-linkedin-in"></a>
+                                                </div>
+                                            </div>
+                                            <span class="divider d-xs-show"></span>
+                                            <div class="product-link-wrapper d-flex">
+                                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
 
                     swiperWrapper += productSlide;
                 });
@@ -518,28 +511,108 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
 
                 productContainer.innerHTML = swiperWrapper;
-
-                data.forEach((product) => {
-                    const sizeDiv = document.querySelector(".SizeBox");
-                    if (sizeDiv) {
-                        product.productFeatureDto.forEach((productFeature) => {
-                            const Size = document.createElement("a");
-                            Size.href = "#";
-                            Size.classList.add("size");
-                            Size.textContent = productFeature.sizeName;
-                            sizeDiv.appendChild(Size);
-                        });
-                    }
-                });
             } else {
-                productContainer.innerHTML =
-                    "<p>لا توجد منتجات متاحة في الوقت الحالي.</p>";
+                productContainer.innerHTML = "<p>لا توجد منتجات متاحة في الوقت الحالي.</p>";
             }
         })
         .catch((error) => {
             console.error("Error fetching product data:", error);
         });
 });
+
+    let selectedSizes = [];
+    let selectedColors = [];
+    let productPrice = document.getElementById('product-variation-pricee');
+    let btn = document.getElementById('btn');
+    
+    btn.disabled = true; 
+    
+    const updateButtonState = () => {
+        if (selectedSizes.length > 0 && selectedColors.length > 0) {
+            btn.disabled = false; 
+            btn.onclick = () => {
+                AddToCart();
+                checkForMatchingFeature();
+            };
+        } else {
+            btn.disabled = true; 
+            btn.onclick = null;  
+        }
+    };
+    
+    const checkForMatchingFeature = () => {
+        let foundMatchingFeature = false;
+    
+        product.productFeatureDto.forEach(productFeature => {
+            if (selectedSizes.includes(productFeature.sizeName) && selectedColors.includes(productFeature.color)) {
+                let productId = productFeature.id;
+                let productCount = productFeature.count
+                localStorage.setItem('ProductId', productId);
+                localStorage.setItem('ProductCount' , productCount)
+                foundMatchingFeature = true;
+
+            }
+        });
+            if (!foundMatchingFeature) {
+            localStorage.setItem('ProductId', 'False');
+        }
+    };
+    
+    const sizeDiv = document.getElementById('size');
+    
+    if (sizeDiv) {
+        product.productFeatureDto.forEach(productFeature => {
+            const Size = document.createElement('a');
+            Size.href = '#';
+            Size.classList.add('size');
+            Size.textContent = productFeature.sizeName;
+    
+            Size.onclick = () => { 
+                if (selectedSizes.includes(productFeature.sizeName)) {
+                    selectedSizes = selectedSizes.filter(size => size !== productFeature.sizeName);
+                    Size.classList.remove('active');
+                } else {
+                    selectedSizes.splice(0, selectedSizes.length);
+                    selectedSizes.push(productFeature.sizeName);
+                    Size.classList.add('active');
+                    console.log(selectedSizes);
+                }
+                updateButtonState();
+                checkForMatchingFeature();
+            };
+    
+            sizeDiv.appendChild(Size);
+        });
+    }
+    
+    const ColorDiv = document.getElementById('ColorSwitch');
+    
+    if (ColorDiv) {
+        product.productFeatureDto.forEach(productFeature => {
+            const Color = document.createElement('a');
+            Color.style.backgroundColor = productFeature.color;
+            Color.classList.add('color');
+            Color.href = '#';
+    
+            Color.onclick = () => {
+                if (selectedColors.includes(productFeature.color)) {
+                    selectedColors = selectedColors.filter(color => color !== productFeature.color);
+                    Color.classList.remove('active');
+                } else {
+                    selectedColors.splice(0, selectedColors.length);
+                    selectedColors.push(productFeature.color);
+                    Color.classList.add('active');
+                    console.log(selectedColors);
+                }
+                updateButtonState();
+                checkForMatchingFeature();
+            };
+    
+            ColorDiv.appendChild(Color);
+        });
+}
+
+
 /*الاكثر مبيعا -----------*/
 document.addEventListener("DOMContentLoaded", function () {
     const apiBestSellerUrl = "https://everyapi.webxy.net/Product/GetBestSeller";

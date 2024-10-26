@@ -49,6 +49,16 @@
 
 </head>
 <style>
+
+    .color-circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+    }
+
+
+
      h1, h2, h3, h4, h5, h6 , select{
         font-family: 'Noto Kufi Arabic', sans-serif;
     }
@@ -145,11 +155,7 @@
                                     <div class="widget widget-collapsible">
                                         <h3 class="widget-title"><label>الحجم</label></h3>
                                         <ul class="widget-body filter-items item-check mt-1" id="SizeFilter">
-                                            <li><a href="#" data-size="XXL">XXL</a></li>
-                                            <li><a href="#" data-size="XL">XL</a></li>
-                                            <li><a href="#" data-size="L">L</a></li>
-                                            <li><a href="#" data-size="M">M</a></li>
-                                            <li><a href="#" data-size="S">S</a></li>
+
                                         </ul>
                                     </div>
                                     <!-- End of Collapsible Widget -->
@@ -167,16 +173,11 @@
                                     <!-- Start of Collapsible Widget -->
                                     <div class="widget widget-collapsible">
                                         <h3 class="widget-title"><label>اللون</label></h3>
-                                        <ul class="widget-body filter-items item-check mt-1">
-                                            <li><a href="#">الاسود</a></li>
-                                            <li><a href="#">الازرق</a></li>
-                                            <li><a href="#">البنى</a></li>
-                                            <li><a href="#">الاخضر</a></li>
-                                            <li><a href="#">الرمادى</a></li>
-                                            <li><a href="#">البرتقالى</a></li>
-                                            <li><a href="#">الاصفر</a></li>
+                                        <ul class="widget-body filter-items item-check mt-1" id="ColorFilter">
+
                                         </ul>
                                     </div>
+                                    
                                     <div class="widget widget-collapsible">
                                         <h3 class="widget-title"><label>التقيم</label></h3>
                                         <ul id="ReviewFilter" class="filter-review widget-body filter-items item-check mt-1">

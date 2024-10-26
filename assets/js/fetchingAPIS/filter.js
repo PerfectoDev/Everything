@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentPage = 1;
     let totalProducts = 0;
 
-    const fetchAndDisplayProducts = (minPrice = null, maxPrice = null, sizeName = null, review = null, brandId = null, page = 1) => {
+    const fetchAndDisplayProducts = (minPrice = null, maxPrice = null, sizeName = null, review = null, brandId = null, color = null, page = 1) => {
         let ApiFilter = `https://everyapi.webxy.net/Filter/filter-products?CategoryId=${categoryId}&page=${page}&limit=${productsPerPage}`;
 
         if (minPrice !== null) {
@@ -16,17 +16,20 @@ document.addEventListener('DOMContentLoaded', function () {
         if (maxPrice !== null) {
             ApiFilter += `&MaxPrice=${maxPrice}`;
         }
-        if (sizeName !== null) {
-            ApiFilter += `&sizeName=${sizeName}`;
-        }
         if (review !== null) {
             ApiFilter += `&review=${review}`;
+        }
+        if (sizeName !== null) {
+            ApiFilter += `&sizeName=${sizeName}`;
         }
         if (brandId !== null) {
             ApiFilter += `&BrandId=${brandId}`;
         }
         if (searchQuery) {
             ApiFilter += `&search=${encodeURIComponent(searchQuery)}`;
+        }
+        if (color !== null) {
+            ApiFilter += `&color=${encodeURIComponent(color)}`; 
         }
 
         console.log('API URL:', ApiFilter);
@@ -50,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         return product.productName_Ar.includes(searchQuery) || product.productName.includes(searchQuery);
                     });
                 }
-
                 if (sizeName) {
                     data = data.filter(product => {
                         return product.productFeatureDto.some(feature => feature.sizeName.toLowerCase() === sizeName.toLowerCase());
@@ -61,6 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     data = data.filter(product => {
                         const productReview = product.review || 0;
                         return productReview >= review;
+                    });
+                }
+                if (color) {
+                    data = data.filter(product => {
+                        return product.productFeatureDto.some(feature => feature.color.toLowerCase() === color.toLowerCase());
                     });
                 }
 
@@ -113,6 +120,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 productContainer.innerHTML = '<p>حدث خطأ أثناء جلب المنتجات.</p>';
             });
     };
+
+    const fetchColors = () => {
+        const colorApiUrl = 'https://everyapi.webxy.net/api/Lookup/get-all-colors';
+        fetch(colorApiUrl)
+            .then(response => response.json())
+            .then(colors => {
+                const colorFilter = document.getElementById('ColorFilter');
+                colorFilter.innerHTML = ''; 
+
+                colors.forEach(colorCode => {
+                    const colorItem = document.createElement('li');
+                    colorItem.innerHTML = `
+                        <label>
+                            <input type="checkbox" class="color-checkbox" data-color="${colorCode}" />
+                            <span class="color-circle" style="background-color: ${colorCode};"></span>
+                        </label>
+                    `;
+                    colorFilter.appendChild(colorItem);
+
+
+                    colorItem.querySelector('input').addEventListener('change', function () {
+                        const selectedColors = Array.from(document.querySelectorAll('.color-checkbox:checked')).map(input => input.getAttribute('data-color'));
+                        fetchAndDisplayProducts(null, null, null, null, null, selectedColors.join(','), 1);
+                    });
+                });
+            })
+            .catch(error => console.error('Error fetching colors:', error));
+    };
+    
 
     const updatePagination = (currentPage) => {
         const totalPages = Math.ceil(totalProducts / productsPerPage);
@@ -179,6 +215,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 const categoryFilter = document.getElementById('CategoryFilter');
                 categoryFilter.innerHTML = '<p>حدث خطأ أثناء جلب الفئات.</p>';
             });
+    };
+
+    const fetchSizes = () => {
+        const sizeApiUrl = 'https://everyapi.webxy.net/api/Lookup/get-all-sizes';
+        fetch(sizeApiUrl)
+            .then(response => response.json())
+            .then(sizes => {
+                const sizeFilter = document.getElementById('SizeFilter');
+                sizeFilter.innerHTML = '';
+
+                sizes.forEach(size => {
+                    const sizeItem = document.createElement('li');
+                    sizeItem.innerHTML = `<a href="#" data-size="${size.name.trim()}">${size.name.trim()}</a>`;
+                    sizeFilter.appendChild(sizeItem);
+
+                    sizeItem.querySelector('a').addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const selectedSize = this.getAttribute('data-size');
+                        fetchAndDisplayProducts(null, null, selectedSize, null, null, null, 1); 
+                    });
+                });
+            })
+            .catch(error => console.error('Error fetching sizes:', error));
     };
 
     const fetchBrands = () => {
@@ -251,15 +310,6 @@ priceRangeForm.addEventListener('submit', function (e) {
 });
 
     
-    const sizeFilterLinks = document.querySelectorAll('#SizeFilter li a');
-    sizeFilterLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const selectedSize = this.textContent.trim();
-            fetchAndDisplayProducts(null, null, selectedSize, null, null, 1);
-        });
-    });
-
     const reviewFilterLinks = document.querySelectorAll('#ReviewFilter li a');
     reviewFilterLinks.forEach(link => {
         link.addEventListener('click', function (e) {
@@ -275,6 +325,8 @@ priceRangeForm.addEventListener('submit', function (e) {
         fetchAndDisplayProducts();  
     });
 
+    fetchSizes();
+    fetchColors();
     fetchCategories();
     fetchBrands();
     fetchAndDisplayProducts(); 

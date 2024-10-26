@@ -63,8 +63,8 @@ async function logout() {
 }
 
 document.getElementById('logoutButton').onclick = logout;
-const Hours = 3 * 60 * 60 * 1000;
+const sessionDuration = 3 * 60 * 60 * 1000; 
 setTimeout(() => {
     logout()
-}, Hours);
+}, sessionDuration);
 
