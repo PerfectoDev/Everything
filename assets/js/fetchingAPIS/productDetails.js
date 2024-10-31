@@ -135,8 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                             </div>
                                         </div>
                                         <div class="product-form product-variation-form product-size-swatch">
-                                            <label class="mb-1">الحجم:</label>
-                                            <div class="flex-wrap d-flex align-items-center product-variations" id='size'>
+                                            <label class="size-Div mb-1">المقاسات:</label>
+                                            <div class="size-Div flex-wrap d-flex align-items-center product-variations" id='size'>
                                                 
                                             </div>
                                             <a href="#" class="product-variation-clean" style="display: none;">Clean All</a>
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 <div class="product-form">
                                     <div class="product-qty-form">
                                         <div class="input-qty-group">
-                                            <input class="quantity form-control" id='Quantity' type="number" min="1" >
+                                            <input class="quantity form-control" id='Quantity' type="number" value="1" min="1" >
                                         </div>
                                     </div>
                                     <button id='btn' class="btn btn-cart btn-primary">
@@ -173,8 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
                                                 
                                             </div>
-                                        </div>
-                                        
+                                        </div>          
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <a href="../../ar-product-details.html?id=${productData.productId}" class="rating-reviews">(${productData.review} تعليقات)</a>
                             </div>
                             <div class="product-pa-wrapper">
-                                <div class="product-price">${productData.price}</div>
+                                <div class="product-price">${productData.price} ريال سعودي</div>
                             </div>
                         </div>
                     </div>
@@ -239,161 +238,215 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
                 
+   
+    
+
+
     let selectedSizes = [];
     let selectedColors = [];
     let productPrice = document.getElementById('product-variation-pricee');
     let btn = document.getElementById('btn');
+    const imagesDiv = document.getElementById('product-thumbs');
     
-    btn.disabled = true; 
+    btn.disabled = false;
+    
+    const sizeContainer = document.querySelector('.product-form.product-variation-form.product-size-swatch');
+    const sizeLabel = document.querySelector('.size-Div.mb-1');
+    const sizeDiv = document.getElementById('size');
+    sizeContainer.style.display = 'none';
+    sizeLabel.style.display = 'none';
     
     const updateButtonState = () => {
+    
         if (selectedSizes.length > 0 && selectedColors.length > 0) {
-            btn.disabled = false; 
+            btn.disabled = false;
+            console.log("Button enabled");
+            // alert("Button is now enabled"); 
             btn.onclick = () => {
                 AddToCart();
                 checkForMatchingFeature();
+                // alert("Button clicked");
             };
         } else {
-            btn.disabled = true; 
-            btn.onclick = null;  
+            btn.disabled = true;
+            btn.onclick = null;
+            console.log("Button disabled");
+            // alert("Button is now disabled");  
         }
     };
     
     const checkForMatchingFeature = () => {
         let foundMatchingFeature = false;
+        let imagesToStore = [];
     
         product.productFeatureDto.forEach(productFeature => {
-            if (selectedSizes.includes(productFeature.sizeName) && selectedColors.includes(productFeature.color)) {
-                let productId = productFeature.id;
-                let productCount = productFeature.count
-                localStorage.setItem('ProductId', productId);
-                localStorage.setItem('ProductCount' , productCount)
-                foundMatchingFeature = true;
-
+            if (selectedColors.includes(productFeature.color)) {
+                productFeature.sizes.forEach(size => {
+                    if (selectedSizes.includes(size.name)) {
+                        console.log("Feature ID:", size.featureId);
+                        console.log("Quantity:", size.quantity);
+    
+                        // تحقق من الكمية المخزنة
+                        const requestedQuantity = parseInt(document.getElementById('Quantity').value) || 1;
+                        if (requestedQuantity > size.quantity) {
+                            alert("الكمية المطلوبة غير متوفرة.");
+                            return;
+                        }
+    
+                        localStorage.setItem('ProductId', size.featureId);
+                        localStorage.setItem('ProductCount', size.quantity);
+    
+                        imagesToStore = [];
+                        for (let key in productFeature) {
+                            if (key.startsWith('featureImageToWeb')) {
+                                imagesToStore.push(productFeature[key]);
+                            }
+                        }
+                        foundMatchingFeature = true;
+                    }
+                });
             }
         });
-            if (!foundMatchingFeature) {
+    
+        if (foundMatchingFeature) {
+            console.log("Found matching feature. Storing images:", imagesToStore);
+            displayImages(imagesToStore);
+        } else {
             localStorage.setItem('ProductId', 'False');
         }
     };
     
-    const sizeDiv = document.getElementById('size');
+    const updateSizes = (sizes) => {
+        sizeDiv.innerHTML = '';
     
-    if (sizeDiv) {
-        product.productFeatureDto.forEach(productFeature => {
-            const Size = document.createElement('a');
-            Size.href = '#';
-            Size.classList.add('size');
-            Size.textContent = productFeature.sizeName;
+        sizes.forEach(size => {
+            const sizeElement = document.createElement('a');
+            sizeElement.href = '#';
+            sizeElement.classList.add('size');
+            sizeElement.textContent = size.name;
     
-            Size.onclick = () => { 
-                if (selectedSizes.includes(productFeature.sizeName)) {
-                    selectedSizes = selectedSizes.filter(size => size !== productFeature.sizeName);
-                    Size.classList.remove('active');
+            sizeElement.onclick = (e) => {
+                e.preventDefault();
+    
+                if (selectedSizes.includes(size.name)) {
+                    selectedSizes = [];  
+                    sizeElement.classList.remove('active');
                 } else {
-                    selectedSizes.splice(0, selectedSizes.length);
-                    selectedSizes.push(productFeature.sizeName);
-                    Size.classList.add('active');
-                    console.log(selectedSizes);
+                    selectedSizes = [size.name]; 
+                    Array.from(sizeDiv.children).forEach(child => child.classList.remove('active'));
+                    sizeElement.classList.add('active');
                 }
-                updateButtonState();
+                updateButtonState(); 
                 checkForMatchingFeature();
             };
     
-            sizeDiv.appendChild(Size);
+            sizeDiv.appendChild(sizeElement);
         });
-    }
     
-    const ColorDiv = document.getElementById('ColorSwitch');
+        sizeContainer.style.display = 'block';
+        sizeLabel.style.display = 'block';
+        sizeLabel.textContent = 'المقاسات:';
+    };
     
-    if (ColorDiv) {
+    const colorDiv = document.getElementById('ColorSwitch');
+    if (colorDiv) {
         product.productFeatureDto.forEach(productFeature => {
-            const Color = document.createElement('a');
-            Color.style.backgroundColor = productFeature.color;
-            Color.classList.add('color');
-            Color.href = '#';
+            const colorElement = document.createElement('a');
+            colorElement.style.backgroundColor = productFeature.color;
+            colorElement.classList.add('color');
+            colorElement.href = '#';
     
-            Color.onclick = () => {
+            colorElement.onclick = (e) => {
+                e.preventDefault();
+    
                 if (selectedColors.includes(productFeature.color)) {
-                    selectedColors = selectedColors.filter(color => color !== productFeature.color);
-                    Color.classList.remove('active');
+                    selectedColors = [];  
+                    colorElement.classList.remove('active');
+                    sizeDiv.innerHTML = '';  
+                    sizeContainer.style.display = 'none'; 
+                    sizeLabel.style.display = 'none';
                 } else {
-                    selectedColors.splice(0, selectedColors.length);
-                    selectedColors.push(productFeature.color);
-                    Color.classList.add('active');
-                    console.log(selectedColors);
+                    selectedColors = [productFeature.color]; 
+                    Array.from(colorDiv.children).forEach(child => child.classList.remove('active'));
+                    colorElement.classList.add('active');
+                    updateSizes(productFeature.sizes);  
                 }
-                updateButtonState();
+                updateButtonState();  
                 checkForMatchingFeature();
             };
     
-            ColorDiv.appendChild(Color);
+            colorDiv.appendChild(colorElement);
         });
     }
     
+    const ImgSwitch = document.querySelector('.ImgSwitch');
     
-                const ImgSwitch = document.querySelector('.ImgSwitch');
-
-                if (ImgSwitch) {
-                    product.productFeatureDto.forEach(productFeature => {
-                        const Img = document.createElement('div');
-                        Img.classList.add('product-thumb', 'swiper-slide', 'swiper-slide-visible', 'swiper-slide-active', 'swiper-slide-thumb-active');
-                        Img.role = 'group';
-                
-                        const productImage = document.createElement('img');
-                        productImage.src = 'https://everyui.webxy.net/'+productFeature.featureImage; 
-                        productImage.alt = 'Product Thumb';
-                        productImage.width = 800;
-                        productImage.height = 900;
-                
-                        Img.appendChild(productImage);
-                        ImgSwitch.appendChild(Img);
-                    });
-                }
-
-                const ImgSlider = document.querySelector('.ImgSlider');
-
-                if (ImgSlider) {
-                    product.productFeatureDto.forEach(productFeature => {
-                        const Img = document.createElement('div');
-                        Img.classList.add('product-thumb', 'swiper-slide', 'swiper-slide-next');
-                        Img.role = 'group';
-                
-                        const figure = document.createElement('figure');
-                        figure.classList.add('product-image');
-                        figure.style.position = 'relative';
-                        figure.style.overflow = 'hidden';
-                        figure.style.cursor = 'pointer';
-                
-                        const productImage = document.createElement('img');
-                        productImage.src = 'https://everyui.webxy.net/' + productFeature.featureImage; 
-                        productImage.alt = 'Product Thumb';
-                        productImage.width = 488;  
-                        productImage.height = 549;  
-                        productImage.setAttribute('data-zoom-image', productImage.src); 
-                
-                        const zoomImage = document.createElement('img');
-                        zoomImage.role = 'presentation';
-                        zoomImage.alt = 'Product Thumb';
-                        zoomImage.src = 'https://everyui.webxy.net/' + productFeature.featureImage; 
-                        zoomImage.classList.add('zoomImg');
-                        zoomImage.style.position = 'absolute';
-                        zoomImage.style.top = '0';
-                        zoomImage.style.left = '0';
-                        zoomImage.style.opacity = '0';
-                        zoomImage.style.width = '880px';
-                        zoomImage.style.height = '990px';
-                        zoomImage.style.border = 'none';
-                        zoomImage.style.maxWidth = 'none';
-                        zoomImage.style.maxHeight = 'none';
-                
-                        figure.appendChild(productImage);
-                        figure.appendChild(zoomImage);
-                        Img.appendChild(figure);
-                        ImgSlider.appendChild(Img);
-                    });
-                }
-                fetchProductImages(product);
+    const displayImages = (images) => {
+        if (ImgSwitch) {
+            ImgSwitch.innerHTML = '';
+            images.forEach(imageUrl => {
+                const Img = document.createElement('div');
+                Img.classList.add('product-thumb', 'swiper-slide');
+                Img.role = 'group';
+    
+                const productImage = document.createElement('img');
+                productImage.src = 'https://everyui.webxy.net/' + imageUrl;
+                productImage.alt = 'صورة المنتج';
+                productImage.width = 800;
+                productImage.height = 900;
+    
+                Img.appendChild(productImage);
+                ImgSwitch.appendChild(Img);
+            });
+        }
+    };
+    
+    const ImgSlider = document.querySelector('.ImgSlider');
+    
+    if (ImgSlider) {
+        product.productFeatureDto.forEach(productFeature => {
+            const Img = document.createElement('div');
+            Img.classList.add('product-thumb', 'swiper-slide', 'swiper-slide-next');
+            Img.role = 'group';
+    
+            const figure = document.createElement('figure');
+            figure.classList.add('product-image');
+            figure.style.position = 'relative';
+            figure.style.overflow = 'hidden';
+            figure.style.cursor = 'pointer';
+    
+            const productImage = document.createElement('img');
+            productImage.src = 'https://everyui.webxy.net/' + productFeature.featureImage;
+            productImage.alt = 'Product Thumb';
+            productImage.width = 488;
+            productImage.height = 549;
+            productImage.setAttribute('data-zoom-image', productImage.src);
+    
+            const zoomImage = document.createElement('img');
+            zoomImage.role = 'presentation';
+            zoomImage.alt = 'Product Thumb';
+            zoomImage.src = 'https://everyui.webxy.net/' + productFeature.featureImage;
+            zoomImage.classList.add('zoomImg');
+            zoomImage.style.position = 'absolute';
+            zoomImage.style.top = '0';
+            zoomImage.style.left = '0';
+            zoomImage.style.opacity = '0';
+            zoomImage.style.width = '880px';
+            zoomImage.style.height = '990px';
+            zoomImage.style.border = 'none';
+            zoomImage.style.maxWidth = 'none';
+            zoomImage.style.maxHeight = 'none';
+    
+            figure.appendChild(productImage);
+            figure.appendChild(zoomImage);
+            Img.appendChild(figure);
+            ImgSlider.appendChild(Img);
+        });
+    }
+    
+    fetchProductImages(product);
+    
+    
 
             }
 
@@ -405,13 +458,5 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.log("لم يتم العثور على ID المنتج في URL");
     }
-
-   
-
-
-
-
-
-
 
     });

@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (color !== null) {
             ApiFilter += `&color=${encodeURIComponent(color)}`; 
         }
+        
 
         console.log('API URL:', ApiFilter);
 
@@ -45,9 +46,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Raw data from API:', data);
                 const productContainer = document.querySelector('.product-wrapper');
                 productContainer.innerHTML = '';
-
-                totalProducts = data.totalCount || data.length;  
-
+            
+                totalProducts = data.totalCount || data.length;
+            
                 if (searchQuery) {
                     data = data.filter(product => {
                         return product.productName_Ar.includes(searchQuery) || product.productName.includes(searchQuery);
@@ -55,22 +56,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 if (sizeName) {
                     data = data.filter(product => {
-                        return product.productFeatureDto.some(feature => feature.sizeName.toLowerCase() === sizeName.toLowerCase());
+
+                        return product.productFeatureDto.some(feature => 
+                            feature.sizes.some(size => size.name.toLowerCase() === sizeName.toLowerCase())
+                        );
                     });
                 }
-
+                
+            
                 if (review) {
                     data = data.filter(product => {
                         const productReview = product.review || 0;
-                        return productReview >= review;
+                        return productReview == review;
                     });
                 }
-                if (color) {
-                    data = data.filter(product => {
-                        return product.productFeatureDto.some(feature => feature.color.toLowerCase() === color.toLowerCase());
-                    });
-                }
+            
 
+                if (color && typeof color === "string") {
+                    data = data.filter(product => {
+                        return product.productFeatureDto.some(feature => 
+                            typeof feature.color === "string" && feature.color.toLowerCase() === color.toLowerCase()
+                        );
+                    });
+                }
+            
                 if (data.length > 0) {
                     data.forEach(product => {
                         const productId = product.id;
@@ -83,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         </a>
                                         <div class="product-action-horizontal">
                                             <a href="#" onclick="window.location.href='../../ar-product-details.html?id=${productId}'" class="btn-product-icon btn-cart w-icon-cart" title="Add to cart"></a>
-                                            <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Wishlist"></a>
+                                            <a class="btn-product-icon btn-wishlist w-icon-heart" data-id="${productId}" title="Wishlist"></a>
                                         </div>
                                     </figure>
                                     <div class="product-details">
@@ -100,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                             <a class="rating-reviews">(تعليقات)</a>
                                         </div>
                                         <div class="product-pa-wrapper">
-                                            <div class="product-price">${product.price}</div>
+                                            <div class="product-price">${product.price} ريال سعودي</div>
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         `;
                         productContainer.innerHTML += productHtml;
                     });
-
+            
                     updatePagination(currentPage);          
                 } else {
                     productContainer.innerHTML = '<p>لا توجد منتجات متاحة لهذه الفئة.</p>';
@@ -117,9 +126,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error fetching filtered products:', error);
                 const productContainer = document.querySelector('.product-wrapper');
-                productContainer.innerHTML = '<p>حدث خطأ أثناء جلب المنتجات.</p>';
+                productContainer.innerHTML = '<p>لا يوجد منتجات لهذه الفئه</p>';
             });
-    };
+        };            
 
     const fetchColors = () => {
         const colorApiUrl = 'https://everyapi.webxy.net/api/Lookup/get-all-colors';
@@ -272,42 +281,47 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     };
 
-const filterLinks = document.querySelectorAll('.filter-items li a');
-filterLinks.forEach(link => {
-    link.addEventListener('click', function (e) {
-        e.preventDefault();  
-        const priceRangeText = this.textContent.trim();
-        
-        let minPrice = null;
-        let maxPrice = null;
+            const filterLinks = document.querySelectorAll('.filter-items li a');
+            filterLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();  
+                    const priceRangeText = this.textContent.trim();
+                    
+                    let minPrice = null;
+                    let maxPrice = null;
+            
+                    if (priceRangeText.includes('+')) {
+                        const singlePrice = parseFloat(priceRangeText.split('+')[0].replace('ريال سعودى', '').trim());
+                        minPrice = singlePrice;  
+                        maxPrice = 999999999999999;  
+                    } else {
 
-        if (priceRangeText.includes('+500')) {
-            minPrice = 500;  
-            maxPrice = null;   
-        } else {
-            const priceRange = priceRangeText.split('-');
-            minPrice = parseFloat(priceRange[0].replace('ريال سعودى', '').trim());
-            maxPrice = priceRange[1] ? parseFloat(priceRange[1].replace('ريال سعودى', '').trim()) : null;
-        }
+                        const priceRange = priceRangeText.split('-');
+                        minPrice = parseFloat(priceRange[0].replace('ريال سعودى', '').trim());
+                        maxPrice = priceRange[1] ? parseFloat(priceRange[1].replace('ريال سعودى', '').trim()) : null;
+                    }
+            
 
+                    console.log(`Fetching products with minPrice: ${minPrice}, maxPrice: ${maxPrice}`);
+                    
+                    fetchAndDisplayProducts(minPrice, maxPrice, null, null, null, 1); 
+                });
+            });
+            
 
-        fetchAndDisplayProducts(minPrice, maxPrice, null, null, null, 1); 
-    });
-});
+        const priceRangeForm = document.querySelector('.price-range');
 
- const priceRangeForm = document.querySelector('.price-range');
+        priceRangeForm.addEventListener('submit', function (e) {
+            e.preventDefault(); 
 
-priceRangeForm.addEventListener('submit', function (e) {
-    e.preventDefault(); 
+            const minPriceInput = document.querySelector('.min_price').value;
+            const maxPriceInput = document.querySelector('.max_price').value;
 
-    const minPriceInput = document.querySelector('.min_price').value;
-    const maxPriceInput = document.querySelector('.max_price').value;
+            const minPrice = minPriceInput ? parseFloat(minPriceInput) : null;
+            const maxPrice = maxPriceInput ? parseFloat(maxPriceInput) : null;
 
-    const minPrice = minPriceInput ? parseFloat(minPriceInput) : null;
-    const maxPrice = maxPriceInput ? parseFloat(maxPriceInput) : null;
-
-    fetchAndDisplayProducts(minPrice, maxPrice, null, null, null, 1);
-});
+            fetchAndDisplayProducts(minPrice, maxPrice, null, null, null, 1);
+        });
 
     
     const reviewFilterLinks = document.querySelectorAll('#ReviewFilter li a');

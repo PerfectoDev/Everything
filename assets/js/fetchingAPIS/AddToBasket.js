@@ -4,7 +4,7 @@ function AddToCart() {
     console.log(Quantity)
     let userId = localStorage.getItem('User_id');
     let productid = localStorage.getItem('ProductId')
-    let productCount = localStorage.getItem('ProductCount')
+    let productCount = parseInt(localStorage.getItem('ProductCount'));
        
         if(productid === 'False' ) { 
         console.log('المنتج غير موجود')
@@ -18,13 +18,14 @@ function AddToCart() {
         'userId': userId,
         'product_id': product_id,
         'quantity': Quantity,
-        'featuresId': featuresId,
-        
+        'featuresId': featuresId
     };
+
+    
     localStorage.setItem('AdDtoCart', JSON.stringify(ProductData));
     if(productCount < Quantity) { 
         console.log('العدد الموجود في المنتج غير كافي')
-        return
+        return;
 
     }
     AddToBasket();
@@ -33,9 +34,16 @@ function AddToCart() {
 async function AddToBasket() {
     const ApiLink = 'https://everyapi.webxy.net/Orders/Add-to-Basket';
     const productDataString = localStorage.getItem('AdDtoCart');
+    const token = localStorage.getItem('token');
 
     if (!productDataString) {
         console.error('No product data found in localStorage.');
+        return;
+    }
+
+    if (!token) {
+        updateLoginStatus(false);
+        showLoginPrompt();
         return;
     }
 
@@ -52,47 +60,56 @@ async function AddToBasket() {
         return;
     }
 
-    const userId = ProductData.userId;
-    const productId = ProductData.product_id;
-    const quantity = ProductData.quantity;
-    const featuresId = ProductData.featuresId;
-
-
-    const token = localStorage.getItem('token');    
-
     try {
         const response = await fetch(ApiLink, {
             method: 'POST',
             headers: {
                 'accept': '*/*',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` 
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ 
-                userId: userId,
-                productId: productId,
-                quantity: quantity,
-                featuresId: featuresId,
+            body: JSON.stringify({
+                userId: ProductData.userId,
+                productId: ProductData.product_id,
+                quantity: ProductData.quantity,
+                featuresId: ProductData.featuresId,
             })
         });
 
-        const responseText = await response.text();
-
-        if (!response.ok) {
-            Swal.fire({
-                title: "Error",
-                text: 'يجب تسجيل الدخول اولا',
-                icon: "error"
-            });
-            setTimeout(() => {
-                location.href='login.html';
-            }, 1500);
-        } else { 
-           
+        if (response.status === 401) {  
+            updateLoginStatus(false);
+            showLoginPrompt();
+            return;
         }
 
-        const data = JSON.parse(responseText);
+        if (!response.ok) {
+            console.error('There was an issue with the request.');
+            return;
+        }
+
+        const data = await response.json();
+        console.log('Request successful:', data);
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
     }
 }
+
+function showLoginPrompt() {
+    Swal.fire({
+        title: "Error",
+        text: 'يجب تسجيل الدخول أولا',
+        icon: "error"
+    });
+    setTimeout(() => {
+        location.href = 'login.html';
+    }, 1500);
+}
+
+function updateLoginStatus(status) {
+    localStorage.setItem('isLoggedIn', status ? 'true' : 'false');
+    if (!status) {
+        localStorage.removeItem('token'); 
+    }
+}
+
+

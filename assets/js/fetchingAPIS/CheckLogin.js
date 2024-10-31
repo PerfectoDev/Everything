@@ -1,24 +1,34 @@
 function CheckLogin() { 
     let login = localStorage.getItem('isLoggedIn');
-    if (login === 'false') {
+    const token = localStorage.getItem('token');
+
+    if (login === 'false' || !token) {
+        updateLoginStatus(false);  
         let myaccount = document.getElementById('myAccount');
         
         if (myaccount) {
-            CartCount = document.getElementById('CartCount')
+            let CartCount = document.getElementById('CartCount');
             myaccount.removeAttribute('href');
             myaccount.style.display = 'none';
-            CartCount.style.display = 'none'
+            if (CartCount) CartCount.style.display = 'none';
         }
-    }else { 
-        loginButton = document.getElementById('loginbuttons')
-        loginButton.style.display = 'none'
-        loginButton.removeItem('href')
+    } else { 
+        let loginButton = document.getElementById('loginbuttons');
+        if (loginButton) {
+            loginButton.style.display = 'none';
+            loginButton.removeAttribute('href');
+        }
     }
 }
+
 function CheckLoginPages() { 
     let login = localStorage.getItem('isLoggedIn');
-    if (login === 'false') { 
-        window.location.href = '../../login.html'
+    const token = localStorage.getItem('token');
+
+    if (login === 'false' || !token) { 
+        updateLoginStatus(false);  
+        window.location.href = '../../login.html';
     }
 }
+
 CheckLogin();

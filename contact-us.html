@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <title>Wolmart eCommmerce Marketplace HTML Template</title>
+    <title>Evreything | Contact Us  </title>
 
     <meta name="keywords" content="Marketplace ecommerce responsive HTML5 Template" />
     <meta name="description" content="Wolmart is powerful marketplace &amp; ecommerce responsive Html5 Template.">
@@ -34,8 +34,10 @@
 
     <!-- Default CSS -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+    <!-- Default CSS -->
     <link rel="stylesheet" type="text/css" href="assets/css/demo-rtl.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/custom.css">
+
 </head>
 
 
@@ -214,7 +216,7 @@
     <!-- Start of Page Header -->
     <div class="page-header">
         <div class="container">
-            <h1 class="page-title mb-0"> اضافة العناوين </h1>
+            <h1 class="page-title mb-0"> تواصل معنا  </h1>
         </div>
     </div>
     <!-- End of Page Header -->
@@ -228,37 +230,20 @@
             <div class="col-lg-6">
                 <div class="tab-pane" id="account-details">
                     <form class="shipping-calculator-form">
+                        
                         <div class="form-group">
-                            <div class="">
-                                <select name="country" class="form-control form-control-md">
-                                    <option value="default" selected="selected">المملكة العربية السعودية
-                                        
-                                    </option>
-                                    <option value="us">مصر</option>
-                                    <option value="">الاردن</option>
-                                    <option value="">البحرين</option>
-                                    <option value="">الجزائر</option>
-                                </select>
-                            </div>
+                            <input class="form-control form-control-md" type="text" name="name" placeholder="الاسم">
                         </div>
                         <div class="form-group">
-                            <div class="">
-                                <select name="state" id="region" class="form-control form-control-md">
-                                  
-                                </select>
-                            </div>
+                            <input class="form-control form-control-md" type="email"
+                                name="Email" placeholder="البريد الالكتروني" >
                         </div>
                         <div class="form-group">
                             <input class="form-control form-control-md" type="text"
-                                name="addressDetails" placeholder="العنوان بالتفصيل">
+                                name="phone" placeholder="رقم الهاتف المحمول">
                         </div>
                         <div class="form-group">
-                            <input class="form-control form-control-md" type="text"
-                                name="signMarks" placeholder="علامة مميزة للمكان" >
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control form-control-md" type="text"
-                                name="zipcode" placeholder="الرمز البريدى">
+                            <textarea lass="form-control form-control-md" name="messages" id="" placeholder="محتوي الرسالة"></textarea>
                         </div>
                         
                             <button id="Submit"  class="btn btn-dark btn-rounded btn-sm mb-4">اضافة العنوان</button>
@@ -276,7 +261,9 @@
 
         </div>
     </div>
-    <!-- Start of Footer -->
+</main>
+<!-- End of Main -->
+<!-- Start of Footer -->
 <footer class="footer appear-animate" data-animation-options="{
     'name': 'fadeIn'
     }">
@@ -388,26 +375,25 @@
     </div>
     </footer>
     <!-- End of Footer -->
-</main>
-<!-- End of Main -->
-
 
 <!-- Plugin JS File -->
 <script src="assets/vendor/jquery/jquery.min.js"></script>
 <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 <script src="assets/js/main.min.js"></script>
-<script src="assets/js/fetchingAPIS/addAddress.js"></script>
-<script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
-<script src="assets/js/fetchingAPIS/addcart.js"></script>
-<script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
-<script src="assets/js/fetchingAPIS/GetBasket.js"></script>
-<script src="assets/js/fetchingAPIS/AddToBasket.js"></script>
 <script src="assets/js/fetchingAPIS/getSettings.js"></script>
-<script src="assets/js/fetchingAPIS/removeAllFromBasket.js"></script>
-<script src="assets/js/fetchingAPIS/FilterProduct.js"></script>
-<script src="assets/js/fetchingAPIS/brands.js"></script>
-<script src="assets/js/fetchingAPIS/login.js"></script>
+<script src="assets/js/fetchingAPIS/addAddress.js"></script>
+
+    <script src="assets/js/fetchingAPIS/addcart.js"></script>
+    <script src="assets/js/fetchingAPIS/getSettings.js"></script>
+    <script src="assets/js/fetchingAPIS/filter.js"></script>
+    <script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
+    <script src="assets/js/fetchingAPIS/GetBasket.js"></script>
+    <script src="assets/js/fetchingAPIS/AddToBasket.js"></script>
+    <script src="assets/js/fetchingAPIS/removeAllFromBasket.js"></script>
+    <script src="assets/js/fetchingAPIS/productDetails.js"></script>
+    <script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
+    <script src="assets/js/fetchingAPIS/login.js"></script>
 
 </body>
 

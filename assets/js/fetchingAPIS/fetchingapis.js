@@ -1,49 +1,4 @@
-/*setting--------------*/
-let phoneNumber, title, description, logo, faceBook, twitter, instgram, youtube, pint, message, contactUs;
 
-    fetch("https://everyapi.webxy.net/PageSetting/GetSetting")
-        .then(response => response.json()) 
-        .then((data) => {
-        const domainImage = "https://everyui.webxy.net/";
-        phoneNumber=data.phoneNumber;
-        title=data.titleAr;       
-        description=data.descriptionAr;
-        logo=data.logo;
-        faceBook=data.faceBook;  
-        twitter=data.twitter;
-        instgram=data.instagram;
-        youtube=data.youtube;
-        pint=data.pint;
-        message=data.messageAR;
-        contactUs=data.contactUs;
-
-
-
-
-document.getElementById("welcome-msg").textContent=message;
-document.querySelectorAll(".phone-number").forEach((element)=>{
-    element.textContent=phoneNumber;
-})
-document.querySelectorAll(".logo").forEach((element)=>{
-    element.src=logo;
-})
-document.querySelectorAll(".social-facebook").forEach((element)=>{
-    element.href=faceBook;
-})
-document.querySelectorAll(".social-twitter").forEach((element)=>{
-    element.href=twitter;
-})
-document.querySelectorAll(".social-youtube").forEach((element)=>{
-    element.href=youtube;
-})
-document.querySelectorAll(".social-pinterest").forEach((element)=>{
-    element.href=pint;
-})
-
-    })
-    .catch((error) => {
-        console.error('Error fetching settings:', error);
-    });
 if (!localStorage.getItem("isLoggedIn")) {
     localStorage.setItem("isLoggedIn", "false");
 }
@@ -133,7 +88,6 @@ window.onload = function () {
         });
     }
 };
-
 /*ADD TO BASKET--------------*/
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -258,7 +212,7 @@ function updateSlider(sliderData) {
                 style="background-image: url(${domainImage}${slide.backgroundimg}); background-color: #ebeef2;">
                 <div class="container">
                     <figure class="slide-image skrollable slide-animate">
-                        <img src="${domainImage}${slide.imgPath}" alt="Banner" width="474" height="397">
+                        <img src="${domainImage}${slide.imgPathToWeb}" alt="Banner" width="474" height="397">
                     </figure>
                     <div class="banner-content y-50 text-right">
                         <h5 class="banner-subtitle font-weight-normal text-default ls-50 lh-1 mb-2 slide-animate">
@@ -353,6 +307,32 @@ fetch("https://everyapi.webxy.net/api/Adds/get-all-adds")
             console.error("Error fetching ads:", error);
         });
 /*عرض مميز  -----------*/
+let selectedColor = []
+let SelectedSize = []
+function displaySizes(index) {
+    const productContainer = document.querySelectorAll(".swiper-slide.productD");
+    const sizes = productContainer[index].querySelector("[data-sizes]").dataset.sizes;
+    const parsedSizes = JSON.parse(sizes);
+
+    const sizeContainer = document.getElementById("size");
+
+    sizeContainer.innerHTML = "";
+
+    parsedSizes.forEach((size) => {
+        const sizeEl = document.createElement("a");
+        sizeEl.className = "size";
+        sizeEl.textContent = `${size.name}`;
+        sizeEl.onclick = function(){
+        sizeContainer.querySelectorAll(".size.active").forEach(el => el.classList.remove("active"));
+        sizeEl.classList.add('active')
+        SelectedSize = []
+        SelectedSize.push(size.featureId)
+        console.log(SelectedSize)
+        localStorage.setItem('ProductId' , SelectedSize)
+        }
+        sizeContainer.appendChild(sizeEl);
+    });
+}
 document.addEventListener("DOMContentLoaded", function () {
     const apiSpacilDayUrl = "https://everyapi.webxy.net/Product/GetSpacilDay";
     const productContainer = document.getElementById("SpacialDay");
@@ -384,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const productSlide = `
                         <div data-id='${product.productId}' class="swiper-slide productD">
-                        <input value='${product.productId}' id='product_id' style='display:none'>
+                            <input value='${product.productId}' id='product_id' style='display:none'>
                             <div class="product product-single row">
                                 <div class="col-md-6">
                                     <div class="product-gallery product-gallery-sticky product-gallery-vertical">
@@ -431,7 +411,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <h2 class="product-title mb-1"><a href="ar-product-details.html?id=${productId}">${product.productName_Ar}</a></h2>
                                         <hr class="product-divider">
                                         <div class="product-price"><ins class="new-price ls-50">
-                                            ${product.price}       
+                                            ${product.price} ريال سعودي      
                                         </ins></div>
                                         <div class="ratings-container">
                                             <div class="ratings-full">
@@ -441,25 +421,28 @@ document.addEventListener("DOMContentLoaded", function () {
                                             <a href="#" class="rating-reviews">(1 تعليق)</a>
                                         </div>
 
+                                        <div class="product-form product-variation-form product-color-swatch">
+                                            <label style='padding-left:100px' >الألوان:</label>
+                                            <div class="d-flex align-items-center product-variations" id='ColorSwitch'>
+                                                ${product.productFeatureDto.map((feature, index) => `
+                                                <a class="color" 
+                                                style="background-color: ${feature.color};" 
+                                                onclick="displaySizes(${index})" 
+                                                data-sizes='${JSON.stringify(feature.sizes)}'></a>
+                                            `).join('')}
+                                            </div>
+                                        </div>
+
                                         <div class="product-form product-variation-form product-size-swatch mb-3">
-                                            <label class="mb-1">المقاسات</label>
-                                            <div class="flex-wrap d-flex align-items-center product-variations SizeBox" id='size'>
-                                                ${product.productFeatureDto.map(feature => `
-                                                <a href="#" class="size">${feature.sizeName}</a>
-                                                `).join('')}
+                                            <label style='padding-left:100px' class="mb-1">المقاسات</label>
+                                            <div href="#" class="flex-wrap d-flex align-items-center product-variations SizeBox" id='size'>
+                                                
+                                            
                                             </div>
                                             <a href="#" class="product-variation-clean">Clean All</a>
                                         </div>
                                         <hr class="product-divider">
 
-                                        <div class="product-form product-variation-form product-color-swatch">
-                                            <label>الألوان:</label>
-                                            <div class="d-flex align-items-center product-variations" id='ColorSwitch'>
-                                                ${product.productFeatureDto.map(feature => `
-                                                <a href="#" class="color" style="background-color: ${feature.color};" onclick="changeMainImage('${domainImage + feature.featureImage}')"></a>
-                                                `).join('')}
-                                            </div>
-                                        </div>
                                         <div class="product-variation-price">
                                             <span></span>
                                         </div>
@@ -472,7 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                                     <button class="quantity-minus w-icon-minus"></button>
                                                 </div>
                                             </div>
-                                            <button class="btn btn-primary btn-cart" id="btn-${productId}" onclick="AddToCart()">
+                                            <button class="btn btn-primary btn-cart" id="btn-${productId}" onclick="AddToCart(${productId})">
                                                 <i class="w-icon-cart"></i>
                                                 <span>اضف للسلة</span>
                                             </button>
@@ -509,8 +492,23 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                     </div>
                 `;
-
+                function displaySizes(index) {
+                    const sizes = product.productFeatureDto[index].sizes;
+                    const sizeContainer = document.getElementById('size');
+                    
+                    sizeContainer.innerHTML = '';
+                    
+                    sizes.forEach(size => {
+                        const sizeElement = document.createElement('span');
+                        sizeElement.className = 'size-option';
+                        sizeElement.textContent = `${size.name} (${size.quantity} متاح)`;
+                        sizeContainer.appendChild(sizeElement);
+                    });
+                }
                 productContainer.innerHTML = swiperWrapper;
+
+                
+
             } else {
                 productContainer.innerHTML = "<p>لا توجد منتجات متاحة في الوقت الحالي.</p>";
             }
@@ -520,97 +518,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-    let selectedSizes = [];
-    let selectedColors = [];
-    let productPrice = document.getElementById('product-variation-pricee');
-    let btn = document.getElementById('btn');
-    
-    btn.disabled = true; 
-    
-    const updateButtonState = () => {
-        if (selectedSizes.length > 0 && selectedColors.length > 0) {
-            btn.disabled = false; 
-            btn.onclick = () => {
-                AddToCart();
-                checkForMatchingFeature();
-            };
-        } else {
-            btn.disabled = true; 
-            btn.onclick = null;  
-        }
-    };
-    
-    const checkForMatchingFeature = () => {
-        let foundMatchingFeature = false;
-    
-        product.productFeatureDto.forEach(productFeature => {
-            if (selectedSizes.includes(productFeature.sizeName) && selectedColors.includes(productFeature.color)) {
-                let productId = productFeature.id;
-                let productCount = productFeature.count
-                localStorage.setItem('ProductId', productId);
-                localStorage.setItem('ProductCount' , productCount)
-                foundMatchingFeature = true;
 
-            }
-        });
-            if (!foundMatchingFeature) {
-            localStorage.setItem('ProductId', 'False');
-        }
-    };
-    
-    const sizeDiv = document.getElementById('size');
-    
-    if (sizeDiv) {
-        product.productFeatureDto.forEach(productFeature => {
-            const Size = document.createElement('a');
-            Size.href = '#';
-            Size.classList.add('size');
-            Size.textContent = productFeature.sizeName;
-    
-            Size.onclick = () => { 
-                if (selectedSizes.includes(productFeature.sizeName)) {
-                    selectedSizes = selectedSizes.filter(size => size !== productFeature.sizeName);
-                    Size.classList.remove('active');
-                } else {
-                    selectedSizes.splice(0, selectedSizes.length);
-                    selectedSizes.push(productFeature.sizeName);
-                    Size.classList.add('active');
-                    console.log(selectedSizes);
-                }
-                updateButtonState();
-                checkForMatchingFeature();
-            };
-    
-            sizeDiv.appendChild(Size);
-        });
-    }
-    
-    const ColorDiv = document.getElementById('ColorSwitch');
-    
-    if (ColorDiv) {
-        product.productFeatureDto.forEach(productFeature => {
-            const Color = document.createElement('a');
-            Color.style.backgroundColor = productFeature.color;
-            Color.classList.add('color');
-            Color.href = '#';
-    
-            Color.onclick = () => {
-                if (selectedColors.includes(productFeature.color)) {
-                    selectedColors = selectedColors.filter(color => color !== productFeature.color);
-                    Color.classList.remove('active');
-                } else {
-                    selectedColors.splice(0, selectedColors.length);
-                    selectedColors.push(productFeature.color);
-                    Color.classList.add('active');
-                    console.log(selectedColors);
-                }
-                updateButtonState();
-                checkForMatchingFeature();
-            };
-    
-            ColorDiv.appendChild(Color);
-        });
-}
 
 
 /*الاكثر مبيعا -----------*/
@@ -636,8 +544,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="product-details">
                                 <h4 onclick=window.location.href='ar-product-details.html?id=${product.id}' class="product-name">${product.nameAr}</h4>
                                 <div class="product-price">
-                                    <span class="new-price">جنيه ${product.price}</span>
-                                    ${product.oldPrice? `<span class="old-price">جنيه ${product.oldPrice}</span>`: ""}
+                                    <span class="new-price">ريال سعودي ${product.price}</span>
+                                    ${product.oldPrice? `<span class="old-price">ريال سعودي ${product.oldPrice}</span>`: ""}
                                 </div>
                             </div>
                         </div>
@@ -710,22 +618,22 @@ fetch("https://everyapi.webxy.net/Product/GetNewProduct")
           <div class="product text-center">
             <figure class="product-media">
               
-                <img onclick=window.location.href='ar-product-details.html?id${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
+                <img onclick=window.location.href='ar-product-details.html?id=${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
               
               <div class="product-action-vertical">
-                <a onclick=window.location.href='ar-product-details.html?id${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
+                <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
                 <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
             <div class="product-details">
-              <h4 class="product-name"><a href="ar-product-details.html?id${product.id}">${product.nameAr}</a></h4>
+              <h4 class="product-name"><a href="ar-product-details.html?id=${product.id}">${product.nameAr}</a></h4>
               <div class="ratings-container">
                 <div class="ratings-full">
                   <span class="ratings" style="width: ${product.review ? product.review * 20 : 0}%;"></span>
                   <span class="tooltiptext tooltip-top"></span>
                 </div>
-                <a href="ar-product-details.html?id${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
+                <a href="ar-product-details.html?id=${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
               </div>
               <div class="product-price">
                 <ins class="new-price">${product.price}</ins> ر.س
@@ -756,22 +664,22 @@ fetch("https://everyapi.webxy.net/Product/GetMostPopular")
           <div class="product text-center">
             <figure class="product-media">
               
-                <img onclick=window.location.href='ar-product-details.html?id${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
+                <img onclick=window.location.href='ar-product-details.html?id=${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
               
               <div class="product-action-vertical">
-                <a onclick=window.location.href='ar-product-details.html?id${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
+                <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
                 <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
             <div class="product-details">
-              <h4 class="product-name"><a href="ar-product-details.html?id${product.id}">${product.nameAr}</a></h4>
+              <h4 class="product-name"><a href="ar-product-details.html?id=${product.id}">${product.nameAr}</a></h4>
               <div class="ratings-container">
                 <div class="ratings-full">
                   <span class="ratings" style="width: ${product.review ? product.review * 20 : 0}%;"></span>
                   <span class="tooltiptext tooltip-top"></span>
                 </div>
-                <a href="ar-product-details.html?id${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
+                <a href="ar-product-details.html?id=${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
               </div>
               <div class="product-price">
                 <ins class="new-price">${product.price}</ins> ر.س
@@ -802,10 +710,10 @@ fetch("https://everyapi.webxy.net/Product/GetBestSeller")
           <div class="product text-center">
             <figure class="product-media">
               
-                <img onclick=window.location.href='ar-product-details.html?id${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
+                <img onclick=window.location.href='ar-product-details.html?id=${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
               
               <div class="product-action-vertical">
-                <a onclick=window.location.href='ar-product-details.html?id${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
+                <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
                 <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
@@ -817,7 +725,7 @@ fetch("https://everyapi.webxy.net/Product/GetBestSeller")
                   <span class="ratings" style="width: ${product.review ? product.review * 20 : 0}%;"></span>
                   <span class="tooltiptext tooltip-top"></span>
                 </div>
-                <a href="ar-product-details.html?id${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
+                <a href="ar-product-details.html?id=${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
               </div>
               <div class="product-price">
                 <ins class="new-price">${product.price}</ins> ر.س
@@ -848,22 +756,22 @@ fetch("https://everyapi.webxy.net/Product/GetBestSeller")
           <div class="product text-center">
             <figure class="product-media">
               
-                <img onclick=window.location.href='ar-product-details.html?id${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
+                <img onclick=window.location.href='ar-product-details.html?id=${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
               
               <div class="product-action-vertical">
-                <a onclick=window.location.href='ar-product-details.html?id${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
+                <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
                 <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
             <div class="product-details">
-              <h4 class="product-name"><a href="ar-product-details.html?id${product.id}">${product.nameAr}</a></h4>
+              <h4 class="product-name"><a href="ar-product-details.html?id=${product.id}">${product.nameAr}</a></h4>
               <div class="ratings-container">
                 <div class="ratings-full">
                   <span class="ratings" style="width: ${product.review ? product.review * 20 : 0}%;"></span>
                   <span class="tooltiptext tooltip-top"></span>
                 </div>
-                <a href="ar-product-details.html?id${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
+                <a href="ar-product-details.html?id=${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
               </div>
               <div class="product-price">
                 <ins class="new-price">${product.price}</ins> ر.س

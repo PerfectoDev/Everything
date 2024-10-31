@@ -1,43 +1,64 @@
 const userId = localStorage.getItem('User_id');
 const token = localStorage.getItem('token');
-const defaultUserName = localStorage.getItem('username');  
-const defaultEmail = localStorage.getItem('Email'); 
+const defaultUserName = localStorage.getItem('username');
+const defaultEmail = localStorage.getItem('Email');
+let totalPrice = 0;
 
-async function fetchAddressId() {
+async function fetchAddresses() {
     const url = `https://everyapi.webxy.net/Accounts/get-all-address/${userId}`;
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`,
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            return;
         }
-    });
 
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const addresses = await response.json();
+        const addressDropdown = document.getElementById('addressDropdown');
+        addressDropdown.innerHTML = '<option value="">اختر عنوانًا</option>';
+
+        addresses.forEach(address => {
+            const option = document.createElement('option');
+            option.value = address.id;
+            option.textContent = address.addrees; 
+            if (address.isdefault) {
+                option.selected = true;
+            }
+            addressDropdown.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching addresses:', error);
     }
-
-    const addresses = await response.json();
-    const defaultAddress = addresses.find(address => address.isdefault === true);
-    return defaultAddress ? defaultAddress.id : null;  
 }
 
 async function fetchWalletAmount() {
     const walletUrl = `https://everyapi.webxy.net/Wallet/get-wallet-by-userId/${userId}`;
-    const response = await fetch(walletUrl, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`,
+    try {
+        const response = await fetch(walletUrl, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    });
 
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const walletData = await response.json();
+        return walletData.amount;
+    } catch (error) {
+        console.error('Error fetching wallet amount:', error);
+        return 0;
     }
-
-    const walletData = await response.json();
-    return walletData.amount;
 }
 
 async function placeOrder() {
@@ -46,16 +67,18 @@ async function placeOrder() {
         return;
     }
 
-    const addressId = await fetchAddressId();  
+    const addressId = document.getElementById('addressDropdown').value;  
     const walletAmount = await fetchWalletAmount();
 
     const checkOutData = {
         userId: userId,
         orderPaymentMethod: 1,
-        addressId: addressId || 0,  
+        addressId: addressId || 0,
         isFreeShipping: true,
-        walletAmountNumber: walletAmount || 0,  
+        walletAmountNumber: Math.min(walletAmount, totalPrice),
     };
+
+    console.log(checkOutData);
 
     const checkoutPostUrl = "https://everyapi.webxy.net/Orders/CheckOut";
 
@@ -76,14 +99,13 @@ async function placeOrder() {
             alert("تمت معالجة الطلب بنجاح.");
         }
     } catch (error) {
-        alert(`خطأ: ${error.message}`);
+        alert(`حدث خطا اثناء عمليه الدفع يرجي التحقق من الكميه او العنوان`);
     }
 }
 
 document.getElementById('placeOrderButton').addEventListener('click', () => {
     placeOrder();
 });
-
 // جلب معلومات السلة
 if (userId && token) {
     const pageNumber = 1;
@@ -104,7 +126,9 @@ if (userId && token) {
         return response.json();
     })
     .then(data => {
+        console.log("Basket Data:", data);  
         document.getElementById('check-out-cart').innerHTML = '';
+        let totalPrice = 0;
 
         data.forEach(item => {
             const productData = {
@@ -115,6 +139,7 @@ if (userId && token) {
                 productId: item.productId,
                 featuresId: item.featuresId  
             };
+            totalPrice += productData.totalPrice;
 
             const productRow = document.createElement('tr');
             productRow.innerHTML = `
@@ -126,6 +151,8 @@ if (userId && token) {
             `;
             document.getElementById('check-out-cart').appendChild(productRow);
         });
+        document.getElementById('totalPriceDiv').textContent = `${totalPrice}$`;
+
     })
     .catch(error => {
         console.error('Error:', error);
@@ -133,6 +160,7 @@ if (userId && token) {
 } else {
     console.error("User ID أو token غير موجود.");
 }
- 
+fetchAddresses();
+
 document.querySelector('input[name="firstname"]').value = defaultUserName;
 document.querySelector('input[name="email"]').value = defaultEmail;

@@ -33,6 +33,10 @@
 
     <!-- Default CSS -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/demo-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/custom.css">
+
 </head>
 
 <body>
@@ -61,6 +65,174 @@
 
         <!-- Start of Main -->
         <main class="main login-page">
+            <h1 class="d-none">Wolmart - Responsive Marketplace HTML Template</h1>
+            <!-- Start of Header -->
+            <header class="header">
+                <div class="header-top">
+                    <div class="container">
+                        <div class="header-left">
+                            <p class="welcome-msg" id="welcome-msg"></p>
+                        </div>
+                        <div class="header-right pl-0">
+                            <div class="dropdown">
+                                <a href="#currency">ريال سعودي</a>
+                               <!-- <div class="dropdown-box">
+                                    <a href="#USD">دولار </a>
+                                    <a href="#EUR">يورو</a>
+                                </div>
+                            -->
+                            </div>
+                            <!-- End of DropDown Menu -->
+    
+                            <div class="dropdown">
+                                <a href="#language"> تغير اللغة</a>
+                                <div class="dropdown-box">
+                                    <a href="#ENG">
+                                        
+                                        ENGLISH
+                                    </a>
+                                    <a href="#FRA">
+                                       
+                                        arabic
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- End of Dropdown Menu -->
+                            <span class="divider d-lg-show"></span>
+                            <a href="contact-us.html" class="d-lg-show">اتصل بنا</a>
+                            <a id="myAccount" href="my-account.html" class="d-lg-show">حسابى</a>
+                            <div id="loginbuttons" style="display: flex;">
+                            <a onclick="window.location.href='login.html'" href="#" class="d-lg-show login sign-in"><i class="w-icon-account"></i>تسجيل الدخول</a>
+                            <span class="delimiter d-lg-show">/</span>
+                            <a onclick="window.location.href='Register-New-Account.html'" href="#" class="ml-0 d-lg-show login register">تسجيل حساب جديد</a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of Header Top -->
+    
+                <div class="header-middle">
+                    <div class="container">
+                        <div class="header-left mr-md-4">
+                            <a href="#" class="mobile-menu-toggle  w-icon-hamburger" aria-label="menu-toggle">
+                            </a>
+                            <a href="index.html" class="logo ml-lg-0">
+                                <img src="assets/images/logo.png" alt="logo" width="144" height="45" />
+                            </a>
+                            <form method="get" action="#"
+                                class="header-search hs-expanded hs-round d-none d-md-flex input-wrapper">
+                                <div class="select-box" id="select-box">
+                                    <select id="category" name="category">
+                                        <option value="">جميع الفئات</option>
+    
+                                    </select>
+                                </div>
+                                
+                                <input type="text" class="form-control" name="search" id="search" placeholder="ابحث عن" required />
+                                <button class="btn btn-search" id="searchButton"><i class="w-icon-search"></i></button>
+                                
+                            </form>
+                        </div>
+                        <div class="header-right ml-4">
+                            <div class="header-call d-xs-show d-lg-flex align-items-center">
+                                <a href="tel:#" class="w-icon-call"></a>
+                                <div class="call-info d-lg-show">
+                                    <h4 class="chat font-weight-normal font-size-md text-normal ls-normal text-light mb-0">
+                                       <!-- <a href="mailto:#" class="text-capitalize text-primary">الشات اللحظي</a> </h4>-->
+                                    <a href="tel:#" class="phone-number font-weight-bolder ls-50"></a>
+                                </div>
+                            </div>
+                            <a class="wishlist label-down link d-xs-show" href="wishlist.html">
+                                <i class="w-icon-heart"></i>
+                                <span class="wishlist-label d-lg-show">المنتجات المفضلة</span>
+                            </a>
+                           
+                            <div class="dropdown cart-dropdown cart-offcanvas mr-0 mr-lg-2">
+                                <div class="cart-overlay"></div>
+                                <a href="#" class="cart-toggle label-down link">
+                                    <i class="w-icon-cart">
+                                        <span  id="CartCount" class="cart-count">0</span>
+                                    </i>
+                                    <span class="cart-label">سلة المشتريات</span>
+                                </a>
+                                <div class="dropdown-box" id="cartProduct">
+                                    <div class="cart-header">
+                                        <span>السلة</span>
+                                        <a href="" class="btn-close">اغلاق<i class="w-icon-long-arrow-left"></i></a>
+                                    </div>
+    
+                                    <div class="products" id="cartproduct">
+                                        
+                                    </div>
+    
+                                    <div class="cart-total">
+                                        <label>المبلغ الكلي:</label>
+                                        <span class="price">0</span> <!-- Total Price starts at 0 -->
+                                    </div>
+    
+                                    <div class="cart-action">
+                                        <a href="cart.html" class="btn btn-dark btn-outline btn-rounded">اعرض السلة</a>
+                                        
+                                        <div class="cart-header">
+                                            <a href="demo-rtl-shop.html" class="btn-close btn btn-primary  btn-rounded">التسوق مرة أخرى</a>
+                                        </div>
+                                        
+                                    </div>
+                                    <br>
+                                    <a href="checkout.html" class="btn btn-primary  btn-rounded btncheckout">اذهب للدفع</a>
+                                </div>
+                                <!-- End of Dropdown Box -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of Header Middle -->
+    
+                <div class="header-bottom sticky-content fix-top sticky-header show-dropdown has-dropdown">
+                    <div class="container">
+                        <div class="inner-wrap">
+                            <div class="header-left">
+                                <div class="dropdown category-dropdow has-border" data-visible="true">
+                                    <a href="#" onclick="window.location.href='demo-rtl-shop.html'" class="category-toggle text-dark" role="button" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="true" data-display="static"
+                                        title="Browse Categories">
+                                        <i class="w-icon-category"></i>
+                                        <span> تصفح الفئات</span>
+                                    </a>
+    
+                                    <div class="dropdown-box">
+                                        <ul class="menu vertical-menu category-menu" id="main-menu"></ul>
+                                    </div>
+                                    
+                                </div>
+                                <nav class="main-nav">
+                                    <ul class="menu active-underline">
+                                        <li class="active">
+                                            <a href="index.html">الرئيسية</a>
+                                        </li>
+                                        <li>
+                                            <a href="contact-us.html">اتصل بنا</a>
+    
+                                           
+                                        </li>
+                                        <li>
+                                            <a href="vendor-dokan-store.html">سياسية الاسترجاع</a>
+                                            
+                                        </li>
+                                       
+                                      
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="header-right">
+                                <!--<a href="#" class="d-xl-show"><i class="w-icon-map-marker mr-1"></i>تتبع طلبي</a>-->
+                                <!--<a href="#"><i class="w-icon-sale"></i>العروض اليومية</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- End of Header -->
             <!-- Start of Page Header -->
             <div class="page-header">
                 <div class="container">
@@ -102,6 +274,118 @@
             
             </div>
         </main>
+        <!-- Start of Footer -->
+<footer class="footer appear-animate" data-animation-options="{
+    'name': 'fadeIn'
+    }">
+    <div class="footer-newsletter bg-primary">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-xl-5 col-lg-6">
+                    <div class="icon-box icon-box-side text-white">
+                        <div class="icon-box-icon d-inline-flex">
+                            <i class="w-icon-envelop3"></i>
+                        </div>
+                        <div class="icon-box-content">
+                            <h4 class="icon-box-title text-white text-uppercase font-weight-bold">قم بالتسجيل فى القائمة البريدية</h4>
+                            <p class="text-white">لتحصل على جميع العروض والمنتجات الجديدة
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-lg-6 col-md-9 mt-4 mt-lg-0 ">
+                    <form action="#" method="get"
+                        class="input-wrapper input-wrapper-inline input-wrapper-rounded">
+                        <input type="email" class="form-control mr-2 bg-white text-dark" name="email" id="email"
+                            placeholder="ادخل بريدك الالكترونى" />
+                        <button class="btn btn-dark btn-rounded" type="submit">سجل الان<i
+                                class="w-icon-long-arrow-left"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="footer-top">
+            <div class="row">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="widget widget-about">
+                        <a href="demo-rtl.html" class="logo logo-footer">
+                            <img src="assets/images/logo_footer.png" alt="logo-footer" width="144"
+                                height="45" />
+                        </a>
+                        <div class="widget-body">
+                            <p class="widget-about-title">عندك سؤال اتصل بنا</p>
+                            <a href="tel:18005707777" class="widget-about-call phone-number"></a>
+                            <p class="widget-about-desc">
+                            </p>
+    
+                            <div class="social-icons social-icons-colored">
+                                <a href="#" class="social-icon social-facebook w-icon-facebook"></a>
+                                <a href="#" class="social-icon social-twitter w-icon-twitter"></a>
+                                <a href="#" class="social-icon social-instagram w-icon-instagram"></a>
+                                <a href="#" class="social-icon social-youtube w-icon-youtube"></a>
+                                <a href="#" class="social-icon social-pinterest w-icon-pinterest"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="widget">
+                        <h3 class="widget-title">لينك للصفحات</h3>
+                        <ul class="widget-body">
+                            <li><a href="contact-us.html">اتصل بنا</a></li>
+                            <li><a href="my-account.html">حسابي</a></li>
+                            <li><a href="AddToWallet.html">المحفظه</a></li>
+                            <li><a href="cart.html">السله</a></li>
+                            <li><a href="add-address.html">العنوان</a></li>
+                            <li><a href="AccountData.html">بيانات الحساب</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="widget">
+                        <h4 class="widget-title">لينك للصفحات</h4>
+                        <ul class="widget-body">
+                            <li><a href="contact-us.html">اتصل بنا</a></li>
+                            <li><a href="my-account.html">حسابي</a></li>
+                            <li><a href="AddToWallet.html">المحفظه</a></li>
+                            <li><a href="cart.html">السله</a></li>
+                            <li><a href="add-address.html">العنوان</a></li>
+                            <li><a href="AccountData.html">بيانات الحساب</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="widget">
+                        <h4 class="widget-title">لينك للصفحات</h4>
+                        <ul class="widget-body">
+                            <li><a href="contact-us.html">اتصل بنا</a></li>
+                            <li><a href="my-account.html">حسابي</a></li>
+                            <li><a href="AddToWallet.html">المحفظه</a></li>
+                            <li><a href="cart.html">السله</a></li>
+                            <li><a href="add-address.html">العنوان</a></li>
+                            <li><a href="AccountData.html">بيانات الحساب</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+        <div class="footer-bottom">
+            <div class="footer-left">
+                <p class="copyright">mr-everthing.com © 2023 جميع الحقوق محفوظة.</p>
+            </div>
+            <div class="footer-right">
+                <span class="payment-label mr-lg-8"> نستخدم بوابات دفع امنه</span>
+                <figure class="payment">
+                    <img src="assets/images/payment.png" alt="payment" width="159" height="25" />
+                </figure>
+            </div>
+        </div>
+    </div>
+    </footer>
+    <!-- End of Footer -->
         <!-- End of Main -->
 
        <script>
@@ -128,7 +412,16 @@
     <script src="assets/vendor/jquery/jquery.min.js"></script>
     <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
     <script src="assets/js/main.min.js"></script>
-    <script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
     <script src="assets/js/fetchingAPIS/OtpSend.js"></script>
+
+    <script src="assets/js/fetchingAPIS/addcart.js"></script>
+    <script src="assets/js/fetchingAPIS/getSettings.js"></script>
+    <script src="assets/js/fetchingAPIS/filter.js"></script>
+    <script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
+    <script src="assets/js/fetchingAPIS/GetBasket.js"></script>
+    <script src="assets/js/fetchingAPIS/AddToBasket.js"></script>
+    <script src="assets/js/fetchingAPIS/removeAllFromBasket.js"></script>
+    <script src="assets/js/fetchingAPIS/productDetails.js"></script>
+    <script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
 </body>
 </html>

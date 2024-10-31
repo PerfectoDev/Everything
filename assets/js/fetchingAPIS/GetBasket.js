@@ -38,7 +38,7 @@ fetch(url, {
         productDiv.className = 'product product-cart';
         productDiv.innerHTML = `
                                         <div class="product-detail productD" data-id='${productData.productId}'>
-                                            <a href="#" class="product-name">
+                                            <a href="ar-product-details.html?id=${productData.productId}" class="product-name">
                                             ${productData.name}
                                             </a>
                                             <div class="price-box">
@@ -55,7 +55,7 @@ fetch(url, {
                                             </div>
                                         </div>
                                         <figure class="product-media" >
-                                            <a href="#">
+                                            <a href="ar-product-details.html?id=${productData.productId}">
                                                 <img src="${productData.Img}" alt="product" height="84"
                                                     width="94" />
                                             </a>
