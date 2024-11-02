@@ -499,7 +499,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                             </div>
                                             <span class="divider d-xs-show"></span>
                                             <div class="product-link-wrapper d-flex">
-                                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"></a>
+                                                <a onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -640,7 +640,7 @@ fetch("https://everyapi.webxy.net/Product/GetNewProduct")
         products.forEach((product) => {
             const productHTML = `
             
-        <div data-id='${product.id}' class="product-wrap product productD ProductBox" style='cursor:pointer'>
+        <div  class="product-wrap product  ProductBox" style='cursor:pointer'>
           <div class="product text-center">
             <figure class="product-media">
               
@@ -648,11 +648,11 @@ fetch("https://everyapi.webxy.net/Product/GetNewProduct")
               
               <div class="product-action-vertical">
                 <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
-                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
+                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
-            <div class="product-details">
+            <div class="product-details productD" data-id='${product.id}'>
               <h4 class="product-name"><a href="ar-product-details.html?id=${product.id}">${product.nameAr}</a></h4>
               <div class="ratings-container">
                 <div class="ratings-full">
@@ -694,7 +694,7 @@ fetch("https://everyapi.webxy.net/Product/GetMostPopular")
               
               <div class="product-action-vertical">
                 <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
-                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
+                <a onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
@@ -740,7 +740,7 @@ fetch("https://everyapi.webxy.net/Product/GetBestSeller")
               
               <div class="product-action-vertical">
                 <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
-                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
+                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
@@ -786,7 +786,7 @@ fetch("https://everyapi.webxy.net/Product/GetBestSeller")
               
               <div class="product-action-vertical">
                 <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
-                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
+                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>

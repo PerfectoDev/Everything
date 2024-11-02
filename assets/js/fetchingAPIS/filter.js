@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         </a>
                                         <div class="product-action-horizontal">
                                             <a href="#" onclick="window.location.href='../../ar-product-details.html?id=${productId}'" class="btn-product-icon btn-cart w-icon-cart" title="Add to cart"></a>
-                                            <a class="btn-product-icon btn-wishlist w-icon-heart" data-id="${productId}" title="Wishlist"></a>
+                                            <a class="btn-product-icon btn-wishlist w-icon-heart" onclick='addToWishlist(${product.id})' data-id="${productId}" title="Wishlist"></a>
                                         </div>
                                     </figure>
                                     <div class="product-details">

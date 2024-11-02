@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <input class="quantity form-control" id='Quantity' type="number" value="1" min="1" >
                                         </div>
                                     </div>
-                                    <button id='btn' class="btn btn-cart btn-primary">
+                                    <button id='btn' class="btn btn-cart AddToCartButton btn-primary">
                                         <i class="w-icon-cart"></i>
                                         <span>اضافة للسلة</span>
                                     </button>
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             </div>
                                             <span class="divider d-xs-show"></span>
                                             <div class="product-link-wrapper d-flex">
-                                                <a href="#" class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
+                                                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart"><span></span></a>
                                                 
                                             </div>
                                         </div>          
@@ -260,18 +260,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
         if (selectedSizes.length > 0 && selectedColors.length > 0) {
             btn.disabled = false;
-            console.log("Button enabled");
-            // alert("Button is now enabled"); 
+            document.querySelector('.AddToCartButton').classList.remove('disabled')
             btn.onclick = () => {
                 AddToCart();
                 checkForMatchingFeature();
-                // alert("Button clicked");
             };
         } else {
             btn.disabled = true;
             btn.onclick = null;
-            console.log("Button disabled");
-            // alert("Button is now disabled");  
+            document.querySelector('.AddToCartButton').classList.add('disabled')
+           
         }
     };
     
