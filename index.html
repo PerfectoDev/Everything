@@ -396,7 +396,7 @@
                 <div class="container pb-2">
                     <h2 class="title justify-content-center pt-1 ls-normal mb-5">اكثر الفئات مبيعاً </h2>
                     <div class="swiper">
-                        <div class="swiper-container swiper-theme shadow-swiper pg-show" data-swiper-options="{
+                        <div class="swiper-container custom-swiper-container swiper-theme shadow-swiper pg-show" data-swiper-options="{
                             'spaceBetween': 20,
                             'slidesPerView': 2,
                             'breakpoints': {
@@ -976,24 +976,24 @@
     </div>
     <!-- End of Mobile Menu -->
     <h2 class="title title-underline mb-4 ls-normal appear-animate">العلامات التجارية</h2>
-    <div class="swiper-container swiper-theme brands-wrapper mb-9 appear-animate" data-swiper-options="{
-        'spaceBetween': 0,
-        'slidesPerView': 2,
-        'breakpoints': {
-            '576': {
-                'slidesPerView': 3
-            },
-            '768': {
-                'slidesPerView': 4
-            },
-            '992': {
-                'slidesPerView': 5
-            },
-            '1200': {
-                'slidesPerView': 6
-            }
-        }
-    }">
+                    <div class="swiper-container custom-swiper-container-brands swiper-theme brands-wrapper mb-9 appear-animate" data-swiper-options="{
+                        'spaceBetween': 0,
+                        'slidesPerView': 2,
+                        'breakpoints': {
+                            '576': {
+                                'slidesPerView': 3
+                            },
+                            '768': {
+                                'slidesPerView': 4
+                            },
+                            '992': {
+                                'slidesPerView': 5
+                            },
+                            '1200': {
+                                'slidesPerView': 6
+                            }
+                        }
+                    }">
         <div class="swiper-wrapper row gutter-no cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2" id="BrandContainer">
             
            
@@ -1326,7 +1326,8 @@
 <script src="assets/js/fetchingAPIS/FilterProduct.js"></script>
 <script src="assets/js/fetchingAPIS/brands.js"></script>
 <script src="assets/js/fetchingAPIS/login.js"></script>
-<script src="assets/js/fetchingAPIS/login.js"></script>
+<script src="assets/js/fetchingAPIS/menu.js"></script>
+<script src="assets/js/fetchingAPIS/bestseller.js"></script>
 
     <!-- Plugin JS File -->
     <script src="assets/vendor/jquery/jquery.min.js"></script>

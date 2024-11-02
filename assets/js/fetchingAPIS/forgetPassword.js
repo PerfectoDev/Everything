@@ -1,17 +1,39 @@
 document.getElementById('resetPasswordButton').addEventListener('click', function(event) {
     event.preventDefault();  
-    const usernameOrEmail = document.getElementById('username').value;
+    
+    const phoneNumber = document.getElementById('phoneNumber').value; 
+    const email = document.getElementById('email').value; 
+    const password = document.getElementById('password').value; 
+    const confirmPassword = document.getElementById('confirmPassword').value; 
+    const otp = document.getElementById('otp').value;  
 
-    if (!usernameOrEmail) {
-        alert("يرجى إدخال اسم المستخدم أو البريد الإلكتروني.");
+
+    if (!phoneNumber || !email || !password || !otp || !confirmPassword) {
+        Swal.fire({
+            title: "تم بنجاح",
+            text: 'يرجى ملء جميع الحقول المطلوبة.',
+            icon: "success"
+        });
         return;
     }
 
 
-    const requestData = {
-        emailOrUsername: usernameOrEmail
-    };
+    if (password !== confirmPassword) {
+        Swal.fire({
+            title: "خطا",
+            text: 'كلمات المرور غير متطابقة.',
+            icon: "warning"
+        });
+        return;
+    }
 
+    const requestData = {
+        phoneNumber: phoneNumber,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+        otp: otp
+    };
 
     fetch('https://everyapi.webxy.net/Accounts/forget-password', {
         method: 'POST',
@@ -21,18 +43,15 @@ document.getElementById('resetPasswordButton').addEventListener('click', functio
         body: JSON.stringify(requestData)
     })
     .then(response => {
-        if (!response.ok) {
-            return response.json().then(errorData => {
-                throw new Error(errorData.message || 'حدث خطأ أثناء محاولة استعادة كلمة المرور');
-            });
-        }
-        return response.json();
+        return response.text().then(text => {
+            if (!response.ok) {
+                console.error('Error response:', text); 
+                Swal.fire({
+                    title: "خطا",
+                    text: 'برجاء التاكد من البيانات المدخله .',
+                    icon: "error"
+                });
+            }
+        });
     })
-    .then(data => {
-        alert('تم إرسال التعليمات إلى بريدك الإلكتروني.');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert(error.message);
-    });
 });
