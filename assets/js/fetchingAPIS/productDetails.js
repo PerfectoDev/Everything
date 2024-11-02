@@ -289,7 +289,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         // تحقق من الكمية المخزنة
                         const requestedQuantity = parseInt(document.getElementById('Quantity').value) || 1;
                         if (requestedQuantity > size.quantity) {
-                            alert("الكمية المطلوبة غير متوفرة.");
+                            Swal.fire({
+                                title: "Error",
+                                text: 'الكمية المطلوبة غير متوفرة.',
+                                icon: "error"
+                            });
                             return;
                         }
     

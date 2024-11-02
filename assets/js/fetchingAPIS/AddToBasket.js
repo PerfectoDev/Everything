@@ -5,7 +5,8 @@ function AddToCart() {
     let userId = localStorage.getItem('User_id');
     let productid = localStorage.getItem('ProductId')
     let productCount = parseInt(localStorage.getItem('ProductCount'));
-       
+    var adcart =  localStorage.getItem('AdDtoCart')
+    var ProductId = localStorage.getItem('ProductId')
         if(productid === 'False' ) { 
         console.log('المنتج غير موجود')
 
@@ -13,22 +14,79 @@ function AddToCart() {
         
     }
     let featuresId = productid; 
-    
     let ProductData = {
         'userId': userId,
         'product_id': product_id,
         'quantity': Quantity,
         'featuresId': featuresId
     };
-
-    
     localStorage.setItem('AdDtoCart', JSON.stringify(ProductData));
     if(productCount < Quantity) { 
-        console.log('العدد الموجود في المنتج غير كافي')
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "error",
+            title: "العدد الموجود في المنتج غير كافي"
+          });
         return;
 
     }
-    AddToBasket();
+   
+    
+
+    if(ProductId == ""){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "error",
+            title: "من فضلك اختار اللون والحجم للمنتج"
+          });
+
+          
+
+}else { 
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "تم اضافة المنتج بنجاح"
+      });
+            
+      AddToBasket();
+      localStorage.setItem('AdDtoCart' , '')
+      localStorage.setItem('ProductId' , '')
+
+}
+
+
+  
 }
 
 async function AddToBasket() {
@@ -88,7 +146,9 @@ async function AddToBasket() {
         }
 
         const data = await response.json();
-        console.log('Request successful:', data);
+
+       
+       
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
     }

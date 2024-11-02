@@ -17,7 +17,12 @@ window.onload = function () {
             const password = document.getElementById("password").value;
 
             if (!emailOrPhone || !password) {
-                alert("يرجى إدخال البريد الإلكتروني/رقم الهاتف وكلمة المرور.");
+
+                Swal.fire({
+                    title: "تحذير",
+                    text: 'يرجى إدخال البريد الإلكتروني/رقم الهاتف وكلمة المرور.',
+                    icon: "warning"
+                });
                 return;
             }
 
@@ -46,7 +51,12 @@ window.onload = function () {
                     localStorage.setItem("token", result.token);
                     localStorage.setItem("isLoggedIn", "true");
                     localStorage.setItem("User_id", result.userId);
-                    alert("تم تسجيل الدخول بنجاح!");
+
+                    Swal.fire({
+                        title: "تم بنجاح",
+                        text: 'تم تسجيل الدخول بنجاح!.',
+                        icon: "success"
+                    });
                     window.location.href = "../../index.html";
                     if (result.isActive == "true") {
                         window.location.href = "../../index.html";
@@ -73,17 +83,28 @@ window.onload = function () {
                         }, 3000);
                     }
                 } else if (response.status === 401) {
-                    alert("Error");
+                    Swal.fire({
+                        title: "خطأ",
+                        text: 'حدث خطأ أثناء التسجيل.',
+                        icon: "error"
+                    });
                     /*  window.location.href = '../../index.html'; */
                 } else {
-                    const errorText = await response.text();
-                    alert(
-                        "بيانات الدخول غير صحيحة. يرجى المحاولة مرة أخرى.\n" + errorText
-                    );
+                    
+                    Swal.fire({
+                        title: "خطأ",
+                        text: 'بيانات الدخول غير صحيحة. يرجى المحاولة مرة أخرى.',
+                        icon: "error"
+                    });
                 }
             } catch (error) {
                 console.error("Error:", error);
-                alert("حدث خطأ أثناء الاتصال بالخادم.");
+
+                Swal.fire({
+                    title: "خطأ",
+                    text: 'حدث خطأ أثناء الاتصال بالخادم.',
+                    icon: "error"
+                });
             }
         });
     }
@@ -96,7 +117,11 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".addToCart").forEach((button) => {
         button.addEventListener("click", function (event) {
             event.preventDefault();
-            alert("تم إضافة المنتج إلى السلة");
+            Swal.fire({
+                title: "تم بنجاح",
+                text: 'تم إضافة المنتج إلى السلة.',
+                icon: "success"
+            });
             console.log("تم إضافة المنتج إلى السلة");
         });
     });
@@ -307,14 +332,19 @@ fetch("https://everyapi.webxy.net/api/Adds/get-all-adds")
             console.error("Error fetching ads:", error);
         });
 /*عرض مميز  -----------*/
-let selectedColor = []
-let SelectedSize = []
+let selectedColor = [];
+let SelectedSize = [];
+
 function displaySizes(index) {
     const productContainer = document.querySelectorAll(".swiper-slide.productD");
     const sizes = productContainer[index].querySelector("[data-sizes]").dataset.sizes;
     const parsedSizes = JSON.parse(sizes);
 
     const sizeContainer = document.getElementById("size");
+    const sizeLabel = document.querySelector(".product-size-swatch label");
+
+    sizeLabel.style.display = "block";
+    sizeContainer.style.display = "flex";
 
     sizeContainer.innerHTML = "";
 
@@ -322,14 +352,13 @@ function displaySizes(index) {
         const sizeEl = document.createElement("a");
         sizeEl.className = "size";
         sizeEl.textContent = `${size.name}`;
-        sizeEl.onclick = function(){
-        sizeContainer.querySelectorAll(".size.active").forEach(el => el.classList.remove("active"));
-        sizeEl.classList.add('active')
-        SelectedSize = []
-        SelectedSize.push(size.featureId)
-        console.log(SelectedSize)
-        localStorage.setItem('ProductId' , SelectedSize)
-        }
+        sizeEl.onclick = function() {
+            sizeContainer.querySelectorAll(".size.active").forEach(el => el.classList.remove("active"));
+            sizeEl.classList.add("active");
+            SelectedSize = [];
+            SelectedSize.push(size.featureId);
+            localStorage.setItem("ProductId", SelectedSize);
+        };
         sizeContainer.appendChild(sizeEl);
     });
 }
@@ -361,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const productImage = product.productAttributs.length > 0 && product.productAttributs[0].productAttributImages.length > 0
                         ? domainImage + product.productAttributs[0].productAttributImages[0].imagePath
                         : "placeholder.jpg";
-
+                    
                     const productSlide = `
                         <div data-id='${product.productId}' class="swiper-slide productD">
                             <input value='${product.productId}' id='product_id' style='display:none'>
@@ -384,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                             <button class="swiper-button-next"></button>
                                             <button class="swiper-button-prev"></button>
                                             <div class="product-label-group">
-                                                <label class="product-label label-discount">${product.discount} خصم</label>
+                                        <label class="product-label label-discount">${Math.floor(product.discount)}% خصم</label>
                                             </div>
                                         </div>
                                         <div class="product-thumbs-wrap swiper-container"
@@ -425,23 +454,20 @@ document.addEventListener("DOMContentLoaded", function () {
                                             <label style='padding-left:100px' >الألوان:</label>
                                             <div class="d-flex align-items-center product-variations" id='ColorSwitch'>
                                                 ${product.productFeatureDto.map((feature, index) => `
-                                                <a class="color" 
+                                                 <a class="color" 
                                                 style="background-color: ${feature.color};" 
                                                 onclick="displaySizes(${index})" 
                                                 data-sizes='${JSON.stringify(feature.sizes)}'></a>
                                             `).join('')}
                                             </div>
                                         </div>
+                                        <hr class="product-divider">
 
-                                        <div class="product-form product-variation-form product-size-swatch mb-3">
-                                            <label style='padding-left:100px' class="mb-1">المقاسات</label>
-                                            <div href="#" class="flex-wrap d-flex align-items-center product-variations SizeBox" id='size'>
-                                                
-                                            
-                                            </div>
+                                         <div class="product-form product-variation-form product-size-swatch mb-3">
+                                            <label style='padding-left:100px; display:none;' class="mb-1">المقاسات</label>
+                                            <div href="#" class="flex-wrap d-flex align-items-center product-variations SizeBox" id='size' style='display:none;'></div>
                                             <a href="#" class="product-variation-clean">Clean All</a>
                                         </div>
-                                        <hr class="product-divider">
 
                                         <div class="product-variation-price">
                                             <span></span>
@@ -450,7 +476,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <div class="product-form pt-4">
                                             <div class="product-qty-form mb-2 mr-2">
                                                 <div class="input-group">
-                                                    <input id='Quantity' class="quantity form-control" type="number" min="1" max="10000000">
+                                                    <input id='Quantity' class="quantity form-control" type="number" value ="1" min="1" max="10000000">
                                                     <button class="quantity-plus w-icon-plus"></button>
                                                     <button class="quantity-minus w-icon-minus"></button>
                                                 </div>
@@ -795,7 +821,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let products = document.querySelectorAll(".productD");
 
     if (products.length === 0) {
-        console.log("لا توجد منتجات!");
     } else {
         products.forEach((product) => {
             product.addEventListener("click", function () {
@@ -839,7 +864,12 @@ document
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error("تفاصيل الخطأ:", errorText);
-                alert("فشل التسجيل. تأكد من البيانات المدخلة.");
+
+                Swal.fire({
+                    title: "خطأ",
+                    text: 'فشل التسجيل. تأكد من البيانات المدخلة.',
+                    icon: "error"
+                });
                 return;
             }
 
