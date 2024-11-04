@@ -295,6 +295,13 @@ fetch("https://everyapi.webxy.net/api/Adds/get-all-adds")
 let selectedColor = [];
 let SelectedSize = [];
 
+// دالة لتحديث كمية المنتج بناءً على الحجم المحدد
+function updateProductCount(featureId, quantity) {
+    localStorage.setItem("ProductId", featureId);
+    localStorage.setItem("ProductCount", quantity);
+}
+
+// دالة لعرض المقاسات بناءً على اللون المختار
 function displaySizes(index) {
     const productContainer = document.querySelectorAll(".swiper-slide.productD");
     const sizes = productContainer[index].querySelector("[data-sizes]").dataset.sizes;
@@ -312,16 +319,34 @@ function displaySizes(index) {
         const sizeEl = document.createElement("a");
         sizeEl.className = "size";
         sizeEl.textContent = `${size.name}`;
-        sizeEl.onclick = function() {
+        sizeEl.onclick = function () {
             sizeContainer.querySelectorAll(".size.active").forEach(el => el.classList.remove("active"));
             sizeEl.classList.add("active");
             SelectedSize = [];
             SelectedSize.push(size.featureId);
-            localStorage.setItem("ProductId", SelectedSize);
+
+            // تحديث الكمية في localStorage
+            updateProductCount(size.featureId, size.quantity);
         };
         sizeContainer.appendChild(sizeEl);
     });
 }
+
+// دالة اختيار اللون وعرض المقاسات المناسبة
+function selectColor(element, index) {
+    selectedColor = [];
+    const colorElements = document.querySelectorAll(".product-variations .color");
+    colorElements.forEach(el => el.classList.remove("active"));
+    element.classList.add("active");
+
+    // حفظ اللون المحدد
+    selectedColor.push(element.style.backgroundColor);
+
+    // عرض المقاسات بناءً على اللون المحدد
+    displaySizes(index);
+}
+
+// دالة جاهزية الصفحة
 document.addEventListener("DOMContentLoaded", function () {
     const apiSpacilDayUrl = "https://everyapi.webxy.net/Product/GetSpacilDay";
     const productContainer = document.getElementById("SpacialDay");
@@ -350,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const productImage = product.productAttributs.length > 0 && product.productAttributs[0].productAttributImages.length > 0
                         ? domainImage + product.productAttributs[0].productAttributImages[0].imagePath
                         : "placeholder.jpg";
-                    
+
                     const productSlide = `
                         <div data-id='${product.productId}' class="swiper-slide productD">
                             <input value='${product.productId}' id='product_id' style='display:none'>
@@ -416,14 +441,14 @@ document.addEventListener("DOMContentLoaded", function () {
                                                 ${product.productFeatureDto.map((feature, index) => `
                                                  <a class="color" 
                                                 style="background-color: ${feature.color};" 
-                                                onclick="displaySizes(${index})" 
+                                                onclick="selectColor(this, ${index})" 
                                                 data-sizes='${JSON.stringify(feature.sizes)}'></a>
                                             `).join('')}
                                             </div>
                                         </div>
                                         <hr class="product-divider">
 
-                                         <div class="product-form product-variation-form product-size-swatch mb-3">
+                                        <div class="product-form product-variation-form product-size-swatch mb-3">
                                             <label style='padding-left:100px; display:none;' class="mb-1">المقاسات</label>
                                             <div href="#" class="flex-wrap d-flex align-items-center product-variations SizeBox" id='size' style='display:none;'></div>
                                             <a href="#" class="product-variation-clean">Clean All</a>
@@ -437,9 +462,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                             <div class="product-qty-form mb-2 mr-2">
                                                 <div class="input-group">
                                                     <input id='Quantity' class="quantity form-control" type="number" value ="1" min="1" max="10000000">
-                                                    <button class="quantity-plus w-icon-plus"></button>
-                                                    <button class="quantity-minus w-icon-minus"></button>
-                                                </div>
+                                                    <button class="quantity-plus w-icon-plus" onclick="changeQuantity(1)"></button>
+                                                    <button class="quantity-minus w-icon-minus" onclick="changeQuantity(-1)"></button>
+                                                 </div>
                                             </div>
                                             <button class="btn btn-primary btn-cart" id="btn-${productId}" onclick="AddToCart(${productId})">
                                                 <i class="w-icon-cart"></i>
@@ -450,7 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <div class="social-links-wrapper">
                                             <div class="social-links">
                                                 <div class="social-icons social-no-color border-thin">
-                                                    <a href="${faceBook}" class="social-icon social-facebook w-icon-facebook"></a>
+                                                    <a href="${faceBook}" class="social-icon social-facebook w-icon-facebook"></...
                                                     <a href="${twitter}" class="social-icon social-twitter w-icon-twitter"></a>
                                                     <a href="${pint}" class="social-icon social-pinterest fab fa-pinterest-p"></a>
                                                     <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
@@ -478,22 +503,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                     </div>
                 `;
-                function displaySizes(index) {
-                    const sizes = product.productFeatureDto[index].sizes;
-                    const sizeContainer = document.getElementById('size');
-                    
-                    sizeContainer.innerHTML = '';
-                    
-                    sizes.forEach(size => {
-                        const sizeElement = document.createElement('span');
-                        sizeElement.className = 'size-option';
-                        sizeElement.textContent = `${size.name} (${size.quantity} متاح)`;
-                        sizeContainer.appendChild(sizeElement);
-                    });
-                }
-                productContainer.innerHTML = swiperWrapper;
-
                 
+                productContainer.innerHTML = swiperWrapper;
 
             } else {
                 productContainer.innerHTML = "<p>لا توجد منتجات متاحة في الوقت الحالي.</p>";
@@ -503,6 +514,37 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Error fetching product data:", error);
         });
 });
+
+function changeQuantity(amount) {
+    const quantityInput = document.getElementById('Quantity');
+    let currentValue = parseInt(quantityInput.value); 
+
+
+    const newValue = currentValue + amount;
+
+
+    if (newValue >= parseInt(quantityInput.min) && newValue <= parseInt(quantityInput.max)) {
+        quantityInput.value = newValue;  
+    } else if (newValue < parseInt(quantityInput.min)) {
+        quantityInput.value = quantityInput.min;  
+    } else if (newValue > parseInt(quantityInput.max)) {
+        quantityInput.value = quantityInput.max;
+    }
+}
+function selectColor(element, index) {
+    const colorElements = document.querySelectorAll(".color");
+    colorElements.forEach((color) => {
+        color.classList.remove("active");  
+    });
+
+    if (element.classList.contains("active")) {
+        element.classList.remove("active");  
+    } else {
+        element.classList.add("active");  
+    }
+
+    displaySizes(index);
+}
 
 
 

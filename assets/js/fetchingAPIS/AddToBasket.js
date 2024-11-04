@@ -78,6 +78,9 @@ function AddToCart() {
         icon: "success",
         title: "تم اضافة المنتج بنجاح"
       });
+      setTimeout(()=>{
+        location.reload();
+      },3000);
             
       AddToBasket();
       localStorage.setItem('AdDtoCart' , '')

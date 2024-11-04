@@ -83,7 +83,7 @@
                                 <!-- End of Dropdown Menu -->
                                 <span class="divider d-lg-show"></span>
                                 <a href="contact-us.html" class="d-lg-show">اتصل بنا</a>
-                                <a id="myAccount" href="my-account.html" class="d-lg-show">حسابى</a>
+                                <a onclick="checkMyaccount()" style="cursor: pointer;" id="myAccount" class="my-account d-lg-show">حسابى</a>
                                 <div id="loginbuttons" style="display: flex;">
                                 <a onclick="window.location.href='login.html'" href="#" class="d-lg-show login sign-in"><i class="w-icon-account"></i>تسجيل الدخول</a>
                                 <span class="delimiter d-lg-show">/</span>
@@ -125,7 +125,7 @@
                                         <a href="tel:#" class="phone-number font-weight-bolder ls-50"></a>
                                     </div>
                                 </div>
-                                <a class="wishlist label-down link d-xs-show" href="wishlist.html">
+                                <a class="wishlist label-down link d-xs-show" onclick="checkwishlist()">
                                     <i class="w-icon-heart"></i>
                                     <span class="wishlist-label d-lg-show">المنتجات المفضلة</span>
                                 </a>
@@ -450,11 +450,11 @@
                         <h3 class="widget-title">لينك للصفحات</h3>
                         <ul class="widget-body">
                             <li><a href="contact-us.html">اتصل بنا</a></li>
-                            <li><a href="my-account.html">حسابي</a></li>
-                            <li><a href="AddToWallet.html">المحفظه</a></li>
-                            <li><a href="cart.html">السله</a></li>
-                            <li><a href="add-address.html">العنوان</a></li>
-                            <li><a href="AccountData.html">بيانات الحساب</a></li>
+                            <li onclick="checkMyaccount()" style="cursor: pointer;" class="my-account"><a>حسابي</a></li>
+                            <li onclick="checkWallet()" style="cursor: pointer;"><a >المحفظه</a></li>
+                            <li ><a href="cart.html">السله</a></li>
+                            <li onclick="checkAddress()" style="cursor: pointer;"><a >العنوان</a></li>
+                            <li onclick="checkMyaccountDet()" style="cursor: pointer;"><a >بيانات الحساب</a></li>
                         </ul>
                     </div>
                 </div>
@@ -463,11 +463,11 @@
                         <h4 class="widget-title">لينك للصفحات</h4>
                         <ul class="widget-body">
                             <li><a href="contact-us.html">اتصل بنا</a></li>
-                            <li><a href="my-account.html">حسابي</a></li>
-                            <li><a href="AddToWallet.html">المحفظه</a></li>
-                            <li><a href="cart.html">السله</a></li>
-                            <li><a href="add-address.html">العنوان</a></li>
-                            <li><a href="AccountData.html">بيانات الحساب</a></li>
+                            <li onclick="checkMyaccount()" style="cursor: pointer;" class="my-account"><a>حسابي</a></li>
+                            <li onclick="checkWallet()" style="cursor: pointer;"><a >المحفظه</a></li>
+                            <li ><a href="cart.html">السله</a></li>
+                            <li onclick="checkAddress()" style="cursor: pointer;"><a >العنوان</a></li>
+                            <li onclick="checkMyaccountDet()" style="cursor: pointer;"><a >بيانات الحساب</a></li>
                         </ul>
                     </div>
                 </div>
@@ -476,11 +476,11 @@
                         <h4 class="widget-title">لينك للصفحات</h4>
                         <ul class="widget-body">
                             <li><a href="contact-us.html">اتصل بنا</a></li>
-                            <li><a href="my-account.html">حسابي</a></li>
-                            <li><a href="AddToWallet.html">المحفظه</a></li>
-                            <li><a href="cart.html">السله</a></li>
-                            <li><a href="add-address.html">العنوان</a></li>
-                            <li><a href="AccountData.html">بيانات الحساب</a></li>
+                            <li onclick="checkMyaccount()" style="cursor: pointer;" class="my-account"><a>حسابي</a></li>
+                            <li onclick="checkWallet()" style="cursor: pointer;"><a >المحفظه</a></li>
+                            <li ><a href="cart.html">السله</a></li>
+                            <li onclick="checkAddress()" style="cursor: pointer;"><a >العنوان</a></li>
+                            <li onclick="checkMyaccountDet()" style="cursor: pointer;"><a >بيانات الحساب</a></li>
                         </ul>
                     </div>
                 </div>
@@ -513,7 +513,9 @@
     <script src="assets/js/fetchingAPIS/removeAllFromBasket.js"></script>
 <!-- <script src="assets/js/fetchingAPIS/fetchingapis.js"></script> -->
 <script src="assets/js/fetchingAPIS/productDetails.js"></script>
-<script src="assets/js/fetchingAPIS/search.js"></script>    <script src="assets/js/fetchingAPIS/addcart.js"></script>
+<script src="assets/js/fetchingAPIS/search.js"></script> 
+<script src="assets/js/fetchingAPIS/myAccount.js"></script>
+   <script src="assets/js/fetchingAPIS/addcart.js"></script>
     <script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
     <script src="assets/js/fetchingAPIS/addToWishlist.js"></script>
     <script src="assets/js/fetchingAPIS/GetBasket.js"></script>

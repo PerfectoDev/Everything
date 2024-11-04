@@ -50,6 +50,41 @@
 
     <!-- WebFont.js -->
     <script>
+
+        /////////////////////
+// document.addEventListener('DOMContentLoaded', () => {
+//     const iconHearts = document.querySelectorAll('.w-icon-heart');
+//     const userId = localStorage.getItem('User_id');
+//     const token = localStorage.getItem('token');
+
+//     if (userId && token) {
+//         fetch(`https://everyapi.webxy.net/UserOpertion/ProductWishList?userId=${userId}`, {
+//             method: 'GET',
+//             headers: {
+//                 'Authorization': `Bearer ${token}`,
+//                 'Content-Type': 'application/json'
+//             }
+//         })
+//         .then(response => response.json())
+//         .then(wishlistItems => {
+
+//             const wishlistProductIds = wishlistItems.map(item => item.productId);
+            
+//             alert('wishlistProductIds : ' +wishlistProductIds)
+//             console.log('wishlistProductIds: ', wishlistProductIds);
+//             iconHearts.forEach(icon => {
+//                 const productId = icon.getAttribute('data-product-id');  
+//                 if (wishlistProductIds.includes(productId)) {
+//                     icon.classList.add('w-icon-heart-full');
+//                     icon.classList.remove('w-icon-heart');
+//                 }
+//             });
+//         })
+//     }
+// });
+
+
+/////////////////////////////////////
         WebFontConfig = {
             google: { families: ['Poppins:400,500,600,700,800'] }
         };
@@ -125,7 +160,7 @@
                         <!-- End of Dropdown Menu -->
                         <span class="divider d-lg-show"></span>
                         <a href="contact-us.html" class="d-lg-show">اتصل بنا</a>
-                        <a id="myAccount" href="my-account.html" class="d-lg-show">حسابى</a>
+                        <a onclick="checkMyaccount()" style="cursor: pointer;" id="myAccount" class="my-account d-lg-show">حسابى</a>
                         <div id="loginbuttons" style="display: flex;">
                         <a onclick="window.location.href='login.html'" href="#" class="d-lg-show login sign-in"><i class="w-icon-account"></i>تسجيل الدخول</a>
                         <span class="delimiter d-lg-show">/</span>
@@ -167,7 +202,7 @@
                                 <a href="tel:#" class="phone-number font-weight-bolder ls-50"></a>
                             </div>
                         </div>
-                        <a class="wishlist label-down link d-xs-show" href="wishlist.html">
+                        <a onclick="checkwishlist()" class="wishlist label-down link d-xs-show">
                             <i class="w-icon-heart"></i>
                             <span class="wishlist-label d-lg-show">المنتجات المفضلة</span>
                         </a>
@@ -192,7 +227,7 @@
 
                                 <div class="cart-total">
                                     <label>المبلغ الكلي:</label>
-                                    <span class="price">0</span> <!-- Total Price starts at 0 -->
+                                    <span id="total-products-price" class="price">0</span>  
                                 </div>
 
                                 <div class="cart-action">
@@ -262,34 +297,20 @@
         <!-- Start of Main-->
         <main class="main">
             <section class="intro-section">
-                <div class="swiper-container swiper-theme nav-inner pg-inner swiper-nav-lg animation-slider pg-xxl-hide nav-xxl-show nav-hide"
-                    data-swiper-options="{
-                    'slidesPerView': 1,
-                    'autoplay': {
-                        'delay': 8000,
-                        'disableOnInteraction': false
-                    }
-                }">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide banner banner-fixed intro-slide intro-slide1">
-
-                            <!-- End of .container -->
-                        </div>
-                        <!-- End of .intro-slide1 -->
-
-                        <div class="swiper-slide banner banner-fixed intro-slide intro-slide2">
-                           
-                            <!-- End of .container -->
-                        </div>
-                        <!-- End of .intro-slide2 -->
-
-                        <div class="swiper-slide banner banner-fixed intro-slide intro-slide3">
-                        <!-- End of .intro-slide3 -->
-                    </div>
-
-                    <button class="swiper-button-next appear-animate"></button>
-                    <button class="swiper-button-prev appear-animate"></button>
-                </div>
+                <div class="swiper-container swiper-theme nav-inner pg-inner swiper-nav-lg animation-slider pg-xxl-hide nav-xxl-show nav-hide" 
+     data-swiper-options="{
+         'slidesPerView': 1,
+         'autoplay': {
+             'delay': 8000,
+             'disableOnInteraction': false
+         }
+     }">
+    <div class="swiper-wrapper">
+        <!-- الشرائح سيتم إضافتها هنا -->
+    </div>
+    <div class="swiper-button-next appear-animate"></div>
+    <div class="swiper-button-prev appear-animate"></div>
+</div>
                 <!-- End of .swiper-container -->
             </section>
             <!-- End of .intro-section -->
@@ -1263,11 +1284,11 @@
                     <h3 class="widget-title">لينك للصفحات</h3>
                     <ul class="widget-body">
                         <li><a href="contact-us.html">اتصل بنا</a></li>
-                        <li><a href="my-account.html">حسابي</a></li>
-                        <li><a href="AddToWallet.html">المحفظه</a></li>
-                        <li><a href="cart.html">السله</a></li>
-                        <li><a href="add-address.html">العنوان</a></li>
-                        <li><a href="AccountData.html">بيانات الحساب</a></li>
+                        <li onclick="checkMyaccount()" style="cursor: pointer;" class="my-account"><a>حسابي</a></li>
+                        <li onclick="checkWallet()" style="cursor: pointer;"><a >المحفظه</a></li>
+                        <li ><a href="cart.html">السله</a></li>
+                        <li onclick="checkAddress()" style="cursor: pointer;"><a >العنوان</a></li>
+                        <li onclick="checkMyaccountDet()" style="cursor: pointer;"><a >بيانات الحساب</a></li>
                     </ul>
                 </div>
             </div>
@@ -1276,11 +1297,11 @@
                     <h4 class="widget-title">لينك للصفحات</h4>
                     <ul class="widget-body">
                         <li><a href="contact-us.html">اتصل بنا</a></li>
-                        <li><a href="my-account.html">حسابي</a></li>
-                        <li><a href="AddToWallet.html">المحفظه</a></li>
-                        <li><a href="cart.html">السله</a></li>
-                        <li><a href="add-address.html">العنوان</a></li>
-                        <li><a href="AccountData.html">بيانات الحساب</a></li>
+                        <li onclick="checkMyaccount()" style="cursor: pointer;" class="my-account"><a>حسابي</a></li>
+                        <li onclick="checkWallet()" style="cursor: pointer;"><a >المحفظه</a></li>
+                        <li ><a href="cart.html">السله</a></li>
+                        <li onclick="checkAddress()" style="cursor: pointer;"><a >العنوان</a></li>
+                        <li onclick="checkMyaccountDet()" style="cursor: pointer;"><a >بيانات الحساب</a></li>
                     </ul>
                 </div>
             </div>
@@ -1289,11 +1310,11 @@
                     <h4 class="widget-title">لينك للصفحات</h4>
                     <ul class="widget-body">
                         <li><a href="contact-us.html">اتصل بنا</a></li>
-                        <li><a href="my-account.html">حسابي</a></li>
-                        <li><a href="AddToWallet.html">المحفظه</a></li>
-                        <li><a href="cart.html">السله</a></li>
-                        <li><a href="add-address.html">العنوان</a></li>
-                        <li><a href="AccountData.html">بيانات الحساب</a></li>
+                        <li onclick="checkMyaccount()" style="cursor: pointer;" class="my-account"><a>حسابي</a></li>
+                        <li onclick="checkWallet()" style="cursor: pointer;"><a >المحفظه</a></li>
+                        <li ><a href="cart.html">السله</a></li>
+                        <li onclick="checkAddress()" style="cursor: pointer;"><a >العنوان</a></li>
+                        <li onclick="checkMyaccountDet()" style="cursor: pointer;"><a >بيانات الحساب</a></li>
                     </ul>
                 </div>
             </div>
@@ -1318,7 +1339,6 @@
 
 <script src="assets/js/fetchingAPIS/fetchingapis.js"></script>
 <script src="assets/js/fetchingAPIS/addcart.js"></script>
-<script src="assets/js/fetchingAPIS/addToWishlist.js"></script>
 <script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
 <script src="assets/js/fetchingAPIS/GetBasket.js"></script>
 <script src="assets/js/fetchingAPIS/AddToBasket.js"></script>
@@ -1329,6 +1349,9 @@
 <script src="assets/js/fetchingAPIS/login.js"></script>
 <script src="assets/js/fetchingAPIS/menu.js"></script>
 <script src="assets/js/fetchingAPIS/bestseller.js"></script>
+<script src="assets/js/fetchingAPIS/myAccount.js"></script>
+<script src="assets/js/fetchingAPIS/addToWishlist.js"></script>
+<script src="assets/js/fetchingAPIS/wishlistPage.js"></script>
 
     <!-- Plugin JS File -->
     <script src="assets/vendor/jquery/jquery.min.js"></script>

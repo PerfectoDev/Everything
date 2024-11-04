@@ -69,7 +69,7 @@ fetch(url, {
                 </a>
             </td>
             <td class="product-size">${productData.size}</td>
-            <td class="product-price"><span class="amout">${productData.price}</span></td>
+            <td class="product-price"><span class="amout">${productData.price} ريال سعودي</span></td>
             <td class="product-quantity">
                 <div class="input-group">
                     <input class="quantityForm${productData.productId} form-control" type="number" value='${productData.quantity}' min='1' max="100000">
@@ -78,7 +78,7 @@ fetch(url, {
                 </div>
             </td>
             <td class="product-subtotal">
-                <span class="amount">${productData.TotalPrice}</span>
+                <span class="amount">${productData.TotalPrice} ريال سعودي</span>
             </td>
         `;
 
@@ -86,12 +86,12 @@ fetch(url, {
         grandTotal += parseFloat(productData.TotalPrice) || 0;
     });
     
-    document.getElementById('GrandTotal').innerHTML = grandTotal;
+    document.getElementById('GrandTotal').innerHTML = grandTotal + " ريال سعودي ";
     TotalPriceWithShipping = grandTotal + shipping;
-    document.querySelector('.shipping-destination').innerHTML = shipping;
-    document.getElementById('OraderTotal').innerHTML = TotalPriceWithShipping;
+    document.querySelector('.shipping-destination').innerHTML = shipping + " ريال سعودي ";;
+    document.getElementById('OraderTotal').innerHTML = TotalPriceWithShipping + " ريال سعودي ";;
 
-    document.getElementById('CartCount').innerHTML = count;
+    document.getElementById('CartCount').innerHTML = count + " ريال سعودي ";;
 })
 .catch(error => {
     console.error('Error:', error);

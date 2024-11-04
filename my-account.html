@@ -57,7 +57,30 @@
 
 
 </head>
+
+<script>
+    function checkLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (isLoggedIn) {
+                window.location.href = 'my-account.html';
+            } else {
+                alert('يجب تسجيل الدخول أولاً');
+                window.location.href = 'login.html';
+            }
+        }
+
+        window.onload = function() {
+            
+             const accountButtons = document.querySelectorAll('.my-account');
+
+             accountButtons.forEach(button => {
+                button.addEventListener('click', checkLogin);
+            });
+        };
+</script>
 <style>
+    
      h1, h2, h3, h4, h5, h6 , select{
         font-family: 'Noto Kufi Arabic', sans-serif;
     }
@@ -103,7 +126,7 @@
                         <!-- End of Dropdown Menu -->
                         <span class="divider d-lg-show"></span>
                         <a href="contact-us.html" class="d-lg-show">اتصل بنا</a>
-                        <a id="myAccount" href="my-account.html" class="d-lg-show">حسابى</a>
+                        <a class="my-account" id="myAccount" class="d-lg-show">حسابى</a>
                         <div id="loginbuttons" style="display: flex;">
                         <a onclick="window.location.href='login.html'" href="#" class="d-lg-show login sign-in"><i class="w-icon-account"></i>تسجيل الدخول</a>
                         <span class="delimiter d-lg-show">/</span>
@@ -272,7 +295,7 @@
                                         </a>
                                     </div>
                                     <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
-                                        <a href="AddToWallet.html" class="link-to-tab">
+                                        <a onclick="window.location.href='AddToWallet.html'" style="cursor: pointer;" class="link-to-tab">
                                             <div class="icon-box text-center">
                                                 <span class="icon-box-icon icon-download">
                                                     <i class="w-icon-download"></i>
@@ -284,7 +307,7 @@
                                         </a>
                                     </div>
                                     <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
-                                        <a href="MyAddress.html" class="link-to-tab">
+                                        <a onclick="window.location.href='MyAddress.html'" style="cursor: pointer;" class="link-to-tab">
                                             <div class="icon-box text-center">
                                                 <span class="icon-box-icon icon-address">
                                                     <i class="w-icon-map-marker"></i>
@@ -296,7 +319,7 @@
                                         </a>
                                     </div>
                                     <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
-                                        <a href="AccountData.html" class="link-to-tab">
+                                        <a onclick="window.location.href='AccountData.html'" style="cursor: pointer;" class="link-to-tab">
                                             <div class="icon-box text-center">
                                                 <span class="icon-box-icon icon-account">
                                                     <i class="w-icon-user"></i>
@@ -308,7 +331,7 @@
                                         </a>
                                     </div>
                                     <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6 mb-4">
-                                        <a href="wishlist.html" class="link-to-tab">
+                                        <a onclick="window.location.href='wishlist.html'" style="cursor: pointer;"   class="link-to-tab">
                                             <div class="icon-box text-center">
                                                 <span class="icon-box-icon icon-wishlist">
                                                     <i class="w-icon-heart"></i>
@@ -394,7 +417,7 @@
                         <h3 class="widget-title">لينك للصفحات</h3>
                         <ul class="widget-body">
                             <li><a href="contact-us.html">اتصل بنا</a></li>
-                            <li><a href="my-account.html">حسابي</a></li>
+                            <li><a class="my-account">حسابي</a></li>
                             <li><a href="AddToWallet.html">المحفظه</a></li>
                             <li><a href="cart.html">السله</a></li>
                             <li><a href="add-address.html">العنوان</a></li>
@@ -407,7 +430,7 @@
                         <h4 class="widget-title">لينك للصفحات</h4>
                         <ul class="widget-body">
                             <li><a href="contact-us.html">اتصل بنا</a></li>
-                            <li><a href="my-account.html">حسابي</a></li>
+                            <li><a class="my-account">حسابي</a></li>
                             <li><a href="AddToWallet.html">المحفظه</a></li>
                             <li><a href="cart.html">السله</a></li>
                             <li><a href="add-address.html">العنوان</a></li>
@@ -420,7 +443,7 @@
                         <h4 class="widget-title">لينك للصفحات</h4>
                         <ul class="widget-body">
                             <li><a href="contact-us.html">اتصل بنا</a></li>
-                            <li><a href="my-account.html">حسابي</a></li>
+                            <li><a class="my-account">حسابي</a></li>
                             <li><a href="AddToWallet.html">المحفظه</a></li>
                             <li><a href="cart.html">السله</a></li>
                             <li><a href="add-address.html">العنوان</a></li>
@@ -456,9 +479,19 @@
     <script src="assets/js/fetchingAPIS/menu.js"></script>
     <script src="assets/js/fetchingAPIS/addToWishlist.js"></script>
 <script src="assets/js/fetchingAPIS/productDetails.js"></script>
-<script src="assets/js/fetchingAPIS/search.js"></script>    <script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
+<script src="assets/js/fetchingAPIS/search.js"></script> 
+   <script src="assets/js/fetchingAPIS/CheckLogin.js"></script>
     <script src="assets/js/fetchingAPIS/Logout.js"></script>
     <script src="assets/js/fetchingAPIS/login.js"></script>
+    <script src="assets/js/fetchingAPIS/wishlistPage.js"></script>
+
+
+<script src="assets/js/fetchingAPIS/addcart.js"></script>
+<script src="assets/js/fetchingAPIS/GetBasket.js"></script>
+<script src="assets/js/fetchingAPIS/AddToBasket.js"></script>
+<script src="assets/js/fetchingAPIS/getSettings.js"></script>
+<script src="assets/js/fetchingAPIS/removeAllFromBasket.js"></script>
+<script src="assets/js/fetchingAPIS/FilterProduct.js"></script>
 
 
 </body>

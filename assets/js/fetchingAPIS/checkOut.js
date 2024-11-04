@@ -63,7 +63,14 @@ async function fetchWalletAmount() {
 
 async function placeOrder() {
     if (!userId) {
-        alert("يرجى تسجيل الدخول للمتابعة.");
+        Swal.fire({
+            title: "Error",
+            text: 'يجب تسجيل الدخول أولا',
+            icon: "error"
+        });
+        setTimeout(() => {
+            location.href = 'login.html';
+        }, 1500);
         return;
     }
 
@@ -96,12 +103,23 @@ async function placeOrder() {
             const errorDetails = await response.json();
             throw new Error(`HTTP error! status: ${response.status}, Details: ${JSON.stringify(errorDetails)}`);
         } else {
-            alert("تمت معالجة الطلب بنجاح.");
+            Swal.fire({
+                title: "Success",
+                text: 'تمت معالجة الطلب بنجاح.',
+                icon: "success",
+            });
+            setTimeout(() => {
+                location.href = 'index.html';
+            }, 2000);
         }
     } catch (error) {
         alert(`حدث خطا اثناء عمليه الدفع يرجي التحقق من الكميه او العنوان`);
-    }
-}
+        Swal.fire({
+            title: "Error",
+            text: 'يرجي التاكد من الكميه ',
+            icon: "error"
+        });
+}}
 
 document.getElementById('placeOrderButton').addEventListener('click', () => {
     placeOrder();
@@ -147,11 +165,11 @@ if (userId && token) {
                     <i class="fas fa-times"></i>
                     <span class="product-quantity">${productData.quantity}</span>
                 </td>
-                <td class="product-total">${productData.totalPrice}$</td>
+                <td class="product-total">${productData.totalPrice} ريال سعودي</td>
             `;
             document.getElementById('check-out-cart').appendChild(productRow);
         });
-        document.getElementById('totalPriceDiv').textContent = `${totalPrice}$`;
+        document.getElementById('totalPriceDiv').textContent = `${totalPrice} ريال سعودي `;
 
     })
     .catch(error => {
