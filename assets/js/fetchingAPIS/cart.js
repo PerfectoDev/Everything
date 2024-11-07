@@ -3,9 +3,6 @@ const pageNumber = 1;
 const pageSize = 1000;
 const token = localStorage.getItem('token');
 
-const storedColor = localStorage.getItem('selectedColors');
-const storedSize = localStorage.getItem('selectedSizes');
-
 const url = `https://everyapi.webxy.net/Orders/Get-Basket-By-UserId?userId=${userId}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
 fetch(url, {
     method: 'GET',
@@ -21,32 +18,42 @@ fetch(url, {
     return response.json();
 })
 .then(data => {
-    document.getElementById('data_table').innerHTML = '';
-    
-    let count = 0;
+    const dataTable = document.getElementById('data_table');
+
+    if (!dataTable) {
+        console.error("Element 'data_table' not found.");
+        return;
+    }
+
+    dataTable.innerHTML = '';   
+
+    if (data.length === 0) {
+        dataTable.innerHTML = '<tr><td colspan="7">لا توجد منتجات في السلة</td></tr>';
+        return;
+    }
+
     let grandTotal = 0;
     let shipping = 50;
 
+    console.log("Fetched data:", data);  
+
     data.forEach(item => {
+        console.log("Processing item:", item);  
+
         const productData = {
             name: item.productName_Ar,
             quantity: item.quantity,
             price: item.unitPrice,
-            TotalPrice: item.totalPrice,
-            Img: 'https://everyui.webxy.net/' + item.productImage,
+            totalPrice: item.totalPrice,
+            img: 'https://everyui.webxy.net/' + item.productImage,
             productId: item.productId,
             featureId: item.featureId,
-            productFeatureDto: item.productFeatureDto,
-            color: storedColor || '',
-            size: storedSize || '',
+            color: item.colorCode || 'غير متوفر',  
+            size: item.sizeName || 'غير متوفر',  
         };
 
-        const matchingFeatures = productData.productFeatureDto.filter(feature => feature.id === productData.featureId);
 
-        if (matchingFeatures.length > 0) {
-            productData.color = matchingFeatures[0].color || productData.color;
-            productData.size = matchingFeatures[0].sizeName || productData.size;
-        }
+        console.log(`Product: ${productData.name}, Color: ${productData.color}, Size: ${productData.size}`);
 
         const productDiv = document.createElement('tr');
         productDiv.innerHTML = `
@@ -54,7 +61,7 @@ fetch(url, {
                 <div class="p-relative">
                     <a href="../../ar-product-details.html?id=${productData.productId}">
                         <figure>
-                            <img src="${productData.Img}" alt="product" width="300" height="338">
+                            <img src="${productData.img}" alt="product" width="300" height="338">
                         </figure>
                     </a>
                     <button onclick='DeleteProductFromCart(${productData.productId})' class="btn btn-close"><i class="fas fa-times"></i></button>
@@ -65,11 +72,11 @@ fetch(url, {
             </td>
             <td class="product-color">
                 <a href="../../ar-product-details.html?id=${productData.productId}" style='display:flex;justify-content:center;align-items:center'>
-                <div style='width:30px;height:30px;border-radius:50%; background-color:${productData.color}'></div>
+                    <div style='width:30px;height:30px;border-radius:50%; background-color:${productData.color}'></div>
                 </a>
             </td>
-            <td class="product-size">${productData.size}</td>
-            <td class="product-price"><span class="amout">${productData.price} ريال سعودي</span></td>
+            <td class="product-size">${productData.size}</td> <!-- عرض الحجم -->
+            <td class="product-price"><span class="amount">${productData.price} ريال سعودي</span></td>
             <td class="product-quantity">
                 <div class="input-group">
                     <input class="quantityForm${productData.productId} form-control" type="number" value='${productData.quantity}' min='1' max="100000">
@@ -78,26 +85,24 @@ fetch(url, {
                 </div>
             </td>
             <td class="product-subtotal">
-                <span class="amount">${productData.TotalPrice} ريال سعودي</span>
+                <span class="amount">${productData.totalPrice} ريال سعودي</span>
             </td>
         `;
 
-        document.getElementById('data_table').appendChild(productDiv);
-        grandTotal += parseFloat(productData.TotalPrice) || 0;
+        dataTable.appendChild(productDiv);
+        grandTotal += parseFloat(productData.totalPrice) || 0;
     });
     
     document.getElementById('GrandTotal').innerHTML = grandTotal + " ريال سعودي ";
-    TotalPriceWithShipping = grandTotal + shipping;
-    document.querySelector('.shipping-destination').innerHTML = shipping + " ريال سعودي ";;
-    document.getElementById('OraderTotal').innerHTML = TotalPriceWithShipping + " ريال سعودي ";;
-
-    document.getElementById('CartCount').innerHTML = count + " ريال سعودي ";;
+    const TotalPriceWithShipping = grandTotal + shipping;
+    document.querySelector('.shipping-destination').innerHTML = shipping + " ريال سعودي ";
+    document.getElementById('OraderTotal').innerHTML = TotalPriceWithShipping + " ريال سعودي ";
 })
 .catch(error => {
     console.error('Error:', error);
 });
 
-function DeleteBasket(id) { 
+function DeleteProductFromCart(id) { 
     const data = {
         userId: localStorage.getItem('User_id'),
         productId: id,

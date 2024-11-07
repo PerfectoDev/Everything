@@ -18,16 +18,7 @@
     <link rel="icon" type="image/png" href="">
 
     <Style>
-        .swiper-container.mySwiper {
-    width: 1240px;
-    height: 200px;
-    margin: 0 auto;
-    }
-
-
-        .swiper-slide.ads-slide {
-        width: 100%;
-    }
+       
 
 
 .ads-banner {
@@ -50,6 +41,7 @@
 
     <!-- WebFont.js -->
     <script>
+
 
         /////////////////////
 // document.addEventListener('DOMContentLoaded', () => {
@@ -85,6 +77,7 @@
 
 
 /////////////////////////////////////
+
         WebFontConfig = {
             google: { families: ['Poppins:400,500,600,700,800'] }
         };
@@ -386,30 +379,35 @@
                    <div class="col-lg-9 mb-4" id="SpacialDay">
 
                    </div>
+
+            
+                  
                    <div class="col-lg-3 mb-4">
-                        <div class="widget widget-products widget-products-bordered h-100">
-                            <div class="widget-body br-sm h-100">
-                                <h4 class="title-sm title-underline font-weight-bolder ls-normal mb-2">الأكثر مبيعاً</h4>
-                                <div class="swiper">
-                                    <div class="swiper-container swiper-theme nav-top" data-swiper-options='{
-                                        "slidesPerView": 1,
-                                        "spaceBetween": 20,
-                                        "breakpoints": {
-                                            "576": {"slidesPerView": 2},
-                                            "768": {"slidesPerView": 3},
-                                            "992": {"slidesPerView": 1}
-                                        }
-                                    }'>
-                                        <div class="swiper-wrapper row cols-lg-1 cols-md-3" id="product-best-seller-container">
-                                        </div>
-                    
-                                        <button class="swiper-button-next"></button>
-                                        <button class="swiper-button-prev"></button>
+                    <div class="widget widget-products widget-products-bordered h-100">
+                        <div class="widget-body br-sm h-100">
+                            <h4 class="title-sm title-underline font-weight-bolder ls-normal mb-2">الأكثر مبيعاً</h4>
+                            <div class="swiper">
+                                <div class="swiper-container swiper-container-best-seller swiper-theme nav-top"  data-swiper-options='{
+                                    "slidesPerView": 1,
+                                    "spaceBetween": 20,
+                                    "breakpoints": {
+                                        "576": {"slidesPerView": 2},
+                                        "768": {"slidesPerView": 3},
+                                        "992": {"slidesPerView": 1}
+                                    }
+                                }'>
+                                    <div class="swiper-wrapper row cols-lg-1 cols-md-3" id="product-best-seller-container">
+
                                     </div>
+                                    <button class="swiper-button-next"></button>
+                                    <button class="swiper-button-prev"></button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                
+
                 <!-- End of Deals Wrapper -->
             </div>
 
@@ -417,7 +415,7 @@
                 <div class="container pb-2">
                     <h2 class="title justify-content-center pt-1 ls-normal mb-5">اكثر الفئات مبيعاً </h2>
                     <div class="swiper">
-                        <div class="swiper-container custom-swiper-container swiper-theme shadow-swiper pg-show" data-swiper-options="{
+                        <div class="swiper-container swiper-container-best-catt-seller custom-swiper-container swiper-theme shadow-swiper pg-show" data-swiper-options="{
                             'spaceBetween': 20,
                             'slidesPerView': 2,
                             'breakpoints': {
@@ -428,7 +426,7 @@
                                     'slidesPerView': 5
                                 },
                                 '992': {
-                                    'slidesPerView': 6
+                                    'slidesPerView': 5
                                 }
                             }
                         }">
@@ -439,7 +437,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </section>
             <!-- End of .category-section top-category -->
 
@@ -1352,6 +1349,9 @@
 <script src="assets/js/fetchingAPIS/myAccount.js"></script>
 <script src="assets/js/fetchingAPIS/addToWishlist.js"></script>
 <script src="assets/js/fetchingAPIS/wishlistPage.js"></script>
+<script src="assets/js/fetchingAPIS/sessionTimeout.js"></script>
+
+
 
     <!-- Plugin JS File -->
     <script src="assets/vendor/jquery/jquery.min.js"></script>

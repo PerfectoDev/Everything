@@ -2,9 +2,7 @@ async function checkwishlist() {
     try {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
 
-
-        if (isLoggedIn != "true") {
-
+        if (isLoggedIn !== "true") {
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -20,22 +18,21 @@ async function checkwishlist() {
                 icon: "error",
                 title: "يرجي تسجيل الدخول اولا!"
             });
-            setTimeout(()=>{
+            setTimeout(() => {
                 window.location.href = 'login.html';
-            },2000);
+            }, 2000);
             return;
-    }else{
-        window.location.href='wishlist.html'
-    }
-    }catch (error) {
+        } else {
+            window.location.href = 'wishlist.html';
+        }
+    } catch (error) {
         console.error('Error:', error);
-     
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const wishlistBody = document.getElementById('wishlist-body');
-    const token = localStorage.getItem('token');  
+    const token = localStorage.getItem('token');
 
     const fetchWishlist = async () => {
         try {
@@ -43,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'  
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -51,18 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Network response was not ok');
             }
 
-            const wishlistItems = await response.json();  
+            const wishlistItems = await response.json();
 
             if (wishlistItems.length === 0) {
                 wishlistBody.innerHTML = '<tr><td colspan="5">لا توجد منتجات في سلة المفضلة.</td></tr>';
                 return;
             }
 
+            const wishlistProductIds = wishlistItems.map(item => item.productId);
+            localStorage.setItem('wishlistProducts', JSON.stringify(wishlistProductIds));
+
             wishlistItems.forEach(item => {
-                console.log(item)
                 const row = `
-                    <tr id="wishlistProduct">
-                        <td  class="product-thumbnail">
+                    <tr id="wishlistProduct-${item.productId}">
+                        <td class="product-thumbnail">
                             <div class="p-relative">
                                 <a href="../../ar-product-details.html?id=${item.productId}">
                                     <figure>
@@ -76,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <a href="../../ar-product-details.html?id=${item.productId}">${item.productName}</a>
                         </td>
                         <td class="product-price">
-                            <ins class="new-price">${item.newPrice}</ins>
+                            <ins class="new-price">${item.newPrice} ريال سعودي</ins>
                         </td>
                         <td class="product-stock-status">
                             <span class="${item.shippingEnabled ? 'wishlist-in-stock' : 'wishlist-out-of-stock'}">
@@ -98,8 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    fetchWishlist(); 
+    fetchWishlist();
 });
+
+
 const tokeN = localStorage.getItem('token');
 
 function removeFromWishlist(productId) {
@@ -118,7 +119,9 @@ function removeFromWishlist(productId) {
         return response.text(); 
     })
     .then(data => {
-        console.log(data);
+        let wishlist = JSON.parse(localStorage.getItem('wishlistProducts') || '[]');
+        wishlist = wishlist.filter(id => id !== productId);
+        localStorage.setItem('wishlistProducts', JSON.stringify(wishlist));
         if (data === "Remove Successfully") {
 
             const Toast = Swal.mixin({
@@ -136,12 +139,12 @@ function removeFromWishlist(productId) {
                 icon: "success",
                 title: "تمت إزالة المنتج من المفضلة بنجاح!"
               });
-              setTimeout(()=>{
-                const wishlistProduct = document.getElementById("wishlistProduct");
-                if (wishlistProduct){
+              setTimeout(() => {
+                const wishlistProduct = document.getElementById(`wishlistProduct-${productId}`);
+                if (wishlistProduct) {
                     wishlistProduct.style.display = "none";
                 }
-              },2000);
+              }, 2000);
         } else {
             alert("حدث خطأ أثناء إزالة المنتج من المفضلة.");
         }
@@ -151,3 +154,17 @@ function removeFromWishlist(productId) {
         alert("حدث خطأ في الاتصال بالخادم.");
     });
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const wishlistProducts = JSON.parse(localStorage.getItem('wishlistProducts') || '[]');
+    const wishlistIcons = document.querySelectorAll('.w-icon-heart');
+
+    wishlistIcons.forEach(icon => {
+        const productId = icon.getAttribute('data-product-id');
+        if (wishlistProducts.includes(productId)) {
+            icon.classList.remove('w-icon-heart');
+            icon.classList.add('w-icon-heart-full');
+        }
+    });
+});

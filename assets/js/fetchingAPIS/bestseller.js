@@ -1,10 +1,7 @@
-/*الاكثر مبيعا -----------*/
 document.addEventListener("DOMContentLoaded", function () {
     const apiBestSellerUrl = "https://everyapi.webxy.net/Product/GetBestSeller";
     const domainImage = "https://everyui.webxy.net/";
-    const productContainer = document.getElementById(
-        "product-best-seller-container"
-    );
+    const productContainer = document.getElementById("product-best-seller-container");
 
     fetch(apiBestSellerUrl)
         .then((response) => response.json())
@@ -13,37 +10,40 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.length > 0) {
                 data.forEach((product) => {
                     const productCard = `
-                        <div class="swiper-slider product-col">
-                        <div class="product product-border">
-                            <figure class="product-media">
-                                <img onclick=window.location.href='ar-product-details.html?id=${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338">
-                            </figure>
-                            <div class="product-details">
-                                <h4 onclick=window.location.href='ar-product-details.html?id=${product.id}' class="product-name">${product.nameAr}</h4>
-                                <div class="product-price">
-                                    <span class="new-price">ريال سعودي ${product.price}</span>
-                                    ${product.oldPrice? `<span class="old-price">ريال سعودي ${product.oldPrice}</span>`: ""}
+                        <div class="swiper-slide product-col">
+                            <div class="product product-border">
+                                <figure class="product-media">
+                                    <img onclick="window.location.href='ar-product-details.html?id=${product.id}'" src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338">
+                                </figure>
+                                <div class="product-details">
+                                    <h4 onclick="window.location.href='ar-product-details.html?id=${product.id}'" class="product-name">${product.nameAr}</h4>
+                                    <div class="product-price">
+                                        <span class="new-price">ريال سعودي ${product.price}</span>
+                                        ${product.oldPrice ? `<span class="old-price">ريال سعودي ${product.oldPrice}</span>` : ""}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                        `;
+                    `;
                     productContainer.innerHTML += productCard;
                 });
-                new Swiper('.custom-swiper-container', {
+
+
+                new Swiper('.swiper-container-best-seller', {
                     spaceBetween: 20,
-                    slidesPerView: 2,
+                    slidesPerView: 1,
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
                     breakpoints: {
-                        576: { slidesPerView: 3 },
-                        768: { slidesPerView: 4 },
-                        992: { slidesPerView: 5 },
-                        1200: { slidesPerView: 5 }
+                        576: { slidesPerView: 2 },
+                        768: { slidesPerView: 3 },
+                        992: { slidesPerView: 1 }
                     }
                 });
-                
             } else {
-                productContainer.innerHTML =
-                    "<p>لا توجد منتجات متاحة في الوقت الحالي.</p>";
+                productContainer.innerHTML = "<p>لا توجد منتجات متاحة في الوقت الحالي.</p>";
             }
         })
         .catch((error) => {

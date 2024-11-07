@@ -11,9 +11,21 @@ function addToWishlist(productId) {
           'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({ userId, productId })
+      
     })
     .then(response => response.text())
     .then(data => {
+     
+      let wishlist = JSON.parse(localStorage.getItem('wishlistProducts') || '[]');
+
+      wishlist = wishlist.filter(id => id !== null);
+  
+      if (!wishlist.includes(productId)) {
+          wishlist.push(productId);
+  
+          localStorage.setItem('wishlistProducts', JSON.stringify(wishlist));
+ }
+
       const Toast = Swal.mixin({
           toast: true,
           position: "bottom-end",
@@ -29,6 +41,7 @@ function addToWishlist(productId) {
           icon: "success",
           title: "تمت إضافة المنتج إلى المفضلة بنجاح!"
         });
+
     })
     .catch(error => {
       console.error('Error:', error);

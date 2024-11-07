@@ -7,7 +7,10 @@ if (!localStorage.getItem("User_id")) {
     localStorage.setItem("User_id", "false");
 }
 
+
+
 window.onload = function () {
+
     const form = document.getElementById("loginForm");
     if (form) {
         form.addEventListener("submit", async function (event) {
@@ -60,6 +63,7 @@ window.onload = function () {
                     window.location.href = "../../index.html";
                     if (result.isActive == "true") {
                         window.location.href = "../../index.html";
+                                                
                     } else {
                         let email = result.userId;
                         const Toast = Swal.mixin({
@@ -295,13 +299,13 @@ fetch("https://everyapi.webxy.net/api/Adds/get-all-adds")
 let selectedColor = [];
 let SelectedSize = [];
 
-// دالة لتحديث كمية المنتج بناءً على الحجم المحدد
+
 function updateProductCount(featureId, quantity) {
     localStorage.setItem("ProductId", featureId);
     localStorage.setItem("ProductCount", quantity);
 }
 
-// دالة لعرض المقاسات بناءً على اللون المختار
+
 function displaySizes(index) {
     const productContainer = document.querySelectorAll(".swiper-slide.productD");
     const sizes = productContainer[index].querySelector("[data-sizes]").dataset.sizes;
@@ -325,28 +329,28 @@ function displaySizes(index) {
             SelectedSize = [];
             SelectedSize.push(size.featureId);
 
-            // تحديث الكمية في localStorage
+
             updateProductCount(size.featureId, size.quantity);
         };
         sizeContainer.appendChild(sizeEl);
     });
 }
 
-// دالة اختيار اللون وعرض المقاسات المناسبة
+
 function selectColor(element, index) {
     selectedColor = [];
     const colorElements = document.querySelectorAll(".product-variations .color");
     colorElements.forEach(el => el.classList.remove("active"));
     element.classList.add("active");
 
-    // حفظ اللون المحدد
+
     selectedColor.push(element.style.backgroundColor);
 
-    // عرض المقاسات بناءً على اللون المحدد
+
     displaySizes(index);
 }
 
-// دالة جاهزية الصفحة
+
 document.addEventListener("DOMContentLoaded", function () {
     const apiSpacilDayUrl = "https://everyapi.webxy.net/Product/GetSpacilDay";
     const productContainer = document.getElementById("SpacialDay");
@@ -484,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                             </div>
                                             <span class="divider d-xs-show"></span>
                                             <div class="product-link-wrapper d-flex">
-                                                <a onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart"></a>
+                                                <a onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" data-product-id="${product.id}"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -545,8 +549,7 @@ function selectColor(element, index) {
 
     displaySizes(index);
 }
-
-
+/**المنتجات الاكثر مبيعا  */
 
 /* اكثر الفئات مبيعا */
 document.addEventListener("DOMContentLoaded", function () {
@@ -574,6 +577,23 @@ document.addEventListener("DOMContentLoaded", function () {
                     `;
                     categoryContainer.innerHTML += category;
                 });
+                new Swiper('.swiper-container-best-catt-seller', {
+                    spaceBetween: 20,
+                    slidesPerView: 2,
+                    breakpoints: {
+                        576: { slidesPerView: 3 },
+                        768: { slidesPerView: 5 },
+                        992: { slidesPerView: 5 }
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev'
+                    }
+                });
             } else {
                 categoryContainer.innerHTML =
                     "<p>لا توجد فئات متاحة في الوقت الحالي.</p>";
@@ -596,44 +616,59 @@ fetch("https://everyapi.webxy.net/Product/GetNewProduct")
         productWrapper.innerHTML = "";
 
         products.forEach((product) => {
-            const productHTML = `
-            
-        <div  class="product-wrap product  ProductBox" style='cursor:pointer'>
-          <div class="product text-center">
-            <figure class="product-media">
-              
-                <img onclick=window.location.href='ar-product-details.html?id=${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
-              
-              <div class="product-action-vertical">
-                <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
-                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
-                <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
-              </div>
-            </figure>
-            <div class="product-details productD" data-id='${product.id}'>
-              <h4 class="product-name"><a href="ar-product-details.html?id=${product.id}">${product.nameAr}</a></h4>
-              <div class="ratings-container">
-                <div class="ratings-full">
-                  <span class="ratings" style="width: ${product.review ? product.review * 20 : 0}%;"></span>
-                  <span class="tooltiptext tooltip-top"></span>
-                </div>
-                <a href="ar-product-details.html?id=${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
-              </div>
-              <div class="product-price">
-                <ins class="new-price">${product.price}</ins> ر.س
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
 
+            const wishlist = JSON.parse(localStorage.getItem('wishlistProducts') || '[]');
+
+
+            const wishlistIconClass = wishlist.includes(product.id) ? 'w-icon-heart-full' : 'w-icon-heart';
+
+            const productHTML = `
+            <div class="product-wrap product ProductBox" style='cursor:pointer'>
+                <div class="product text-center">
+                    <figure class="product-media">
+                        <img onclick=window.location.href='ar-product-details.html?id=${product.id}' src="${domainImage}${product.image}" alt="${product.nameAr}" width="300" height="338" />
+                        <div class="product-action-vertical">
+                            <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart"></a>
+                            <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist ${wishlistIconClass}" title="Add to wishlist" data-product-id="${product.id}"></a>
+                            <a href="../../demo-rtl-shop.html" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
+                        </div>
+                    </figure>
+                    <div class="product-details productD" data-id='${product.id}'>
+                        <h4 class="product-name"><a href="ar-product-details.html?id=${product.id}">${product.nameAr}</a></h4>
+                        <div class="ratings-container">
+                            <div class="ratings-full">
+                                <span class="ratings" style="width: ${product.review ? product.review * 20 : 0}%;"></span>
+                                <span class="tooltiptext tooltip-top"></span>
+                            </div>
+                            <a href="ar-product-details.html?id=${product.id}" class="rating-reviews">(${product.review || 0} التعليقات)</a>
+                        </div>
+                        <div class="product-price">
+                            <ins class="new-price">${product.price}</ins> ر.س
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
             productWrapper.innerHTML += productHTML;
         });
     })
     .catch((error) => {
         console.error("Error fetching products:", error);
     });
+
+function addToWishlist(productId) {
+    let wishlist = JSON.parse(localStorage.getItem('wishlistProducts') || '[]');
+
+    if (!wishlist.includes(productId)) {
+        wishlist.push(productId);
+        localStorage.setItem('wishlistProducts', JSON.stringify(wishlist));
+
+        document.querySelector(`[data-product-id="${productId}"]`).classList.replace('w-icon-heart', 'w-icon-heart-full');
+    }
+}
+
     /* الأكثر مبيعا */
+    
 const tab2 = document.querySelector("#tab2products");
 
 fetch("https://everyapi.webxy.net/Product/GetMostPopular")
@@ -652,7 +687,7 @@ fetch("https://everyapi.webxy.net/Product/GetMostPopular")
               
               <div class="product-action-vertical">
                 <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
-                <a onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
+                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist" data-product-id="${product.id}"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
@@ -671,7 +706,7 @@ fetch("https://everyapi.webxy.net/Product/GetMostPopular")
             </div>
           </div>
         </div>
-      `;
+        `;
 
       tab2.innerHTML += productHTML;
         });
@@ -679,6 +714,8 @@ fetch("https://everyapi.webxy.net/Product/GetMostPopular")
     .catch((error) => {
         console.error("Error fetching products:", error);
     });
+    
+
     /* الأكثر شعبية */
 const tab3 = document.querySelector("#tab3products");
 
@@ -698,7 +735,7 @@ fetch("https://everyapi.webxy.net/Product/GetBestSeller")
               
               <div class="product-action-vertical">
                 <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
-                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
+                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist" data-product-id="${product.id}"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
@@ -744,7 +781,7 @@ fetch("https://everyapi.webxy.net/Product/GetBestSeller")
               
               <div class="product-action-vertical">
                 <a onclick=window.location.href='ar-product-details.html?id=${product.id}' href="#" class="btn-product-icon btn-cart w-icon-cart" ></a>
-                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist"></a>
+                <a href="#" onclick='addToWishlist(${product.id})' class="btn-product-icon btn-wishlist w-icon-heart" title="Add to wishlist" data-product-id="${product.id}"></a>
                 <a href="../../demo-rtl-shop.html" href="#" class="btn-product-icon btn-quickview w-icon-search" title="Quickview"></a>
               </div>
             </figure>
