@@ -44,8 +44,15 @@ document.getElementById('OtpCheck').onclick = async function() {
                 alert('خطأ في الطلب: ' + textResponse);
                 return;
             }else{
-               alert('تم تفعيل الحساب')
-               window.location.href = 'login.html';
+                Swal.fire({
+                    title: "تم بنجاح",
+                    text: "تم تفعيل الحساب بنجاح جاري تحويلك الي صفحه تسجيل الدخول",
+                    icon: "success",
+                });
+                setTimeout(function () {
+                    window.location.href = 'login.html';
+                }, 2000);
+               
             }
 
             const result = JSON.parse(textResponse); 

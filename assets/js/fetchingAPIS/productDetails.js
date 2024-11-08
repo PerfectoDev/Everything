@@ -256,248 +256,238 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                     </div>
                 `;
-
-                                    similarProductContainer.innerHTML += productHtml;
-                                });
-                            } else {
-                                similarProductContainer.innerHTML =
-                                    "<p>No similar products found.</p>";
-                            }
-                        })
-                        .catch((err) =>
-                            console.log("Error fetching similar products:", err)
-                        );
-
-                    let selectedSizes = [];
-                    let selectedColors = [];
-                    let productPrice = document.getElementById(
-                        "product-variation-pricee"
-                    );
-                    let btn = document.getElementById("btn");
-                    const imagesDiv = document.getElementById("product-thumbs");
-
-                    btn.disabled = false;
-
-                    const sizeContainer = document.querySelector(
-                        ".product-form.product-variation-form.product-size-swatch"
-                    );
-                    const sizeLabel = document.querySelector(".size-Div.mb-1");
-                    const sizeDiv = document.getElementById("size");
-                    sizeContainer.style.display = "none";
-                    sizeLabel.style.display = "none";
-
-                    const updateButtonState = () => {
-                        if (selectedSizes.length > 0 && selectedColors.length > 0) {
-                            btn.disabled = false;
-                            document
-                                .querySelector(".AddToCartButton")
-                                .classList.remove("disabled");
-                            btn.onclick = () => {
-                                AddToCart();
-                                checkForMatchingFeature();
-                            };
-                        } else {
-                            btn.disabled = true;
-                            btn.onclick = null;
-                            document
-                                .querySelector(".AddToCartButton")
-                                .classList.add("disabled");
-                        }
-                    };
-
-                    const checkForMatchingFeature = () => {
-                        let foundMatchingFeature = false;
-                        let imagesToStore = [];
-
-                        product.productFeatureDto.forEach((productFeature) => {
-                            if (selectedColors.includes(productFeature.color)) {
-                                productFeature.sizes.forEach((size) => {
-                                    if (selectedSizes.includes(size.name)) {
-                                        console.log("Feature ID:", size.featureId);
-                                        console.log("Quantity:", size.quantity);
-
-                                        const requestedQuantity =
-                                            parseInt(document.getElementById("Quantity").value) || 1;
-                                        if (requestedQuantity > size.quantity) {
-                                            Swal.fire({
-                                                title: "Error",
-                                                text: "الكمية المطلوبة غير متوفرة.",
-                                                icon: "error",
-                                            });
-                                            return;
-                                        }
-
-                                        localStorage.setItem("ProductId", size.featureId);
-                                        localStorage.setItem("ProductCount", size.quantity);
-
-                                        imagesToStore = [];
-                                        for (let key in productFeature) {
-                                            if (key.startsWith("featureImageToWeb")) {
-                                                imagesToStore.push(productFeature[key]);
-                                            }
-                                        }
-                                        foundMatchingFeature = true;
-                                    }
-                                });
-                            }
-                        });
-
-                        if (foundMatchingFeature) {
-                            console.log(
-                                "Found matching feature. Storing images:",
-                                imagesToStore
-                            );
-                            displayImages(imagesToStore);
-                        } else {
-                            localStorage.setItem("ProductId", "False");
-                        }
-                    };
-
-                    const updateSizes = (sizes) => {
-                        sizeDiv.innerHTML = "";
-
-                        sizes.forEach((size) => {
-                            const sizeElement = document.createElement("a");
-                            sizeElement.href = "#";
-                            sizeElement.classList.add("size");
-                            sizeElement.textContent = size.name;
-
-                            sizeElement.onclick = (e) => {
-                                e.preventDefault();
-
-                                if (selectedSizes.includes(size.name)) {
-                                    selectedSizes = [];
-                                    sizeElement.classList.remove("active");
-                                } else {
-                                    selectedSizes = [size.name];
-                                    Array.from(sizeDiv.children).forEach((child) =>
-                                        child.classList.remove("active")
-                                    );
-                                    sizeElement.classList.add("active");
-                                }
-                                updateButtonState();
-                                checkForMatchingFeature();
-                            };
-
-                            sizeDiv.appendChild(sizeElement);
-                        });
-
-                        sizeContainer.style.display = "block";
-                        sizeLabel.style.display = "block";
-                        sizeLabel.textContent = "المقاسات:";
-                    };
-
-                    const colorDiv = document.getElementById("ColorSwitch");
-                    if (colorDiv) {
-                        product.productFeatureDto.forEach((productFeature) => {
-                            const colorElement = document.createElement("a");
-                            colorElement.style.backgroundColor = productFeature.color;
-                            colorElement.classList.add("color");
-                            colorElement.href = "#";
-
-                            colorElement.onclick = (e) => {
-                                e.preventDefault();
-
-                                if (selectedColors.includes(productFeature.color)) {
-                                    selectedColors = [];
-                                    colorElement.classList.remove("active");
-                                    sizeDiv.innerHTML = "";
-                                    sizeContainer.style.display = "none";
-                                    sizeLabel.style.display = "none";
-                                } else {
-                                    selectedColors = [productFeature.color];
-                                    Array.from(colorDiv.children).forEach((child) =>
-                                        child.classList.remove("active")
-                                    );
-                                    colorElement.classList.add("active");
-                                    updateSizes(productFeature.sizes);
-                                }
-                                updateButtonState();
-                                checkForMatchingFeature();
-                            };
-
-                            colorDiv.appendChild(colorElement);
-                        });
-                    }
-
-                    const ImgSwitch = document.querySelector(".ImgSwitch");
-
-                    const displayImages = (images) => {
-                        if (ImgSwitch) {
-                            ImgSwitch.innerHTML = "";
-                            images.forEach((imageUrl) => {
-                                const Img = document.createElement("div");
-                                Img.classList.add("product-thumb", "swiper-slide");
-                                Img.role = "group";
-
-                                const productImage = document.createElement("img");
-                                productImage.src = "https://everyui.webxy.net/" + imageUrl;
-                                productImage.alt = "صورة المنتج";
-                                productImage.width = 800;
-                                productImage.height = 900;
-
-                                Img.appendChild(productImage);
-                                ImgSwitch.appendChild(Img);
-                            });
-                        }
-                    };
-
-                    const ImgSlider = document.querySelector(".ImgSlider");
-
-                    if (ImgSlider) {
-                        product.productFeatureDto.forEach((productFeature) => {
-                            const Img = document.createElement("div");
-                            Img.classList.add(
-                                "product-thumb",
-                                "swiper-slide",
-                                "swiper-slide-next"
-                            );
-                            Img.role = "group";
-
-                            const figure = document.createElement("figure");
-                            figure.classList.add("product-image");
-                            figure.style.position = "relative";
-                            figure.style.overflow = "hidden";
-                            figure.style.cursor = "pointer";
-
-                            const productImage = document.createElement("img");
-                            productImage.src =
-                                "https://everyui.webxy.net/" + productFeature.featureImage;
-                            productImage.alt = "Product Thumb";
-                            productImage.width = 488;
-                            productImage.height = 549;
-                            productImage.setAttribute("data-zoom-image", productImage.src);
-
-                            const zoomImage = document.createElement("img");
-                            zoomImage.role = "presentation";
-                            zoomImage.alt = "Product Thumb";
-                            zoomImage.src =
-                                "https://everyui.webxy.net/" + productFeature.featureImage;
-                            zoomImage.classList.add("zoomImg");
-                            zoomImage.style.position = "absolute";
-                            zoomImage.style.top = "0";
-                            zoomImage.style.left = "0";
-                            zoomImage.style.opacity = "0";
-                            zoomImage.style.width = "880px";
-                            zoomImage.style.height = "990px";
-                            zoomImage.style.border = "none";
-                            zoomImage.style.maxWidth = "none";
-                            zoomImage.style.maxHeight = "none";
-
-                            figure.appendChild(productImage);
-                            figure.appendChild(zoomImage);
-                            Img.appendChild(figure);
-                            ImgSlider.appendChild(Img);
-                        });
-                    }
-
-                    fetchProductImages(product);
-                }
-            })
-            .catch((error) => {
-                console.error("حدث خطأ:", error);
+                similarProductContainer.innerHTML += productHtml;
             });
+        } else {
+            similarProductContainer.innerHTML =
+                "<p>No similar products found.</p>";
+        }
+    })
+    .catch((err) =>
+        console.log("Error fetching similar products:", err)
+    );
+
+let selectedSizes = [];
+let selectedColors = [];
+let productPrice = document.getElementById(
+    "product-variation-pricee"
+);
+let btn = document.getElementById("btn");
+const imagesDiv = document.getElementById("product-thumbs");
+
+btn.disabled = false;
+
+const sizeContainer = document.querySelector(
+    ".product-form.product-variation-form.product-size-swatch"
+);
+const sizeLabel = document.querySelector(".size-Div.mb-1");
+const sizeDiv = document.getElementById("size");
+sizeContainer.style.display = "none";
+sizeLabel.style.display = "none";
+
+const updateButtonState = () => {
+    if (selectedSizes.length > 0 && selectedColors.length > 0) {
+        btn.disabled = false;
+        document
+            .querySelector(".AddToCartButton")
+            .classList.remove("disabled");
+        btn.onclick = () => {
+            checkForMatchingFeature();
+            AddToCart();
+        };
     } else {
-        console.log("لم يتم العثور على ID المنتج في URL");
+        btn.disabled = true;
+        btn.onclick = null;
+        document
+            .querySelector(".AddToCartButton")
+            .classList.add("disabled");
     }
+};
+
+const checkForMatchingFeature = () => {
+    let foundMatchingFeature = false;
+    let imagesToStore = [];
+
+    product.productFeatureDto.forEach((productFeature) => {
+        if (selectedColors.includes(productFeature.color)) {
+            productFeature.sizes.forEach((size) => {
+                if (selectedSizes.includes(size.name)) {
+                    const requestedQuantity =
+                        parseInt(document.getElementById("Quantity").value) || 1;
+                    if (requestedQuantity > size.quantity) {
+                        Swal.fire({
+                            title: "Error",
+                            text: "الكمية المطلوبة غير متوفرة.",
+                            icon: "error",
+                        });
+                        return;
+                    }
+
+                    localStorage.setItem("ProductId", size.featureId);
+                    localStorage.setItem("ProductCount", size.quantity);
+
+                    imagesToStore = [];
+                    for (let key in productFeature) {
+                        if (key.startsWith("featureImageToWeb")) {
+                            imagesToStore.push(productFeature[key]);
+                        }
+                    }
+                    foundMatchingFeature = true;
+                }
+            });
+        }
+    });
+
+    if (foundMatchingFeature) {
+        displayImages(imagesToStore);
+    } else {
+        localStorage.setItem("ProductId", "False");
+    }
+};
+
+const updateSizes = (sizes) => {
+    sizeDiv.innerHTML = "";
+
+    sizes.forEach((size) => {
+        const sizeElement = document.createElement("a");
+        sizeElement.href = "#";
+        sizeElement.classList.add("size");
+        sizeElement.textContent = size.name;
+
+        sizeElement.onclick = (e) => {
+            e.preventDefault();
+
+            if (selectedSizes.includes(size.name)) {
+                selectedSizes = [];
+                sizeElement.classList.remove("active");
+            } else {
+                selectedSizes = [size.name];
+                Array.from(sizeDiv.children).forEach((child) =>
+                    child.classList.remove("active")
+                );
+                sizeElement.classList.add("active");
+            }
+            updateButtonState();
+        };
+
+        sizeDiv.appendChild(sizeElement);
+    });
+
+    sizeContainer.style.display = "block";
+    sizeLabel.style.display = "block";
+    sizeLabel.textContent = "المقاسات:";
+};
+
+const colorDiv = document.getElementById("ColorSwitch");
+if (colorDiv) {
+    product.productFeatureDto.forEach((productFeature) => {
+        const colorElement = document.createElement("a");
+        colorElement.style.backgroundColor = productFeature.color;
+        colorElement.classList.add("color");
+        colorElement.href = "#";
+
+        colorElement.onclick = (e) => {
+            e.preventDefault();
+
+            if (selectedColors.includes(productFeature.color)) {
+                selectedColors = [];
+                colorElement.classList.remove("active");
+                sizeDiv.innerHTML = "";
+                sizeContainer.style.display = "none";
+                sizeLabel.style.display = "none";
+            } else {
+                selectedColors = [productFeature.color];
+                Array.from(colorDiv.children).forEach((child) =>
+                    child.classList.remove("active")
+                );
+                colorElement.classList.add("active");
+                updateSizes(productFeature.sizes);
+            }
+            updateButtonState();
+        };
+
+        colorDiv.appendChild(colorElement);
+    });
+}
+
+const ImgSwitch = document.querySelector(".ImgSwitch");
+
+const displayImages = (images) => {
+    if (ImgSwitch) {
+        ImgSwitch.innerHTML = "";
+        images.forEach((imageUrl) => {
+            const Img = document.createElement("div");
+            Img.classList.add("product-thumb", "swiper-slide");
+            Img.role = "group";
+
+            const productImage = document.createElement("img");
+            productImage.src = "https://everyui.webxy.net/" + imageUrl;
+            productImage.alt = "صورة المنتج";
+            productImage.width = 800;
+            productImage.height = 900;
+
+            Img.appendChild(productImage);
+            ImgSwitch.appendChild(Img);
+        });
+    }
+};
+
+const ImgSlider = document.querySelector(".ImgSlider");
+
+if (ImgSlider) {
+    product.productFeatureDto.forEach((productFeature) => {
+        const Img = document.createElement("div");
+        Img.classList.add(
+            "product-thumb",
+            "swiper-slide",
+            "swiper-slide-next"
+        );
+        Img.role = "group";
+
+        const figure = document.createElement("figure");
+        figure.classList.add("product-image");
+        figure.style.position = "relative";
+        figure.style.overflow = "hidden";
+        figure.style.cursor = "pointer";
+
+        const productImage = document.createElement("img");
+        productImage.src =
+            "https://everyui.webxy.net/" + productFeature.featureImage;
+        productImage.alt = "Product Thumb";
+        productImage.width = 488;
+        productImage.height = 549;
+        productImage.setAttribute("data-zoom-image", productImage.src);
+
+        const zoomImage = document.createElement("img");
+        zoomImage.role = "presentation";
+        zoomImage.alt = "Product Thumb";
+        zoomImage.src =
+            "https://everyui.webxy.net/" + productFeature.featureImage;
+        zoomImage.classList.add("zoomImg");
+        zoomImage.style.position = "absolute";
+        zoomImage.style.top = "0";
+        zoomImage.style.left = "0";
+        zoomImage.style.opacity = "0";
+        zoomImage.style.width = "880px";
+        zoomImage.style.height = "990px";
+        zoomImage.style.border = "none";
+        zoomImage.style.maxWidth = "none";
+        zoomImage.style.maxHeight = "none";
+
+        figure.appendChild(productImage);
+        figure.appendChild(zoomImage);
+        Img.appendChild(figure);
+        ImgSlider.appendChild(Img);
+    });
+}
+
+fetchProductImages(product);
+}
+})
+.catch((error) => {
+console.error("حدث خطأ:", error);
+});
+} else {
+console.log("لم يتم العثور على ID المنتج في URL");
+}
 });

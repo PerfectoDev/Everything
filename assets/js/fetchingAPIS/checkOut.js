@@ -113,7 +113,6 @@ async function placeOrder() {
             }, 2000);
         }
     } catch (error) {
-        alert(`حدث خطا اثناء عمليه الدفع يرجي التحقق من الكميه او العنوان`);
         Swal.fire({
             title: "Error",
             text: 'يرجي التاكد من الكميه ',

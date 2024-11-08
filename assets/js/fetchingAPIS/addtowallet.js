@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(data => {
         if (data && data.balance !== undefined) {
-            document.getElementById('wallet-amount').innerText = `${data.balance}$`;
+            document.getElementById('wallet-amount').innerText = `${data.balance} ريال سعودي`;
         } else {
             console.error('Invalid response data:', data);
         }
@@ -40,7 +40,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const amount = parseFloat(document.getElementById('AddToWallet').value);
 
         if (isNaN(amount) || amount <= 0) {
-            alert('يرجى إدخال مبلغ صحيح وموجب.');
+            Swal.fire({
+                title: "تحذير",
+                text: 'يرجى إدخال مبلغ صحيح وموجب.',
+                icon: "warning"
+            });
             return;
         }
 
@@ -70,8 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(text => {
             console.log('Response data:', text);
-            alert('تمت إضافة المبلغ إلى المحفظة بنجاح.');
-            setTimeout(() => location.reload(), 1000); 
+            Swal.fire({
+                title: "تم بنجاح",
+                text: 'تمت إضافة المبلغ إلى المحفظة بنجاح.',
+                icon: "success"
+            });
+            setTimeout(() => location.reload(), 2000); 
         })
         .catch(error => {
             console.error('Error details:', error);
@@ -82,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 errorMessage += error.message;
             }
-            alert(errorMessage);
         });
     });
 });

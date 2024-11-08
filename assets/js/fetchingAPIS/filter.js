@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const productsPerPage = 12;  
     let currentPage = 1;
     let totalProducts = 0;
+    let sortOrder = 'default';
+
+    document.getElementById('sortOrder').addEventListener('change', (e) => {
+        sortOrder = e.target.value;
+        fetchAndDisplayProducts();  
+    });
 
     const fetchAndDisplayProducts = (minPrice = null, maxPrice = null, sizeName = null, review = null, brandId = null, color = null, page = 1) => {
         let ApiFilter = `https://everyapi.webxy.net/Filter/filter-products?CategoryId=${categoryId}&page=${page}&limit=${productsPerPage}`;
@@ -48,7 +54,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 productContainer.innerHTML = '';
             
                 totalProducts = data.totalCount || data.length;
-            
+
+                data = sortProducts(data, sortOrder);
+
+                const productsArray = data.map(product => ({
+                    id: product.id,
+                    price: product.price,
+                    review: product.review || 0
+                }));
+
+                console.log("Products array:", productsArray);
                 if (searchQuery) {
                     data = data.filter(product => {
                         return product.productName_Ar.includes(searchQuery) || product.productName.includes(searchQuery);
@@ -128,7 +143,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 const productContainer = document.querySelector('.product-wrapper');
                 productContainer.innerHTML = '<p>لا يوجد منتجات لهذه الفئه</p>';
             });
-        };            
+        };        
+        function sortProducts(products, order) {
+            if (order === 'price-low') {
+                return products.sort((a, b) => a.price - b.price);
+            } else if (order === 'price-high') {
+                return products.sort((a, b) => b.price - a.price);
+            } else if (order === 'rating') {
+                return products.sort((a, b) => (b.review || 0) - (a.review || 0));
+            } else {
+                return products;  
+            }
+        }    
 
     const fetchColors = () => {
         const colorApiUrl = 'https://everyapi.webxy.net/api/Lookup/get-all-colors';

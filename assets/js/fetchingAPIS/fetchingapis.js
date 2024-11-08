@@ -296,15 +296,13 @@ fetch("https://everyapi.webxy.net/api/Adds/get-all-adds")
             console.error("Error fetching ads:", error);
         });
 /*عرض مميز  -----------*/
-let selectedColor = [];
-let SelectedSize = [];
-
+let selectedColor = "";
+let selectedSizeId = null;
 
 function updateProductCount(featureId, quantity) {
     localStorage.setItem("ProductId", featureId);
     localStorage.setItem("ProductCount", quantity);
 }
-
 
 function displaySizes(index) {
     const productContainer = document.querySelectorAll(".swiper-slide.productD");
@@ -314,21 +312,19 @@ function displaySizes(index) {
     const sizeContainer = document.getElementById("size");
     const sizeLabel = document.querySelector(".product-size-swatch label");
 
+    // عرض عنصر المقاسات عند توفرها
     sizeLabel.style.display = "block";
     sizeContainer.style.display = "flex";
-
     sizeContainer.innerHTML = "";
 
     parsedSizes.forEach((size) => {
         const sizeEl = document.createElement("a");
         sizeEl.className = "size";
-        sizeEl.textContent = `${size.name}`;
+        sizeEl.textContent = size.name;
         sizeEl.onclick = function () {
             sizeContainer.querySelectorAll(".size.active").forEach(el => el.classList.remove("active"));
             sizeEl.classList.add("active");
-            SelectedSize = [];
-            SelectedSize.push(size.featureId);
-
+            selectedSizeId = size.featureId;
 
             updateProductCount(size.featureId, size.quantity);
         };
@@ -336,20 +332,15 @@ function displaySizes(index) {
     });
 }
 
-
 function selectColor(element, index) {
-    selectedColor = [];
     const colorElements = document.querySelectorAll(".product-variations .color");
     colorElements.forEach(el => el.classList.remove("active"));
     element.classList.add("active");
 
-
-    selectedColor.push(element.style.backgroundColor);
-
-
+    // تحديث اللون المحدد وعرض المقاسات المتاحة
+    selectedColor = element.style.backgroundColor;
     displaySizes(index);
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const apiSpacilDayUrl = "https://everyapi.webxy.net/Product/GetSpacilDay";
@@ -374,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="swiper-wrapper row cols-1 gutter-no">
                 `;
 
-                data.forEach((product) => {
+                data.forEach((product, prodIndex) => {
                     const productId = product.productId;
                     const productImage = product.productAttributs.length > 0 && product.productAttributs[0].productAttributImages.length > 0
                         ? domainImage + product.productAttributs[0].productAttributImages[0].imagePath
@@ -402,7 +393,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                             <button class="swiper-button-next"></button>
                                             <button class="swiper-button-prev"></button>
                                             <div class="product-label-group">
-                                        <label class="product-label label-discount">${Math.floor(product.discount)}% خصم</label>
+                                                <label class="product-label label-discount">${Math.floor(product.discount)}% خصم</label>
                                             </div>
                                         </div>
                                         <div class="product-thumbs-wrap swiper-container"
@@ -440,12 +431,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                         </div>
 
                                         <div class="product-form product-variation-form product-color-swatch">
-                                            <label style='padding-left:100px' >الألوان:</label>
+                                            <label style='padding-left:100px'>الألوان:</label>
                                             <div class="d-flex align-items-center product-variations" id='ColorSwitch'>
                                                 ${product.productFeatureDto.map((feature, index) => `
                                                  <a class="color" 
                                                 style="background-color: ${feature.color};" 
-                                                onclick="selectColor(this, ${index})" 
+                                                onclick="selectColor(this, ${prodIndex})" 
                                                 data-sizes='${JSON.stringify(feature.sizes)}'></a>
                                             `).join('')}
                                             </div>
@@ -456,10 +447,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                             <label style='padding-left:100px; display:none;' class="mb-1">المقاسات</label>
                                             <div href="#" class="flex-wrap d-flex align-items-center product-variations SizeBox" id='size' style='display:none;'></div>
                                             <a href="#" class="product-variation-clean">Clean All</a>
-                                        </div>
-
-                                        <div class="product-variation-price">
-                                            <span></span>
                                         </div>
 
                                         <div class="product-form pt-4">
@@ -479,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <div class="social-links-wrapper">
                                             <div class="social-links">
                                                 <div class="social-icons social-no-color border-thin">
-                                                    <a href="${faceBook}" class="social-icon social-facebook w-icon-facebook"></...
+                                                    <a href="${faceBook}" class="social-icon social-facebook w-icon-facebook"></a>
                                                     <a href="${twitter}" class="social-icon social-twitter w-icon-twitter"></a>
                                                     <a href="${pint}" class="social-icon social-pinterest fab fa-pinterest-p"></a>
                                                     <a href="#" class="social-icon social-whatsapp fab fa-whatsapp"></a>
@@ -506,17 +493,12 @@ document.addEventListener("DOMContentLoaded", function () {
                             <button class="swiper-button-next"></button>
                         </div>
                     </div>
-                `;
-                
-                productContainer.innerHTML = swiperWrapper;
+                </div>`;
 
-            } else {
-                productContainer.innerHTML = "<p>لا توجد منتجات متاحة في الوقت الحالي.</p>";
+                productContainer.innerHTML = swiperWrapper;
             }
         })
-        .catch((error) => {
-            console.error("Error fetching product data:", error);
-        });
+        .catch(error => console.error('Error:', error));
 });
 
 function changeQuantity(amount) {
@@ -881,20 +863,10 @@ document
                 const email = result.Email;
                 console.log(email);
 
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    },
-                });
-                Toast.fire({
+                Swal.fire({
+                    title: "تم بنجاح",
+                    text: "تم تسجيل الحساب بنجاح جاري تحويلك لصفحه تأكيد الحساب",
                     icon: "success",
-                    title: "تم تسجيل الحساب بنجاح جاري تحويلك لصفحه تأكيد الحساب",
                 });
 
                 setTimeout(function () {
