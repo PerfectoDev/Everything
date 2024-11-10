@@ -14,14 +14,14 @@ fetch("https://everyapi.webxy.net/Category/GettMenu")
 
                 category.secondLevels.forEach((second) => {
                     const secondLi = document.createElement("li");
-                    secondLi.innerHTML = `<h4 class="menu-title">${second.name}</h4><hr class="divider">`;
+                    secondLi.innerHTML = `<h4 class="menu-title">${second.nameAr}</h4><hr class="divider">`;
 
                     if (second.threeLevels && second.threeLevels.length > 0) {
                         const thirdLevelUl = document.createElement("ul");
 
                         second.threeLevels.forEach((three) => {
                             const thirdLi = document.createElement("li");
-                            thirdLi.innerText = three.name;
+                            thirdLi.innerText = three.nameAr;
                             thirdLevelUl.appendChild(thirdLi);
                         });
 

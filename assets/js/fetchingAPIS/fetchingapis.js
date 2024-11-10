@@ -312,7 +312,7 @@ function displaySizes(index) {
     const sizeContainer = document.getElementById("size");
     const sizeLabel = document.querySelector(".product-size-swatch label");
 
-    // عرض عنصر المقاسات عند توفرها
+
     sizeLabel.style.display = "block";
     sizeContainer.style.display = "flex";
     sizeContainer.innerHTML = "";
@@ -337,7 +337,7 @@ function selectColor(element, index) {
     colorElements.forEach(el => el.classList.remove("active"));
     element.classList.add("active");
 
-    // تحديث اللون المحدد وعرض المقاسات المتاحة
+
     selectedColor = element.style.backgroundColor;
     displaySizes(index);
 }
