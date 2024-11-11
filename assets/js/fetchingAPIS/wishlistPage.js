@@ -32,7 +32,10 @@ async function checkwishlist() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const wishlistBody = document.getElementById('wishlist-body');
+    const paginationContainer = document.getElementById('pagination');
     const token = localStorage.getItem('token');
+    const itemsPerPage = 5;
+    let currentPage = 1;
 
     const fetchWishlist = async () => {
         try {
@@ -52,54 +55,109 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (wishlistItems.length === 0) {
                 wishlistBody.innerHTML = '<tr><td colspan="5">لا توجد منتجات في سلة المفضلة.</td></tr>';
+                paginationContainer.innerHTML = '';
                 return;
             }
 
             const wishlistProductIds = wishlistItems.map(item => item.productId);
             localStorage.setItem('wishlistProducts', JSON.stringify(wishlistProductIds));
 
-            wishlistItems.forEach(item => {
-                const row = `
-                    <tr id="wishlistProduct-${item.productId}">
-                        <td class="product-thumbnail">
-                            <div class="p-relative">
-                                <a href="../../ar-product-details.html?id=${item.productId}">
-                                    <figure>
-                                        <img src="https://everyui.webxy.net/${item.productImage}" alt="${item.productName}" width="300" height="338">
-                                    </figure>
-                                </a>
-                                <button type="submit" onclick="removeFromWishlist(${item.productId})" class="btn btn-close"><i class="fas fa-times"></i></button>
-                            </div>
-                        </td>
-                        <td class="product-name">
-                            <a href="../../ar-product-details.html?id=${item.productId}">${item.productName}</a>
-                        </td>
-                        <td class="product-price">
-                            <ins class="new-price">${item.newPrice} ريال سعودي</ins>
-                        </td>
-                        <td class="product-stock-status">
-                            <span class="${item.shippingEnabled ? 'wishlist-in-stock' : 'wishlist-out-of-stock'}">
-                                ${item.shippingEnabled ? 'متوفر' : 'غير متوفر'}
-                            </span>
-                        </td>
-                        <td class="wishlist-action">
-                            <div class="d-lg-flex">
-                                <a href="../../ar-product-details.html?id=${item.productId}" class="btn btn-dark btn-rounded btn-sm ml-lg-2 btn-cart">تصفح المنتج</a>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                wishlistBody.insertAdjacentHTML('beforeend', row);
-            });
+            displayProducts(wishlistItems);
+            setupPagination(wishlistItems);
         } catch (error) {
             console.error('حدث خطأ أثناء جلب قائمة الأمنيات:', error);
             wishlistBody.innerHTML = '<tr><td colspan="5">حدث خطأ أثناء جلب قائمة الأمنيات.</td></tr>';
         }
     };
 
+    const displayProducts = (wishlistItems) => {
+        wishlistBody.innerHTML = '';
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const paginatedItems = wishlistItems.slice(start, end);
+
+        paginatedItems.forEach(item => {
+            const row = `
+                <tr id="wishlistProduct-${item.productId}">
+                    <td class="product-thumbnail">
+                        <div class="p-relative">
+                            <a href="../../ar-product-details.html?id=${item.productId}">
+                                <figure>
+                                    <img src="https://everyui.webxy.net/${item.productImage}" alt="${item.productName}" width="300" height="338">
+                                </figure>
+                            </a>
+                            <button type="submit" onclick="removeFromWishlist(${item.productId})" class="btn btn-close"><i class="fas fa-times"></i></button>
+                        </div>
+                    </td>
+                    <td class="product-name">
+                        <a href="../../ar-product-details.html?id=${item.productId}">${item.productName}</a>
+                    </td>
+                    <td class="product-price">
+                        <ins class="new-price">${item.newPrice} ريال سعودي</ins>
+                    </td>
+                    <td class="product-stock-status">
+                        <span class="${item.shippingEnabled ? 'wishlist-in-stock' : 'wishlist-out-of-stock'}">
+                            ${item.shippingEnabled ? 'متوفر' : 'غير متوفر'}
+                        </span>
+                    </td>
+                    <td class="wishlist-action">
+                        <div class="d-lg-flex">
+                            <a href="../../ar-product-details.html?id=${item.productId}" class="btn btn-dark btn-rounded btn-sm ml-lg-2 btn-cart">تصفح المنتج</a>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            wishlistBody.insertAdjacentHTML('beforeend', row);
+        });
+    };
+
+    const setupPagination = (wishlistItems) => {
+        const totalPages = Math.ceil(wishlistItems.length / itemsPerPage);
+        paginationContainer.innerHTML = '';
+        const paginationList = document.createElement('ul');
+        paginationList.classList.add('pagination');
+
+        if (currentPage > 1) {
+            const prevButton = document.createElement('li');
+            prevButton.innerHTML = `<a href="#" class="prev">السابق</a>`;
+            prevButton.onclick = () => {
+                currentPage--;
+                displayProducts(wishlistItems);
+                setupPagination(wishlistItems);
+            };
+            paginationList.appendChild(prevButton);
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageItem = document.createElement('li');
+            const pageButton = document.createElement('a');
+            pageButton.textContent = i;
+            pageButton.className = i === currentPage ? 'active' : '';
+            pageButton.onclick = () => {
+                currentPage = i;
+                displayProducts(wishlistItems);
+                setupPagination(wishlistItems);
+            };
+            pageItem.appendChild(pageButton);
+            paginationList.appendChild(pageItem);
+        }
+
+        if (currentPage < totalPages) {
+            const nextButton = document.createElement('li');
+            nextButton.innerHTML = `<a href="#" class="next">التالي</a>`;
+            nextButton.onclick = () => {
+                currentPage++;
+                displayProducts(wishlistItems);
+                setupPagination(wishlistItems);
+            };
+            paginationList.appendChild(nextButton);
+        }
+
+        paginationContainer.appendChild(paginationList);
+    };
+
     fetchWishlist();
 });
-
 
 const tokeN = localStorage.getItem('token');
 
@@ -116,7 +174,7 @@ function removeFromWishlist(productId) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.text(); 
+        return response.text();
     })
     .then(data => {
         let wishlist = JSON.parse(localStorage.getItem('wishlistProducts') || '[]');
@@ -137,34 +195,16 @@ function removeFromWishlist(productId) {
               });
               Toast.fire({
                 icon: "success",
-                title: "تمت إزالة المنتج من المفضلة بنجاح!"
+                title: "تمت إزالة المنتج من المفضلة"
               });
-              setTimeout(() => {
-                const wishlistProduct = document.getElementById(`wishlistProduct-${productId}`);
-                if (wishlistProduct) {
-                    wishlistProduct.style.display = "none";
-                }
-              }, 2000);
+
+            // قم بتحديث قائمة المفضلة
+            document.getElementById(`wishlistProduct-${productId}`).remove();
         } else {
-            alert("حدث خطأ أثناء إزالة المنتج من المفضلة.");
+            console.error('حدث خطأ:', data);
         }
     })
     .catch(error => {
-        console.error("خطأ في الطلب:", error);
-        alert("حدث خطأ في الاتصال بالخادم.");
+        console.error('حدث خطأ أثناء الاتصال:', error);
     });
 }
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    const wishlistProducts = JSON.parse(localStorage.getItem('wishlistProducts') || '[]');
-    const wishlistIcons = document.querySelectorAll('.w-icon-heart');
-
-    wishlistIcons.forEach(icon => {
-        const productId = icon.getAttribute('data-product-id');
-        if (wishlistProducts.includes(productId)) {
-            icon.classList.remove('w-icon-heart');
-            icon.classList.add('w-icon-heart-full');
-        }
-    });
-});

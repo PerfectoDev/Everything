@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const categoryId = urlParams.get('CategoryId');
     const domainImage = 'https://everyui.webxy.net/';
     const searchQuery = urlParams.get('search');
-    const productsPerPage = 12;  
+    const productsPerPage = 12;   
     let currentPage = 1;
     let totalProducts = 0;
     let sortOrder = 'default';
@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const fetchAndDisplayProducts = (minPrice = null, maxPrice = null, sizeName = null, review = null, brandId = null, color = null, page = 1) => {
+        currentPage = page;
         let ApiFilter = `https://everyapi.webxy.net/Filter/filter-products?CategoryId=${categoryId}&page=${page}&limit=${productsPerPage}`;
 
         if (minPrice !== null) {
@@ -37,33 +38,26 @@ document.addEventListener('DOMContentLoaded', function () {
         if (color !== null) {
             ApiFilter += `&color=${encodeURIComponent(color)}`; 
         }
-        
 
         console.log('API URL:', ApiFilter);
 
         fetch(ApiFilter)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
             .then(data => {
                 console.log('Raw data from API:', data);
                 const productContainer = document.querySelector('.product-wrapper');
-                productContainer.innerHTML = '';
-            
+                productContainer.innerHTML = '';   
+
                 totalProducts = data.totalCount || data.length;
 
                 data = sortProducts(data, sortOrder);
 
-                const productsArray = data.map(product => ({
-                    id: product.id,
-                    price: product.price,
-                    review: product.review || 0
-                }));
 
-                console.log("Products array:", productsArray);
                 if (searchQuery) {
                     data = data.filter(product => {
                         return product.productName_Ar.includes(searchQuery) || product.productName.includes(searchQuery);
@@ -71,22 +65,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 if (sizeName) {
                     data = data.filter(product => {
-
                         return product.productFeatureDto.some(feature => 
                             feature.sizes.some(size => size.name.toLowerCase() === sizeName.toLowerCase())
                         );
                     });
                 }
-                
-            
                 if (review) {
                     data = data.filter(product => {
                         const productReview = product.review || 0;
                         return productReview == review;
                     });
                 }
-            
-
                 if (color && typeof color === "string") {
                     data = data.filter(product => {
                         return product.productFeatureDto.some(feature => 
@@ -95,8 +84,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
             
-                if (data.length > 0) {
-                    data.forEach(product => {
+                const startIndex = (currentPage - 1) * productsPerPage;
+                const endIndex = currentPage * productsPerPage;
+
+                const currentPageProducts = data.slice(startIndex, endIndex);
+
+                if (currentPageProducts.length > 0) {
+                    currentPageProducts.forEach(product => {
                         const productId = product.id;
                         const productHtml = `
                             <div class="product-wrap">
@@ -132,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         `;
                         productContainer.innerHTML += productHtml;
                     });
-            
+
                     updatePagination(currentPage);          
                 } else {
                     productContainer.innerHTML = '<p>لا توجد منتجات متاحة لهذه الفئة.</p>';
@@ -143,7 +137,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const productContainer = document.querySelector('.product-wrapper');
                 productContainer.innerHTML = '<p>لا يوجد منتجات لهذه الفئه</p>';
             });
-        };        
+        }; 
+        
+        
         function sortProducts(products, order) {
             if (order === 'price-low') {
                 return products.sort((a, b) => a.price - b.price);
@@ -188,8 +184,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const updatePagination = (currentPage) => {
         const totalPages = Math.ceil(totalProducts / productsPerPage);
         const paginationContainer = document.querySelector('.pagination');
-
+    
         paginationContainer.innerHTML = '';  
+
         if (totalPages > 1) {
             const prevButton = document.createElement('li');
             prevButton.className = 'prev';
@@ -198,22 +195,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 if (currentPage > 1) {
                     currentPage--;
-                    fetchAndDisplayProducts(null, null, null, null, null, currentPage);
+                    fetchAndDisplayProducts(null, null, null, null, null, null, currentPage);
                 }
             });
             paginationContainer.appendChild(prevButton);
-
+    
             for (let i = 1; i <= totalPages; i++) {
                 const pageItem = document.createElement('li');
                 pageItem.innerHTML = `<a href="#" class="${i === currentPage ? 'active' : ''}">${i}</a>`;
                 pageItem.querySelector('a').addEventListener('click', (e) => {
                     e.preventDefault();
                     currentPage = i;
-                    fetchAndDisplayProducts(null, null, null, null, null, currentPage);
+                    fetchAndDisplayProducts(null, null, null, null, null, null, currentPage);
                 });
                 paginationContainer.appendChild(pageItem);
             }
-
+    
             const nextButton = document.createElement('li');
             nextButton.className = 'next';
             nextButton.innerHTML = `<a href="#" class="${currentPage >= totalPages ? 'disabled' : ''}">التالي</a>`;
@@ -221,12 +218,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 if (currentPage < totalPages) {
                     currentPage++;
-                    fetchAndDisplayProducts(null, null, null, null, null, currentPage);
+                    fetchAndDisplayProducts(null, null, null, null, null, null, currentPage);
                 }
             });
             paginationContainer.appendChild(nextButton);
+        } else {
+            const singlePageButton = document.createElement('li');
+            singlePageButton.className = 'single-page';
+            singlePageButton.innerHTML = `<a href="#" class="active">1</a>`;
+            paginationContainer.appendChild(singlePageButton);
         }
     };
+    
 
     const fetchCategories = () => {
         fetch('https://everyapi.webxy.net/Filter/GetSearchControal')
